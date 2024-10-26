@@ -25,6 +25,18 @@ public class Transform {
         return new Matrix4f().translate(position).rotateX((float) Math.toRadians(rotation.x)).rotateY((float) Math.toRadians(rotation.y)).rotateZ((float) Math.toRadians(rotation.z)).scale(scale);
     }
 
+    public Vector3f getForward() {
+        float x = (float) Math.sin(Math.toRadians(rotation.y)) * (float) Math.cos(Math.toRadians(rotation.x));
+        float y = (float) -Math.sin(Math.toRadians(rotation.x));
+        float z = (float) -Math.cos(Math.toRadians(rotation.y)) * (float) Math.cos(Math.toRadians(rotation.x));
+        return new Vector3f(x, y, z);
+    }
+
+    public Vector3f getRight() {
+        Vector3f forward = getForward();
+        return forward.cross(new Vector3f(0, 1, 0)).normalize();
+    }
+
     public Vector3f getPosition() {
         return position;
     }

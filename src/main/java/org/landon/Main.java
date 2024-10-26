@@ -12,7 +12,7 @@ public class Main {
         window.create();
 
         Scene scene = new Scene();
-        SceneObject object = new SceneObject(Meshes.createCube());
+        SceneObject object = new SceneObject(Meshes.createSphere());
         object.getTransform().getPosition().set(0, 0, -5);
         scene.addObject(object);
 
@@ -21,8 +21,9 @@ public class Main {
         Renderer renderer = new Renderer();
 
         while (window.isOpen()) {
-            window.update();
+            window.startFrame();
 
+            scene.getCamera().update();
             renderer.render(object);
 
             window.endFrame();
