@@ -1,6 +1,7 @@
 package org.landon.input;
 
 import org.joml.Vector2f;
+import org.landon.gui.Gui;
 import org.landon.core.Window;
 import org.lwjgl.glfw.*;
 
@@ -81,6 +82,11 @@ public final class Input {
         return new Vector2f((float) mouseDeltaX, (float) mouseDeltaY);
     }
 
+    public static void scrollCallback(long window, double offsetx, double offsety) {
+        scrollX += offsetx;
+        scrollY += offsety;
+    }
+
     public static double getScrollX() {
         return scrollX;
     }
@@ -98,6 +104,8 @@ public final class Input {
                 keys[key] = (action != GLFW.GLFW_RELEASE);
                 keysReleased[key] = (action == GLFW.GLFW_RELEASE);
                 keysPressed[key] = (action == GLFW.GLFW_PRESS);
+
+                Gui.setupKeyboard(window, key, scancode, action, mods);
             }
         };
     }
@@ -123,6 +131,8 @@ public final class Input {
                 buttons[button] = (action != GLFW.GLFW_RELEASE);
                 buttonsReleased[button] = (action == GLFW.GLFW_RELEASE);
                 buttonsPressed[button] = (action == GLFW.GLFW_PRESS);
+
+                Gui.setupMouse(window, button, action, mods);
             }
         };
     }

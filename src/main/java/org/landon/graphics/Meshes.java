@@ -15,7 +15,7 @@ public final class Meshes {
     }
 
     public static Mesh createSphere() {
-        return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(3));
+        return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(4));
     }
 
     public static Mesh parShapeToMesh(ParShapesMesh parShapesMesh) {

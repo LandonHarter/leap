@@ -1,6 +1,9 @@
 package org.landon.graphics;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.landon.util.FileUtil;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -62,16 +65,16 @@ public class Shader {
         GL20.glUniform1f(getUniformLocation(name), value);
     }
 
-    public void setUniform(String name, float x, float y) {
-        GL20.glUniform2f(getUniformLocation(name), x, y);
+    public void setUniform(String name, Vector2f value) {
+        GL20.glUniform2f(getUniformLocation(name), value.x, value.y);
     }
 
-    public void setUniform(String name, float x, float y, float z) {
-        GL20.glUniform3f(getUniformLocation(name), x, y, z);
+    public void setUniform(String name, Vector3f value) {
+        GL20.glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
     }
 
-    public void setUniform(String name, float x, float y, float z, float w) {
-        GL20.glUniform4f(getUniformLocation(name), x, y, z, w);
+    public void setUniform(String name, Vector4f value) {
+        GL20.glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
     }
 
     public void setUniform(String name, Matrix4f value) {
