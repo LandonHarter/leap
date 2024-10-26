@@ -7,8 +7,11 @@ in vec3 vertex_normal;
 in vec4 worldPosition;
 in mat4 viewMatrix;
 
+uniform sampler2D tex;
+uniform vec3 color;
+
 out vec4 outColor;
 
 void main() {
-    outColor = vec4(vertex_normal, 1.0f);
+    outColor = texture(tex, vertex_textureCoord) * vec4(color, 1.0f);
 }
