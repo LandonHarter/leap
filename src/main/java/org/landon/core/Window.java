@@ -1,10 +1,9 @@
 package org.landon.core;
 
 import imgui.ImGui;
-import org.joml.Vector2f;
+import org.landon.gui.Gui;
 import org.landon.input.Input;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;

@@ -1,4 +1,4 @@
-package org.landon.core;
+package org.landon.gui;
 
 import imgui.*;
 import imgui.callback.ImStrConsumer;
@@ -116,9 +116,11 @@ public class Gui {
         fontConfig.setMergeMode(false);
         fontConfig.setPixelSnapH(false);
         fontConfig.setRasterizerMultiply(1.2f);
+        io.setFontDefault(fontAtlas.addFontFromFileTTF("resources/ptsans.ttf", 18));
         fontConfig.destroy();
 
         imGuiGl3.init(glslVersion);
+        Theme.modernDark(ImGui.getStyle());
     }
 
     public static void setupKeyboard(long window, int key, int scancode, int action, int mods) {

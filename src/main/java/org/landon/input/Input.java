@@ -1,7 +1,7 @@
 package org.landon.input;
 
 import org.joml.Vector2f;
-import org.landon.core.Gui;
+import org.landon.gui.Gui;
 import org.landon.core.Window;
 import org.lwjgl.glfw.*;
 
