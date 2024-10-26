@@ -10,5 +10,5 @@ in mat4 viewMatrix;
 out vec4 outColor;
 
 void main() {
-    outColor = vec4(vertex_position, 1.0f);
+    outColor = vec4(vertex_normal, 1.0f);
 }

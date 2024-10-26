@@ -1,6 +1,7 @@
 package org.landon.scene;
 
 import org.joml.Matrix4f;
+import org.landon.core.Window;
 import org.landon.math.Transform;
 
 public class Camera {
@@ -28,7 +29,9 @@ public class Camera {
     }
 
     public Matrix4f getProjection() {
-        return new Matrix4f().identity().perspective((float) Math.toRadians(fov), 800.0f / 500.0f, nearPlane, farPlane);
+        Window window = Window.getInstance();
+        float aspect = (float) window.getWidth() / (float) window.getHeight();
+        return new Matrix4f().identity().perspective((float) Math.toRadians(fov), aspect, nearPlane, farPlane);
     }
 
     public Transform getTransform() {

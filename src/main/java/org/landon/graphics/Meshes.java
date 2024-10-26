@@ -15,7 +15,7 @@ public final class Meshes {
     }
 
     public static Mesh createSphere() {
-        return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(8));
+        return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(3));
     }
 
     public static Mesh parShapeToMesh(ParShapesMesh parShapesMesh) {
@@ -48,8 +48,9 @@ public final class Meshes {
         triangles.get(indices);
 
         ParShapes.par_shapes_free_mesh(parShapesMesh);
-        Mesh mesh = new Mesh(vertices, indices);
+        Mesh mesh = new Mesh(vertices, indices, false);
         if (normals == null) mesh.calculateNormals();
+        mesh.create();
         return mesh;
     }
 

@@ -1,6 +1,7 @@
 package org.landon.core;
 
 import org.joml.Vector2f;
+import org.landon.input.Input;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
@@ -8,6 +9,8 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 public class Window {
+
+    private static Window instance;
 
     private int width, height;
     private String title;
@@ -19,10 +22,16 @@ public class Window {
     private GLFWWindowSizeCallback windowSize;
     private boolean isResized = false;
 
+    private double s_xpos = 0, s_ypos = 0;
+    private int w_xsiz = 0, w_ysiz = 0;
+    private int dragState = 0;
+
     public Window(int width, int height, String title) {
         this.width = width;
         this.height = height;
         this.title = title;
+
+        instance = this;
     }
 
     public void create() {
@@ -55,9 +64,16 @@ public class Window {
                 width = w;
                 height = h;
                 isResized = true;
+
+                GL11.glViewport(0, 0, width, height);
             }
         };
 
+        GLFW.glfwSetKeyCallback(window, Input.getKeyboardCallback());
+        GLFW.glfwSetCursorPosCallback(window, Input.getMouseMoveCallback());
+        GLFW.glfwSetMouseButtonCallback(window, Input.getMouseClickCallback());
+        GLFW.glfwSetScrollCallback(window, Input.getMouseScrollCallback());
+        GLFW.glfwSetWindowSizeCallback(window, windowSize);
         GLFW.glfwSetWindowSizeCallback(window, windowSize);
         GLFW.glfwSetWindowContentScaleCallback(window, (handle, x, y) -> {
             contentScale = new Vector2f(x, y);
@@ -92,6 +108,18 @@ public class Window {
         // Some resize callback
 
         isResized = false;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public static Window getInstance() {
+        return instance;
     }
 
 }
