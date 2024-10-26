@@ -21,8 +21,9 @@ public class Main {
         Renderer renderer = new Renderer();
 
         while (window.isOpen()) {
-            window.update();
+            window.startFrame();
 
+            scene.getCamera().update();
             renderer.render(object);
 
             window.endFrame();

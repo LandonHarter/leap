@@ -1,5 +1,7 @@
 package org.landon.input;
 
+import org.joml.Vector2f;
+import org.landon.core.Window;
 import org.lwjgl.glfw.*;
 
 public final class Input {
@@ -13,6 +15,18 @@ public final class Input {
     private static double mouseX, mouseY;
     private static double mouseDeltaX, mouseDeltaY;
     private static double scrollX, scrollY;
+
+    public static void lockCursor() {
+        GLFW.glfwSetInputMode(Window.getInstance().getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+    }
+
+    public static void unlockCursor() {
+        GLFW.glfwSetInputMode(Window.getInstance().getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+    }
+
+    public static boolean isCursorLocked() {
+        return GLFW.glfwGetInputMode(Window.getInstance().getWindow(), GLFW.GLFW_CURSOR) == GLFW.GLFW_CURSOR_DISABLED;
+    }
 
     public static boolean isKeyDown(int key) {
         return keys[key];
@@ -46,12 +60,25 @@ public final class Input {
         return mouseY;
     }
 
+    public static Vector2f getMousePosition() {
+        return new Vector2f((float) mouseX, (float) mouseY);
+    }
+
     public static double getMouseDeltaX() {
         return mouseDeltaX;
     }
 
     public static double getMouseDeltaY() {
         return mouseDeltaY;
+    }
+
+    public static void resetDelta() {
+        mouseDeltaX = 0;
+        mouseDeltaY = 0;
+    }
+
+    public static Vector2f getMouseDelta() {
+        return new Vector2f((float) mouseDeltaX, (float) mouseDeltaY);
     }
 
     public static double getScrollX() {

@@ -69,13 +69,16 @@ public class Window {
         GL11.glViewport(0, 0, width, height);
     }
 
-    public void update() {
+    public void startFrame() {
+        Time.startFrame();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
     public void endFrame() {
+        Input.resetDelta();
         GLFW.glfwPollEvents();
         GLFW.glfwSwapBuffers(window);
+        Time.endFrame();
     }
 
     public void close() {
@@ -92,6 +95,10 @@ public class Window {
 
     public int getHeight() {
         return height;
+    }
+
+    public long getWindow() {
+        return window;
     }
 
     public static Window getInstance() {
