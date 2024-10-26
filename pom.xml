@@ -53,6 +53,10 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-par</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-stb</artifactId>
         </dependency>
         <dependency>
@@ -78,6 +82,11 @@
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-opengl</artifactId>
+            <classifier>${lwjgl.natives}</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-par</artifactId>
             <classifier>${lwjgl.natives}</classifier>
         </dependency>
         <dependency>
