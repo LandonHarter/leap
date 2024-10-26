@@ -61,6 +61,10 @@ public class Camera {
         if (Input.isCursorLocked()) {
             Vector2f mouseDelta = Input.getMouseDelta();
             transform.getRotation().add(mouseDelta.y * sensitivity * (float) Time.getDelta(), mouseDelta.x * sensitivity * (float) Time.getDelta(), 0);
+
+            if (transform.getRotation().x < -80) {
+                transform.getRotation().x = -80;
+            }
         }
     }
 
