@@ -1,8 +1,10 @@
 package org.landon.graphics.renderers;
+import org.landon.components.graphics.MeshFilter;
+import org.landon.graphics.Material;
 import org.landon.graphics.Mesh;
 import org.landon.graphics.Shader;
 import org.landon.math.Transform;
-import org.landon.scene.SceneObject;
+import org.landon.scene.GameObject;
 import org.lwjgl.opengl.*;
 
 public class Renderer {
@@ -17,9 +19,10 @@ public class Renderer {
         this.shader = shader;
     }
 
-    public void render(SceneObject object) {
-        Transform transform = object.getTransform();
-        Mesh mesh = object.getMesh();
+    public void render(MeshFilter meshFilter) {
+        Transform transform = meshFilter.getGameObject().getTransform();
+        Mesh mesh = meshFilter.getMesh();
+        Material material = meshFilter.getMaterial();
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL30.glBindVertexArray(mesh.getVao());
@@ -30,15 +33,17 @@ public class Renderer {
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getIbo());
 
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL13.glBindTexture(GL11.GL_TEXTURE_2D, object.getMaterial().getTexture().getTextureId());
+        if (material.getTexture() != null) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            GL13.glBindTexture(GL11.GL_TEXTURE_2D, material.getTexture().getTextureId());
+        }
 
         shader.bind();
 
         shader.setUniform("model", transform.getModelMatrix());
-        shader.setUniform("view", object.getScene().getCamera().getViewMatrix());
-        shader.setUniform("projection", object.getScene().getCamera().getProjection());
-        shader.setUniform("color", object.getMaterial().getColor());
+        shader.setUniform("view", meshFilter.getGameObject().getScene().getCamera().getViewMatrix());
+        shader.setUniform("projection", meshFilter.getGameObject().getScene().getCamera().getProjection());
+        shader.setUniform("color", material.getColor());
 
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);
 

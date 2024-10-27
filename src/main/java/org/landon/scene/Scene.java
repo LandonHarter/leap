@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Scene {
 
-    private List<SceneObject> objects;
+    private List<GameObject> objects;
     private Camera camera;
 
     public Scene() {
@@ -13,17 +13,17 @@ public class Scene {
         camera = new Camera();
     }
 
-    public void addObject(SceneObject object) {
+    public void addObject(GameObject object) {
         objects.add(object);
         object.setScene(this);
     }
 
-    public void removeObject(SceneObject object) {
+    public void removeObject(GameObject object) {
         objects.remove(object);
         object.setScene(null);
     }
 
-    public List<SceneObject> getObjects() {
+    public List<GameObject> getObjects() {
         return objects;
     }
 
