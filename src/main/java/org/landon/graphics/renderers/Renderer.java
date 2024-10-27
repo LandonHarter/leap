@@ -9,7 +9,7 @@ import org.lwjgl.opengl.*;
 
 public class Renderer {
 
-    private Shader shader;
+    private final Shader shader;
 
     public Renderer() {
         shader = new Shader("resources/shaders/unlit/vert.glsl", "resources/shaders/unlit/frag.glsl");

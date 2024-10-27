@@ -4,7 +4,7 @@ import org.landon.scene.GameObject;
 
 public abstract class Component {
 
-    private GameObject gameObject;
+    protected GameObject gameObject;
     private String name;
     private boolean enabled = true;
     private boolean allowMultiple = false;
@@ -14,8 +14,12 @@ public abstract class Component {
         this.allowMultiple = allowMultiple;
     }
 
-    public abstract void start();
-    public abstract void update();
+    public void start() {}
+    public void update() {}
+    public void onAdd() {}
+    public void onRemove() {}
+    public void onComponentAdded(Component component) {}
+    public void onComponentRemoved(Component component) {}
 
     public void setGameObject(GameObject gameObject) {
         this.gameObject = gameObject;

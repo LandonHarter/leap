@@ -13,6 +13,13 @@ public class Scene {
         camera = new Camera();
     }
 
+    public void update() {
+        camera.update();
+        for (GameObject object : objects) {
+            object.update();
+        }
+    }
+
     public void addObject(GameObject object) {
         objects.add(object);
         object.setScene(this);

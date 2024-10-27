@@ -17,6 +17,14 @@ public class GameObject {
         components = new ArrayList<>();
     }
 
+    public void update() {
+        for (Component component : components) {
+            if (component.isEnabled()) {
+                component.update();
+            }
+        }
+    }
+
     public Component addComponent(Component component) {
         if (component.getGameObject() != null) {
             System.err.println("Component already attached to a GameObject");
@@ -32,14 +40,32 @@ public class GameObject {
         }
 
         component.setGameObject(this);
+        for (Component c : components) {
+            c.onComponentAdded(component);
+        }
         components.add(component);
+        component.onAdd();
         return component;
     }
 
-    public Component getComponent(Class<? extends Component> type) {
+    public void removeComponent(Component component) {
+        if (component.getGameObject() != this) {
+            System.err.println("Component not attached to GameObject");
+            return;
+        }
+
+        component.onRemove();
+        components.remove(component);
+        component.setGameObject(null);
+        for (Component c : components) {
+            c.onComponentRemoved(component);
+        }
+    }
+
+    public <T extends Component> T getComponent(Class<T> type) {
         for (Component component : components) {
             if (type.isAssignableFrom(component.getClass())) {
-                return component;
+                return type.cast(component);
             }
         }
         return null;
