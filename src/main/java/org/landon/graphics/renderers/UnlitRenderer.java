@@ -5,6 +5,7 @@ import org.landon.graphics.Material;
 import org.landon.graphics.Mesh;
 import org.landon.graphics.Shader;
 import org.landon.math.Transform;
+import org.landon.scene.SceneManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
@@ -39,8 +40,8 @@ public class UnlitRenderer extends Renderer {
         shader.bind();
 
         shader.setUniform("model", transform.getModelMatrix());
-        shader.setUniform("view", meshFilter.getGameObject().getScene().getCamera().getViewMatrix());
-        shader.setUniform("projection", meshFilter.getGameObject().getScene().getCamera().getProjection());
+        shader.setUniform("view", SceneManager.getCurrentScene().getCamera().getViewMatrix());
+        shader.setUniform("projection", SceneManager.getCurrentScene().getCamera().getProjection());
         shader.setUniform("color", material.getColor());
 
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);

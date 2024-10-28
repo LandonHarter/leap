@@ -27,6 +27,12 @@ public class Scene {
         }
     }
 
+    public void destroy() {
+        for (GameObject object : objects) {
+            object.destroy();
+        }
+    }
+
     public void addObject(GameObject object) {
         objects.add(object);
         object.setScene(this);

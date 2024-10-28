@@ -31,6 +31,14 @@ public class GameObject {
         }
     }
 
+    public void destroy() {
+        for (Component component : components) {
+            component.onRemove();
+        }
+
+        components.clear();
+    }
+
     public Component addComponent(Component component) {
         if (component.getGameObject() != null) {
             System.err.println("Component already attached to a GameObject");

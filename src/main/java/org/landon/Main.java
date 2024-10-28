@@ -9,6 +9,7 @@ import org.landon.graphics.Meshes;
 import org.landon.graphics.Texture;
 import org.landon.scene.Scene;
 import org.landon.scene.GameObject;
+import org.landon.scene.SceneManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -28,7 +29,7 @@ public class Main {
         camera.getTransform().getPosition().set(0, 2, 0);
         scene.addObject(camera);
 
-        scene.start();
+        SceneManager.loadScene(scene);
         while (window.isOpen()) {
             window.startFrame();
 
