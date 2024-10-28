@@ -1,4 +1,4 @@
-package org.landon.scene;
+package org.landon.components;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -8,30 +8,25 @@ import org.landon.input.Input;
 import org.landon.math.Transform;
 import org.lwjgl.glfw.GLFW;
 
-public class Camera {
+public class Camera extends Component {
 
-    private Transform transform;
-
-    private float fov = 70.0f;
+    private float fov = 70;
     private float nearPlane = 0.01f, farPlane = 1000.0f;
 
     private float cameraSpeed = 5.0f;
     private float sensitivity = 35.0f;
 
     public Camera() {
-        transform = new Transform();
+        super("Camera", false);
     }
 
-    public Camera(Transform transform) {
-        this.transform = transform;
+    @Override
+    public void start() {
+        gameObject.getScene().setCamera(this);
     }
 
-    public Camera(Transform transform, float fov) {
-        this.transform = transform;
-        this.fov = fov;
-    }
-
-    public void update() {
+    private void movement() {
+        Transform transform = gameObject.getTransform();
         if (Input.isKeyDown(GLFW.GLFW_KEY_W)) {
             transform.getPosition().add(transform.getForward().mul((float) Time.getDelta() * cameraSpeed));
         }
@@ -69,17 +64,13 @@ public class Camera {
     }
 
     public Matrix4f getViewMatrix() {
-        return new Matrix4f().identity().rotateX((float) Math.toRadians(transform.getRotation().x)).rotateY((float) Math.toRadians(transform.getRotation().y)).rotateZ((float) Math.toRadians(transform.getRotation().z)).translate(-transform.getPosition().x, -transform.getPosition().y, -transform.getPosition().z);
+        return new Matrix4f().identity().rotateX((float) Math.toRadians(gameObject.getTransform().getRotation().x)).rotateY((float) Math.toRadians(gameObject.getTransform().getRotation().y)).rotateZ((float) Math.toRadians(gameObject.getTransform().getRotation().z)).translate(-gameObject.getTransform().getPosition().x, -gameObject.getTransform().getPosition().y, -gameObject.getTransform().getPosition().z);
     }
 
     public Matrix4f getProjection() {
         Window window = Window.getInstance();
         float aspect = (float) window.getWidth() / (float) window.getHeight();
         return new Matrix4f().identity().perspective((float) Math.toRadians(fov), aspect, nearPlane, farPlane);
-    }
-
-    public Transform getTransform() {
-        return transform;
     }
 
 }

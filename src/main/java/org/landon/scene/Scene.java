@@ -1,5 +1,7 @@
 package org.landon.scene;
 
+import org.landon.components.Camera;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +12,16 @@ public class Scene {
 
     public Scene() {
         objects = new ArrayList<>();
-        camera = new Camera();
+    }
+
+    public void start() {
+        checkForCamera();
+        for (GameObject object : objects) {
+            object.start();
+        }
     }
 
     public void update() {
-        camera.update();
         for (GameObject object : objects) {
             object.update();
         }
@@ -30,12 +37,32 @@ public class Scene {
         object.setScene(null);
     }
 
+    private void checkForCamera() {
+        boolean hasCamera = false;
+        for (GameObject object : objects) {
+            if (object.getComponent(Camera.class) != null) {
+                hasCamera = true;
+                break;
+            }
+        }
+
+        if (!hasCamera) {
+            GameObject camera = new GameObject();
+            camera.addComponent(new Camera());
+            addObject(camera);
+        }
+    }
+
     public List<GameObject> getObjects() {
         return objects;
     }
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
     }
 
 }

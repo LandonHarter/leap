@@ -17,6 +17,12 @@ public class GameObject {
         components = new ArrayList<>();
     }
 
+    public void start() {
+        for (Component component : components) {
+            component.start();
+        }
+    }
+
     public void update() {
         for (Component component : components) {
             if (component.isEnabled()) {
