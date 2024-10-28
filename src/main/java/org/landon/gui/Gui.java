@@ -7,6 +7,7 @@ import imgui.extension.imnodes.ImNodes;
 import imgui.extension.implot.ImPlot;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
+import org.landon.edtior.Editor;
 import org.landon.input.Input;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -120,6 +121,8 @@ public class Gui {
 
         imGuiGl3.init(glslVersion);
         Theme.modernDark(ImGui.getStyle());
+
+        Editor.init();
     }
 
     public static void setupKeyboard(long window, int key, int scancode, int action, int mods) {

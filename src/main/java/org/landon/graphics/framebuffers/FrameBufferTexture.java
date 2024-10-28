@@ -112,6 +112,14 @@ public class FrameBufferTexture {
         return null;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public int getTextureId() {
         return textureId;
     }

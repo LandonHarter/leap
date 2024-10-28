@@ -138,6 +138,10 @@ public class Window {
         return window;
     }
 
+    public Framebuffer getFramebuffer() {
+        return framebuffer;
+    }
+
     public static Window getInstance() {
         return instance;
     }
