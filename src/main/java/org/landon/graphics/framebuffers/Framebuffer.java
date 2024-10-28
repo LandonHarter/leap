@@ -52,7 +52,7 @@ public class Framebuffer {
         return fbo;
     }
 
-    public int GetTextureID() {
+    public int getTextureID() {
         return texture.getTextureId();
     }
 
