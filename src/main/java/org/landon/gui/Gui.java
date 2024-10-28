@@ -25,8 +25,7 @@ public class Gui {
     private static final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
     private static String glslVersion = "#version 330 core";
 
-    public static void initialize(long window) {
-
+    public static void init(long window) {
         windowPtr = window;
 
         ImGui.createContext();
@@ -183,7 +182,7 @@ public class Gui {
         imGuiGl3.renderDrawData(ImGui.getDrawData());
     }
 
-    public static void destroyGui() {
+    public static void destroy() {
         ImNodes.destroyContext();
         ImPlot.destroyContext(ImPlot.getCurrentContext());
 

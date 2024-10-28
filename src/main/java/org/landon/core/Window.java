@@ -79,13 +79,14 @@ public class Window {
         GLFW.glfwSwapInterval(0);
 
         GL11.glViewport(0, 0, width, height);
-        Gui.initialize(window);
+        Gui.init(window);
     }
 
     public void destroy() {
         windowSize.free();
         framebuffer.destroy();
 
+        Gui.destroy();
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
     }
@@ -104,7 +105,7 @@ public class Window {
         framebuffer.unbind();
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        framebufferRenderer.render(framebuffer);
+        // framebufferRenderer.render(framebuffer);
     }
 
     public void endFrame() {

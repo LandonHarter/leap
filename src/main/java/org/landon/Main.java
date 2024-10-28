@@ -4,6 +4,7 @@ import org.landon.components.Camera;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.components.graphics.MeshRenderer;
 import org.landon.core.Window;
+import org.landon.edtior.Editor;
 import org.landon.graphics.Material;
 import org.landon.graphics.Meshes;
 import org.landon.graphics.Texture;
@@ -34,9 +35,12 @@ public class Main {
             window.startFrame();
 
             scene.update(); // Renders scene to framebuffer and updates all components
+            Editor.render();
 
             window.postRender(); // Renders framebuffer
             window.endFrame();
         }
+
+        window.destroy();
     }
 }
