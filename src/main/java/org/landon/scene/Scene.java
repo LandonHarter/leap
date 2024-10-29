@@ -7,11 +7,20 @@ import java.util.List;
 
 public class Scene {
 
+    private String name;
+
     private List<GameObject> objects;
     private Camera camera;
 
-    public Scene() {
+    public Scene(boolean load) {
         objects = new ArrayList<>();
+        name = "Scene";
+
+        if (load) SceneManager.loadScene(this);
+    }
+
+    public Scene() {
+        this(true);
     }
 
     public void start() {
@@ -69,6 +78,10 @@ public class Scene {
 
     public void setCamera(Camera camera) {
         this.camera = camera;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }

@@ -9,12 +9,19 @@ import java.util.List;
 public class GameObject {
 
     private Scene scene;
+    private String name;
+
     private Transform transform;
     private List<Component> components;
 
-    public GameObject() {
+    public GameObject(String name) {
         transform = new Transform();
         components = new ArrayList<>();
+        this.name = name;
+    }
+
+    public GameObject() {
+        this("Game Object " + SceneManager.getCurrentScene().getObjects().size() + 1);
     }
 
     public void start() {
@@ -99,6 +106,10 @@ public class GameObject {
 
     public void setScene(Scene scene) {
         this.scene = scene;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }

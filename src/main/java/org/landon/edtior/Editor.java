@@ -7,6 +7,7 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import org.landon.core.Window;
+import org.landon.edtior.windows.SceneHierarchy;
 import org.landon.edtior.windows.Viewport;
 
 public final class Editor {
@@ -18,6 +19,7 @@ public final class Editor {
     public static void render() {
         dockspace();
 
+        SceneHierarchy.render();
         Viewport.render();
 
         ImGui.end();

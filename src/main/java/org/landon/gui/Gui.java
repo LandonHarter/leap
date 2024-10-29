@@ -35,7 +35,7 @@ public class Gui {
 
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename("EngineAssets/editor.ini");
+        io.setIniFilename("resources/editor.ini");
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
         io.setConfigFlags(ImGuiConfigFlags.DockingEnable);
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors);

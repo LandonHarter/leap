@@ -31,7 +31,6 @@ public class Main {
         camera.getTransform().getPosition().set(0, 2, 0);
         scene.addObject(camera);
 
-        SceneManager.loadScene(scene);
         while (window.isOpen()) {
             window.startFrame();
 
