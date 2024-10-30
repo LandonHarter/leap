@@ -45,6 +45,7 @@ public class Project {
         Scene scene = new Scene("Untitled Scene", false);
         File newScene = new File(rootDirectory, "assets/scenes/scene.leap");
         SceneManager.saveScene(scene, newScene);
+        config.save(rootDirectory);
         return newScene;
     }
 

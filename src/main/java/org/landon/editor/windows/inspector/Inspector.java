@@ -73,7 +73,7 @@ public class Inspector {
 
     public static void setSelectedObject(GameObject object) {
         selectedObject = object;
-        name.set(object.getName());
+        if (object != null) name.set(object.getName());
     }
 
     public static GameObject getSelectedObject() {

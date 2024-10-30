@@ -1,6 +1,8 @@
 package org.landon.scene;
 
 import com.alibaba.fastjson.JSON;
+import org.landon.editor.windows.inspector.Inspector;
+import org.landon.project.Project;
 import org.landon.serialization.Serializer;
 import org.landon.util.FileUtil;
 import org.landon.util.LoadingUtil;
@@ -16,6 +18,11 @@ public final class SceneManager {
             currentScene.destroy();
         }
         currentScene = scene;
+        Inspector.setSelectedObject(null);
+
+        if (scene.getFile() != null) {
+            Project.setLastScene(scene.getFile().getAbsolutePath());
+        }
     }
 
     public static void saveScene(Scene scene, File f) {
@@ -27,6 +34,7 @@ public final class SceneManager {
         LoadingUtil.openLoadingScreen("Reading scene file...");
         String data = FileUtil.readFile(f);
         Scene s = Serializer.fromJson(data, Scene.class);
+        s.setFile(f);
         LoadingUtil.closeLoadingBar();
         return s;
     }

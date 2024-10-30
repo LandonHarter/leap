@@ -2,11 +2,13 @@ package org.landon.scene;
 
 import org.landon.components.Camera;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Scene {
 
+    private transient File file;
     private final String name;
     private final List<GameObject> objects;
 
@@ -61,6 +63,12 @@ public class Scene {
         return null;
     }
 
+    public void addCamera() {
+        GameObject camera = new GameObject("Camera");
+        camera.addComponent(new Camera());
+        addObject(camera);
+    }
+
     private void checkForCamera() {
         boolean hasCamera = false;
         for (GameObject object : objects) {
@@ -70,11 +78,16 @@ public class Scene {
             }
         }
 
-        if (!hasCamera) {
-            GameObject camera = new GameObject("Camera");
-            camera.addComponent(new Camera());
-            addObject(camera);
-        }
+        if (!hasCamera) addCamera();
+    }
+
+    public void save(String path) {
+        SceneManager.saveScene(this, new File(path));
+    }
+
+    public void save() {
+        if (file == null) return;
+        save(file.getAbsolutePath());
     }
 
     public List<GameObject> getObjects() {
@@ -91,6 +104,14 @@ public class Scene {
 
     public String getName() {
         return name;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 
 }

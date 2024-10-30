@@ -8,6 +8,10 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import org.landon.core.Window;
 import org.landon.scene.Scene;
+import org.landon.scene.SceneManager;
+import org.landon.util.ExplorerUtil;
+
+import java.io.File;
 
 public final class Dockspace {
 
@@ -30,13 +34,28 @@ public final class Dockspace {
 
         if (ImGui.beginMenu("File")) {
             if (ImGui.menuItem("New Scene")) {
-                new Scene("Untitled Scene", true);
+                Scene scene = new Scene("Untitled Scene",  false);
+                scene.addCamera();
+                SceneManager.loadScene(scene);
             }
             if (ImGui.menuItem("Open Scene")) {
-
+                String path = ExplorerUtil.chooseFile(new String[] { "leap" });
+                if (path != null) {
+                    Scene scene = SceneManager.readScene(new File(path));
+                    SceneManager.loadScene(scene);
+                }
             }
             if (ImGui.menuItem("Save Scene")) {
-
+                Scene currentScene = SceneManager.getCurrentScene();
+                if (currentScene.getFile() != null) {
+                    currentScene.save();
+                } else {
+                    String path = ExplorerUtil.createFile(new String[] { "leap" });
+                    if (path != null) {
+                        currentScene.setFile(new File(path));
+                        currentScene.save();
+                    }
+                }
             }
 
             ImGui.endMenu();
