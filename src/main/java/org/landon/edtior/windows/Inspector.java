@@ -24,6 +24,11 @@ public class Inspector {
             selectedObject.setName(name.get());
         }
 
+        ImGui.text("Transform");
+        ImGui.text(selectedObject.getTransform().getWorldPosition().toString());
+        ImGui.text(selectedObject.getTransform().getWorldRotation().toString());
+        ImGui.text(selectedObject.getTransform().getWorldScale().toString());
+
         ImGui.end();
     }
 

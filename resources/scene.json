@@ -2,17 +2,17 @@
 	"objects":[
 		{
 			"transform":{
-				"position":{
+				"localPosition":{
 					"x":0.0,
 					"y":0.0,
 					"z":-5.0
 				},
-				"rotation":{
+				"localRotation":{
 					"x":0.0,
 					"y":0.0,
 					"z":0.0
 				},
-				"scale":{
+				"localScale":{
 					"x":1.0,
 					"y":1.0,
 					"z":1.0
@@ -41040,17 +41040,17 @@
 		},
 		{
 			"transform":{
-				"position":{
+				"localPosition":{
 					"x":0.0,
 					"y":2.0,
 					"z":0.0
 				},
-				"rotation":{
+				"localRotation":{
 					"x":0.0,
 					"y":0.0,
 					"z":0.0
 				},
-				"scale":{
+				"localScale":{
 					"x":1.0,
 					"y":1.0,
 					"z":1.0

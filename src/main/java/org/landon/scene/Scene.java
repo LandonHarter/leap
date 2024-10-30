@@ -32,7 +32,7 @@ public class Scene {
 
     public void update() {
         for (GameObject object : objects) {
-            object.update();
+            if (object.getParent() == null) object.update(); // Only update root objects
         }
     }
 

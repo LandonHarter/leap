@@ -25,46 +25,8 @@ public class Camera extends Component {
         gameObject.getScene().setCamera(this);
     }
 
-    private void movement() {
-        Transform transform = gameObject.getTransform();
-        if (Input.isKeyDown(GLFW.GLFW_KEY_W)) {
-            transform.getPosition().add(transform.getForward().mul((float) Time.getDelta() * cameraSpeed));
-        }
-        if (Input.isKeyDown(GLFW.GLFW_KEY_S)) {
-            transform.getPosition().sub(transform.getForward().mul((float) Time.getDelta() * cameraSpeed));
-        }
-        if (Input.isKeyDown(GLFW.GLFW_KEY_A)) {
-            transform.getPosition().sub(transform.getRight().mul((float) Time.getDelta() * cameraSpeed));
-        }
-        if (Input.isKeyDown(GLFW.GLFW_KEY_D)) {
-            transform.getPosition().add(transform.getRight().mul((float) Time.getDelta() * cameraSpeed));
-        }
-        if (Input.isKeyDown(GLFW.GLFW_KEY_SPACE)) {
-            transform.getPosition().add(0, (float) Time.getDelta() * cameraSpeed, 0);
-        }
-        if (Input.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-            transform.getPosition().sub(0, (float) Time.getDelta() * cameraSpeed, 0);
-        }
-
-        if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-            Input.lockCursor();
-        }
-        if (Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
-            Input.unlockCursor();
-        }
-
-        if (Input.isCursorLocked()) {
-            Vector2f mouseDelta = Input.getMouseDelta();
-            transform.getRotation().add(mouseDelta.y * sensitivity * (float) Time.getDelta(), mouseDelta.x * sensitivity * (float) Time.getDelta(), 0);
-
-            if (transform.getRotation().x < -80) {
-                transform.getRotation().x = -80;
-            }
-        }
-    }
-
     public Matrix4f getViewMatrix() {
-        return new Matrix4f().identity().rotateX((float) Math.toRadians(gameObject.getTransform().getRotation().x)).rotateY((float) Math.toRadians(gameObject.getTransform().getRotation().y)).rotateZ((float) Math.toRadians(gameObject.getTransform().getRotation().z)).translate(-gameObject.getTransform().getPosition().x, -gameObject.getTransform().getPosition().y, -gameObject.getTransform().getPosition().z);
+        return new Matrix4f().identity().rotateX((float) Math.toRadians(gameObject.getTransform().getWorldRotation().x)).rotateY((float) Math.toRadians(gameObject.getTransform().getWorldRotation().y)).rotateZ((float) Math.toRadians(gameObject.getTransform().getWorldRotation().z)).translate(-gameObject.getTransform().getWorldPosition().x, -gameObject.getTransform().getWorldPosition().y, -gameObject.getTransform().getWorldPosition().z);
     }
 
     public Matrix4f getProjection() {

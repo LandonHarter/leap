@@ -15,9 +15,13 @@ public class GameObject {
     private Transform transform;
     private final List<Component> components;
 
+    private GameObject parent;
+    private final List<GameObject> children;
+
     public GameObject(String name) {
         transform = new Transform();
         components = new ArrayList<>();
+        children = new ArrayList<>();
         this.name = name;
     }
 
@@ -33,10 +37,15 @@ public class GameObject {
 
     public void update() {
         if (!enabled) return;
+        transform.update(parent != null ? parent.getTransform() : null);
         for (Component component : components) {
             if (component.isEnabled()) {
                 component.update();
             }
+        }
+
+        for (GameObject child : children) {
+            child.update();
         }
     }
 
@@ -92,6 +101,28 @@ public class GameObject {
             }
         }
         return null;
+    }
+
+    public GameObject getParent() {
+        return parent;
+    }
+
+    public void setParent(GameObject parent) {
+        this.parent = parent;
+    }
+
+    public List<GameObject> getChildren() {
+        return children;
+    }
+
+    public void addChild(GameObject child) {
+        children.add(child);
+        child.setParent(this);
+    }
+
+    public void removeChild(GameObject child) {
+        children.remove(child);
+        child.setParent(null);
     }
 
     public List<Component> getComponents() {
