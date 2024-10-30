@@ -24,7 +24,7 @@ public final class SceneManager {
 
     public static Scene readScene(File f) {
         String data = FileUtil.readFile(f);
-        return JSON.parseObject(data, Scene.class);
+        return Serializer.fromJson(data, Scene.class);
     }
 
     public static Scene getCurrentScene() {

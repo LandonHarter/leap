@@ -7,7 +7,7 @@ import org.landon.graphics.Mesh;
 
 public class MeshFilter extends Component {
 
-    private transient Mesh mesh;
+    private Mesh mesh;
     private Material material;
 
     public MeshFilter() {

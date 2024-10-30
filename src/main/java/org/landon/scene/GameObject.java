@@ -21,7 +21,7 @@ public class GameObject {
     }
 
     public GameObject() {
-        this("Game Object " + (SceneManager.getCurrentScene().getObjects().size() + 1));
+        this("Game Object " + (int)(Math.random() * 1000));
     }
 
     public void start() {

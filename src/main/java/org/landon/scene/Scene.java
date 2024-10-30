@@ -12,15 +12,15 @@ public class Scene {
 
     private transient Camera camera;
 
-    public Scene(boolean load) {
+    public Scene(String name, boolean load) {
         objects = new ArrayList<>();
-        name = "Scene";
+        this.name = name;
 
         if (load) SceneManager.loadScene(this);
     }
 
     public Scene() {
-        this(true);
+        this("Scene", true);
     }
 
     public void start() {

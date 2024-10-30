@@ -17,22 +17,24 @@ import java.io.File;
 public class Main {
 
     public static void main(String[] args) {
-        Window window = new Window(800, 500, "Leap Game Engine");
+        Window window = new Window(1920, 1080, "Leap Game Engine");
         window.create();
 
-//        SceneSerializer.readScene(new File("resources/scene.json"));
-        Scene scene = new Scene();
+        Scene scene = SceneManager.readScene(new File("resources/scene.json"));
+        SceneManager.loadScene(scene);
 
-        GameObject object = new GameObject("Sphere");
-        object.getTransform().getPosition().set(0, 0, -5);
-        object.addComponent(new MeshFilter(Meshes.createSphere(), new Material(new Texture("resources/images/box.jpg"))));
-        object.addComponent(new MeshRenderer());
-        scene.addObject(object);
-
-        GameObject camera = new GameObject("Camera");
-        camera.addComponent(new Camera());
-        camera.getTransform().getPosition().set(0, 2, 0);
-        scene.addObject(camera);
+//        Scene scene = new Scene();
+//
+//        GameObject object = new GameObject("Sphere");
+//        object.getTransform().getPosition().set(0, 0, -5);
+//        object.addComponent(new MeshFilter(Meshes.createSphere(), new Material(new Texture("resources/images/box.jpg"))));
+//        object.addComponent(new MeshRenderer());
+//        scene.addObject(object);
+//
+//        GameObject camera = new GameObject("Camera");
+//        camera.addComponent(new Camera());
+//        camera.getTransform().getPosition().set(0, 2, 0);
+//        scene.addObject(camera);
 
         scene.start();
         while (window.isOpen()) {
@@ -46,7 +48,7 @@ public class Main {
             window.endFrame();
         }
 
-        SceneManager.saveScene(SceneManager.getCurrentScene(), new File("resources/scene.json"));
+        // SceneManager.saveScene(SceneManager.getCurrentScene(), new File("resources/scene.json"));
 
         window.destroy();
     }

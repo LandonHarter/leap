@@ -16,8 +16,8 @@ public class Mesh {
     private Vertex[] vertices;
     private int[] indices;
 
-    private int vao, pbo, ibo, tbo, nbo;
-    private boolean created = false;
+    private transient int vao, pbo, ibo, tbo, nbo;
+    private transient boolean created = false;
 
     public Mesh(Vertex[] vertices, int[] indices) {
         this.vertices = vertices;
