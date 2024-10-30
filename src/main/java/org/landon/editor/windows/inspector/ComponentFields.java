@@ -5,7 +5,10 @@ import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.landon.annoations.ExecuteGui;
 import org.landon.annoations.HideField;
+import org.landon.annoations.RangeFloat;
+import org.landon.annoations.RangeInt;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
 
@@ -28,10 +31,8 @@ public final class ComponentFields {
                 if (Modifier.isTransient(field.getModifiers())) continue;
                 if (Modifier.isStatic(field.getModifiers())) continue;
                 if (Modifier.isFinal(field.getModifiers())) continue;
-                if (field.isAnnotationPresent(HideField.class)) continue;
 
                 field.setAccessible(true);
-
                 try {
                     renderField(field, c);
                 } catch (IllegalAccessException e) {
@@ -45,12 +46,19 @@ public final class ComponentFields {
     }
 
     private static void renderField(Field field, Component c) throws IllegalAccessException {
-        if (field.getType() == boolean.class) booleanField(field, c);
-        else if (field.getType() == int.class) intField(field, c);
-        else if (field.getType() == float.class) floatField(field, c);
-        else if (field.getType() == String.class) stringField(field, c);
-        else if (field.getType() == Vector2f.class) vector2Field(field, c);
-        else if (field.getType() == Vector3f.class) vector3Field(field, c);
+        if (!field.isAnnotationPresent(HideField.class)) {
+            if (field.getType() == boolean.class) booleanField(field, c);
+            else if (field.getType() == int.class) intField(field, c);
+            else if (field.getType() == float.class) floatField(field, c);
+            else if (field.getType() == String.class) stringField(field, c);
+            else if (field.getType() == Vector2f.class) vector2Field(field, c);
+            else if (field.getType() == Vector3f.class) vector3Field(field, c);
+        }
+
+        ExecuteGui executeGui = field.getAnnotation(ExecuteGui.class);
+        if (executeGui != null) {
+            c.executeGui(executeGui.value());
+        }
     }
 
     private static void booleanField(Field field, Component c) throws IllegalAccessException {
@@ -61,14 +69,20 @@ public final class ComponentFields {
 
     private static void intField(Field field, Component c) throws IllegalAccessException {
         int[] value = new int[] { field.getInt(c) };
-        if (ImGui.dragInt(formatFieldName(field.getName()), value)) {
+        RangeInt range = field.getAnnotation(RangeInt.class);
+
+        boolean changed = range == null ? ImGui.dragInt(formatFieldName(field.getName()), value) : ImGui.sliderInt(formatFieldName(field.getName()), value, range.min(), range.max());
+        if (changed) {
             field.setInt(c, value[0]);
         }
     }
 
     private static void floatField(Field field, Component c) throws IllegalAccessException {
         float[] value = new float[] { field.getFloat(c) };
-        if (ImGui.dragFloat(formatFieldName(field.getName()), value)) {
+        RangeFloat range = field.getAnnotation(RangeFloat.class);
+
+        boolean changed = range == null ? ImGui.dragFloat(formatFieldName(field.getName()), value) : ImGui.sliderFloat(formatFieldName(field.getName()), value, range.min(), range.max());
+        if (changed) {
             field.setFloat(c, value[0]);
         }
     }

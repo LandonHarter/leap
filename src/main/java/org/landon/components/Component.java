@@ -26,6 +26,7 @@ public class Component {
     public void onRemove() {}
     public void onComponentAdded(Component component) {}
     public void onComponentRemoved(Component component) {}
+    public void executeGui(String name) {}
 
     public void setGameObject(GameObject gameObject) {
         this.gameObject = gameObject;

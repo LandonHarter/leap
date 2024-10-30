@@ -1,20 +1,12 @@
 package org.landon.components;
 
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.landon.core.Time;
 import org.landon.core.Window;
-import org.landon.input.Input;
-import org.landon.math.Transform;
-import org.lwjgl.glfw.GLFW;
 
 public class Camera extends Component {
 
     private float fov = 70;
     private float nearPlane = 0.01f, farPlane = 1000.0f;
-
-    private transient final float cameraSpeed = 5.0f;
-    private transient final float sensitivity = 35.0f;
 
     public Camera() {
         super("Camera", false);
