@@ -7,6 +7,7 @@ import imgui.extension.imnodes.ImNodes;
 import imgui.extension.implot.ImPlot;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
+import org.landon.core.Time;
 import org.landon.edtior.Editor;
 import org.landon.input.Input;
 
@@ -176,6 +177,7 @@ public class Gui {
         io.setDisplaySize(winWidth[0], winHeight[0]);
         io.setDisplayFramebufferScale((float) fbWidth[0] / winWidth[0], (float) fbHeight[0] / winHeight[0]);
         io.setMousePos((float) mousePosX[0], (float) mousePosY[0]);
+        io.setFramerate(1 / (float) Time.getDelta());
 
         final int imguiCursor = imgui.ImGui.getMouseCursor();
         glfwSetCursor(windowPtr, mouseCursors[imguiCursor]);
@@ -192,4 +194,5 @@ public class Gui {
         imGuiGl3.dispose();
         imgui.ImGui.destroyContext();
     }
+
 }

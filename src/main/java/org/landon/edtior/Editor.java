@@ -7,6 +7,7 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import org.landon.core.Window;
+import org.landon.edtior.windows.Inspector;
 import org.landon.edtior.windows.SceneHierarchy;
 import org.landon.edtior.windows.Viewport;
 
@@ -21,6 +22,7 @@ public final class Editor {
 
         SceneHierarchy.render();
         Viewport.render();
+        Inspector.render();
 
         ImGui.end();
     }

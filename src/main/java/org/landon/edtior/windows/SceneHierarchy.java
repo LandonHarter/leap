@@ -12,6 +12,9 @@ public final class SceneHierarchy {
         if (ImGui.collapsingHeader(SceneManager.getCurrentScene().getName(), ImGuiTreeNodeFlags.SpanAvailWidth | ImGuiTreeNodeFlags.DefaultOpen)) {
             for (int i = 0; i < SceneManager.getCurrentScene().getObjects().size(); i++) {
                 ImGui.text(SceneManager.getCurrentScene().getObjects().get(i).getName());
+                if (ImGui.isItemClicked()) {
+                    Inspector.setSelectedObject(SceneManager.getCurrentScene().getObjects().get(i));
+                }
             }
         }
 

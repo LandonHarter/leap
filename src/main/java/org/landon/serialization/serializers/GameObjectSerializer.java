@@ -19,6 +19,7 @@ public class GameObjectSerializer implements ObjectSerializer {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", object.getName());
+        jsonObject.put("enabled", object.isEnabled());
         jsonObject.put("transform", object.getTransform());
 
         JSONArray components = new JSONArray();

@@ -10,7 +10,8 @@ public class GameObject {
 
     private transient Scene scene;
 
-    private final transient String name;
+    private String name;
+    private boolean enabled = true;
     private Transform transform;
     private final List<Component> components;
 
@@ -31,6 +32,7 @@ public class GameObject {
     }
 
     public void update() {
+        if (!enabled) return;
         for (Component component : components) {
             if (component.isEnabled()) {
                 component.update();
@@ -112,8 +114,20 @@ public class GameObject {
         this.scene = scene;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

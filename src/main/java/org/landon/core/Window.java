@@ -77,7 +77,7 @@ public class Window {
         GLFW.glfwSetWindowSizeCallback(window, windowSize);
 
         GLFW.glfwShowWindow(window);
-        GLFW.glfwSwapInterval(0);
+        GLFW.glfwSwapInterval(1); // VSync
 
         GL11.glViewport(0, 0, width, height);
         init();
