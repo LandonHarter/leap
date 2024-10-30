@@ -2,15 +2,23 @@ package org.landon;
 
 import org.landon.core.Window;
 import org.landon.editor.Editor;
+import org.landon.project.Project;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
+import org.landon.util.ExplorerUtil;
 
 import java.io.File;
 
 public class Main {
 
     public static void main(String[] args) {
-        Window window = new Window(1920, 1080, "Leap Game Engine");
+        String projectRoot = args.length > 0 ? args[0] : ExplorerUtil.chooseDirectory();
+        if (projectRoot == null) {
+            System.exit(0);
+        }
+        Project.load(new File(projectRoot));
+
+        Window window = new Window(1920, 1080, Project.getName() + " | Leap Game Engine");
         window.create();
         window.maximize();
 

@@ -28,8 +28,8 @@ public final class FileUtil {
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             writer.write(content);
             writer.close();
-        } catch (IOException e) {
-            System.err.println("File not found");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
