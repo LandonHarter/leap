@@ -6,10 +6,16 @@ import org.landon.graphics.renderers.FramebufferRenderer;
 import org.landon.gui.Gui;
 import org.landon.input.Input;
 import org.landon.serialization.Serializer;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.stb.STBImage;
+
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class Window {
 
@@ -78,6 +84,17 @@ public class Window {
 
         GLFW.glfwShowWindow(window);
         GLFW.glfwSwapInterval(1); // VSync
+
+        IntBuffer iconWidth = BufferUtils.createIntBuffer(1);
+        IntBuffer iconHeight = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
+        ByteBuffer image = STBImage.stbi_load("resources/icons/logo.png", iconWidth, iconHeight, channels, 0);
+        GLFWImage icon = GLFWImage.malloc();
+        GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
+        icon.set(iconWidth.get(), iconHeight.get(), image);
+        iconBuffer.put(0, icon);
+
+        GLFW.glfwSetWindowIcon(window, iconBuffer);
 
         GL11.glViewport(0, 0, width, height);
         init();

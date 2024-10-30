@@ -14,6 +14,7 @@ public final class LoadingUtil {
 
     public static void openLoadingScreen(String message) {
         frame = new JFrame(message + " (Active for 0s)");
+        frame.setIconImage(new ImageIcon("resources/icons/logo.png").getImage());
         frame.setSize(400, 100);
         frame.setLocationRelativeTo(null);
         frame.setAlwaysOnTop(true);
