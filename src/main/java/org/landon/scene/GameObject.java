@@ -8,11 +8,11 @@ import java.util.List;
 
 public class GameObject {
 
-    private Scene scene;
-    private String name;
+    private transient Scene scene;
 
+    private final transient String name;
     private Transform transform;
-    private List<Component> components;
+    private final List<Component> components;
 
     public GameObject(String name) {
         transform = new Transform();
@@ -21,7 +21,7 @@ public class GameObject {
     }
 
     public GameObject() {
-        this("Game Object " + SceneManager.getCurrentScene().getObjects().size() + 1);
+        this("Game Object " + (SceneManager.getCurrentScene().getObjects().size() + 1));
     }
 
     public void start() {
@@ -90,6 +90,10 @@ public class GameObject {
             }
         }
         return null;
+    }
+
+    public List<Component> getComponents() {
+        return components;
     }
 
     public Transform getTransform() {

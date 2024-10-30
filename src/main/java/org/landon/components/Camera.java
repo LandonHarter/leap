@@ -13,8 +13,8 @@ public class Camera extends Component {
     private float fov = 70;
     private float nearPlane = 0.01f, farPlane = 1000.0f;
 
-    private float cameraSpeed = 5.0f;
-    private float sensitivity = 35.0f;
+    private transient final float cameraSpeed = 5.0f;
+    private transient final float sensitivity = 35.0f;
 
     public Camera() {
         super("Camera", false);
@@ -71,6 +71,30 @@ public class Camera extends Component {
         Window window = Window.getInstance();
         float aspect = (float) window.getWidth() / (float) window.getHeight();
         return new Matrix4f().identity().perspective((float) Math.toRadians(fov), aspect, nearPlane, farPlane);
+    }
+
+    public void setFov(float fov) {
+        this.fov = fov;
+    }
+
+    public float getFov() {
+        return fov;
+    }
+
+    public void setNearPlane(float nearPlane) {
+        this.nearPlane = nearPlane;
+    }
+
+    public float getNearPlane() {
+        return nearPlane;
+    }
+
+    public void setFarPlane(float farPlane) {
+        this.farPlane = farPlane;
+    }
+
+    public float getFarPlane() {
+        return farPlane;
     }
 
 }

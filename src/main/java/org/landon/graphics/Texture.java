@@ -67,4 +67,8 @@ public class Texture {
         return textureId;
     }
 
+    public String getTexturePath() {
+        return file.getPath();
+    }
+
 }

@@ -1,12 +1,13 @@
 package org.landon.components.graphics;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.landon.components.Component;
 import org.landon.graphics.Material;
 import org.landon.graphics.Mesh;
 
 public class MeshFilter extends Component {
 
-    private Mesh mesh;
+    private transient Mesh mesh;
     private Material material;
 
     public MeshFilter() {

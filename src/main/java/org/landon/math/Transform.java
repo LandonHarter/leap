@@ -1,12 +1,18 @@
 package org.landon.math;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class Transform {
 
+    @JSONField(name = "position")
     private Vector3f position;
+
+    @JSONField(name = "rotation")
     private Vector3f rotation;
+
+    @JSONField(name = "scale")
     private Vector3f scale;
 
     public Transform() {

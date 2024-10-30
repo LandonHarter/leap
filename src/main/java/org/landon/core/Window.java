@@ -5,6 +5,7 @@ import org.landon.graphics.framebuffers.Framebuffer;
 import org.landon.graphics.renderers.FramebufferRenderer;
 import org.landon.gui.Gui;
 import org.landon.input.Input;
+import org.landon.serialization.Serializer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -79,7 +80,12 @@ public class Window {
         GLFW.glfwSwapInterval(0);
 
         GL11.glViewport(0, 0, width, height);
-        Gui.init(window);
+        init();
+    }
+
+    private static void init() {
+        Serializer.init();
+        Gui.init(instance.getWindow());
     }
 
     public void destroy() {

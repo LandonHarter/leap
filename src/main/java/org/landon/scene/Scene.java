@@ -7,10 +7,10 @@ import java.util.List;
 
 public class Scene {
 
-    private String name;
+    private final String name;
+    private final List<GameObject> objects;
 
-    private List<GameObject> objects;
-    private Camera camera;
+    private transient Camera camera;
 
     public Scene(boolean load) {
         objects = new ArrayList<>();

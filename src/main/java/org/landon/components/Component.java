@@ -1,13 +1,15 @@
 package org.landon.components;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.landon.scene.GameObject;
 
-public abstract class Component {
+public class Component {
 
-    protected GameObject gameObject;
-    private String name;
+    protected transient GameObject gameObject;
+
+    private final transient String name;
     private boolean enabled = true;
-    private boolean allowMultiple = false;
+    private transient final boolean allowMultiple;
 
     public Component(String name, boolean allowMultiple) {
         this.name = name;

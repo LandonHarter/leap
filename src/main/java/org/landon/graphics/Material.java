@@ -1,5 +1,6 @@
 package org.landon.graphics;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.joml.Vector3f;
 
 public class Material {

@@ -1,5 +1,11 @@
 package org.landon.scene;
 
+import com.alibaba.fastjson.JSON;
+import org.landon.serialization.Serializer;
+import org.landon.util.FileUtil;
+
+import java.io.File;
+
 public final class SceneManager {
 
     private static Scene currentScene;
@@ -9,7 +15,16 @@ public final class SceneManager {
             currentScene.destroy();
         }
         currentScene = scene;
-        currentScene.start();
+    }
+
+    public static void saveScene(Scene scene, File f) {
+        String serializedScene = Serializer.toJson(scene);
+        FileUtil.writeFile(f, serializedScene);
+    }
+
+    public static Scene readScene(File f) {
+        String data = FileUtil.readFile(f);
+        return JSON.parseObject(data, Scene.class);
     }
 
     public static Scene getCurrentScene() {
