@@ -52,6 +52,15 @@ public class Scene {
         object.setScene(null);
     }
 
+    public GameObject findObject(String uuid) {
+        for (GameObject object : objects) {
+            if (object.getUuid().equals(uuid)) {
+                return object;
+            }
+        }
+        return null;
+    }
+
     private void checkForCamera() {
         boolean hasCamera = false;
         for (GameObject object : objects) {

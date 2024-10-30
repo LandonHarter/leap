@@ -8,7 +8,7 @@ import imgui.extension.implot.ImPlot;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import org.landon.core.Time;
-import org.landon.edtior.Editor;
+import org.landon.editor.Editor;
 import org.landon.input.Input;
 
 import static org.lwjgl.glfw.GLFW.*;

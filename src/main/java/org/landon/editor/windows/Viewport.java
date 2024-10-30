@@ -1,4 +1,4 @@
-package org.landon.edtior.windows;
+package org.landon.editor.windows;
 
 import imgui.ImGui;
 import imgui.ImVec2;

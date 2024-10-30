@@ -1,7 +1,7 @@
 package org.landon;
 
 import org.landon.core.Window;
-import org.landon.edtior.Editor;
+import org.landon.editor.Editor;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
 

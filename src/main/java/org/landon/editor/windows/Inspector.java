@@ -1,15 +1,17 @@
-package org.landon.edtior.windows;
+package org.landon.editor.windows;
 
 import imgui.ImGui;
+import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
+import org.landon.editor.Icons;
 import org.landon.math.Transform;
 import org.landon.scene.GameObject;
 
 public class Inspector {
 
     private static GameObject selectedObject;
-    private static ImString name = new ImString();
+    private final static ImString name = new ImString();
 
     public static void render() {
         ImGui.begin("Inspector");
@@ -18,6 +20,7 @@ public class Inspector {
             return;
         }
 
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
         if (ImGui.checkbox("##enabled", selectedObject.isEnabled())) {
             selectedObject.setEnabled(!selectedObject.isEnabled());
         }
@@ -26,9 +29,11 @@ public class Inspector {
             selectedObject.setName(name.get());
         }
 
-        ImGui.image(-1, 20, 20);
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
+        ImGui.image(Icons.getIcon("transform"), 20, 20);
         ImGui.sameLine();
         if (ImGui.treeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 3);
             Transform transform = selectedObject.getTransform();
 
             float[] position = new float[] { transform.getLocalPosition().x, transform.getLocalPosition().y, transform.getLocalPosition().z };

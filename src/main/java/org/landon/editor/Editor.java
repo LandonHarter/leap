@@ -1,4 +1,4 @@
-package org.landon.edtior;
+package org.landon.editor;
 
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
@@ -7,13 +7,14 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import org.landon.core.Window;
-import org.landon.edtior.windows.Inspector;
-import org.landon.edtior.windows.SceneHierarchy;
-import org.landon.edtior.windows.Viewport;
+import org.landon.editor.windows.Inspector;
+import org.landon.editor.windows.SceneHierarchy;
+import org.landon.editor.windows.Viewport;
 
 public final class Editor {
 
     public static void init() {
+        Icons.init();
         Viewport.init();
     }
 

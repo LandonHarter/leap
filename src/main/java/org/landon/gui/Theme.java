@@ -112,14 +112,13 @@ public final class Theme {
         style.setAntiAliasedLines(true);
         style.setAntiAliasedFill(true);
 
-        style.setChildRounding(0);
-        style.setGrabRounding(0);
-        style.setFrameRounding(2);
-        style.setPopupRounding(0);
-        style.setScrollbarRounding(0);
-        style.setTabRounding(2);
-        style.setWindowRounding(0);
-        style.setFrameRounding(4);
+        style.setChildRounding(3);
+        style.setGrabRounding(3);
+        style.setPopupRounding(3);
+        style.setScrollbarRounding(3);
+        style.setTabRounding(3);
+        style.setWindowRounding(10);
+        style.setFrameRounding(3);
 
         style.setWindowTitleAlign(0, 0.5f);
         style.setColorButtonPosition(ImGuiDir.Left);

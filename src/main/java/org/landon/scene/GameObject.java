@@ -5,11 +5,13 @@ import org.landon.math.Transform;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class GameObject {
 
     private transient Scene scene;
 
+    private String uuid;
     private String name;
     private boolean enabled = true;
     private Transform transform;
@@ -23,6 +25,7 @@ public class GameObject {
         components = new ArrayList<>();
         children = new ArrayList<>();
         this.name = name;
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public GameObject() {
@@ -159,6 +162,14 @@ public class GameObject {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
 }

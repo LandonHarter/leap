@@ -12,9 +12,9 @@ import java.util.HashMap;
 
 public class Texture {
 
-    private static HashMap<String, Integer> loadedTextures = new HashMap<>();
+    private static final HashMap<String, Integer> loadedTextures = new HashMap<>();
 
-    private File file;
+    private final File file;
     private int textureId;
 
     public Texture(String filepath) {
@@ -69,6 +69,10 @@ public class Texture {
 
     public String getTexturePath() {
         return file.getPath();
+    }
+
+    public static int loadTexture(String filepath) {
+        return new Texture(filepath).getTextureId();
     }
 
 }
