@@ -1,7 +1,9 @@
 package org.landon.edtior.windows;
 
 import imgui.ImGui;
+import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
+import org.landon.math.Transform;
 import org.landon.scene.GameObject;
 
 public class Inspector {
@@ -24,10 +26,28 @@ public class Inspector {
             selectedObject.setName(name.get());
         }
 
-        ImGui.text("Transform");
-        ImGui.text(selectedObject.getTransform().getWorldPosition().toString());
-        ImGui.text(selectedObject.getTransform().getWorldRotation().toString());
-        ImGui.text(selectedObject.getTransform().getWorldScale().toString());
+        ImGui.image(-1, 20, 20);
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            Transform transform = selectedObject.getTransform();
+
+            float[] position = new float[] { transform.getLocalPosition().x, transform.getLocalPosition().y, transform.getLocalPosition().z };
+            if (ImGui.dragFloat3("Position", position)) {
+                transform.setLocalPosition(position[0], position[1], position[2]);
+            }
+
+            float[] rotation = new float[] { transform.getLocalRotation().x, transform.getLocalRotation().y, transform.getLocalRotation().z };
+            if (ImGui.dragFloat3("Rotation", rotation)) {
+                transform.setLocalRotation(rotation[0], rotation[1], rotation[2]);
+            }
+
+            float[] scale = new float[] { transform.getLocalScale().x, transform.getLocalScale().y, transform.getLocalScale().z };
+            if (ImGui.dragFloat3("Scale", scale)) {
+                transform.setLocalScale(scale[0], scale[1], scale[2]);
+            }
+
+            ImGui.treePop();
+        }
 
         ImGui.end();
     }

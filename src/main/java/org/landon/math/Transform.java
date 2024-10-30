@@ -65,20 +65,32 @@ public class Transform {
         localPosition = newPosition;
     }
 
+    public void setLocalPosition(float x, float y, float z) {
+        localPosition.set(x, y, z);
+    }
+
     public Vector3f getLocalRotation() {
         return localRotation;
     }
 
-    public void setLocalRotation(Vector3f newlocalRotation) {
-        localRotation = newlocalRotation;
+    public void setLocalRotation(Vector3f newLocalRotation) {
+        localRotation = newLocalRotation;
+    }
+
+    public void setLocalRotation(float x, float y, float z) {
+        localRotation.set(x, y, z);
     }
 
     public Vector3f getLocalScale() {
         return localScale;
     }
 
-    public void setLocalScale(Vector3f newlocalScale) {
-        localScale = newlocalScale;
+    public void setLocalScale(Vector3f newLocalScale) {
+        localScale = newLocalScale;
+    }
+
+    public void setLocalScale(float x, float y, float z) {
+        localScale.set(x, y, z);
     }
 
     public Vector3f getWorldPosition() {
