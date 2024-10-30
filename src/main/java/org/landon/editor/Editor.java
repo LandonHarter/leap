@@ -7,7 +7,7 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import org.landon.core.Window;
-import org.landon.editor.windows.Inspector;
+import org.landon.editor.windows.inspector.Inspector;
 import org.landon.editor.windows.SceneHierarchy;
 import org.landon.editor.windows.Viewport;
 

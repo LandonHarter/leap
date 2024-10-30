@@ -124,6 +124,10 @@ public class Window {
         Time.endFrame();
     }
 
+    public void maximize() {
+        GLFW.glfwMaximizeWindow(window);
+    }
+
     public void close() {
         GLFW.glfwSetWindowShouldClose(window, true);
     }

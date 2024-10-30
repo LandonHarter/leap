@@ -2,6 +2,7 @@ package org.landon.editor.windows;
 
 import imgui.ImGui;
 import imgui.flag.ImGuiTreeNodeFlags;
+import org.landon.editor.windows.inspector.Inspector;
 import org.landon.scene.SceneManager;
 
 public final class SceneHierarchy {

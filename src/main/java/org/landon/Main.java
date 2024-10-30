@@ -12,6 +12,7 @@ public class Main {
     public static void main(String[] args) {
         Window window = new Window(1920, 1080, "Leap Game Engine");
         window.create();
+        window.maximize();
 
         Scene scene = SceneManager.readScene(new File("resources/scene.json"));
         SceneManager.loadScene(scene);

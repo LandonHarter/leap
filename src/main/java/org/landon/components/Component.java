@@ -3,15 +3,19 @@ package org.landon.components;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.landon.scene.GameObject;
 
+import java.util.UUID;
+
 public class Component {
 
     protected transient GameObject gameObject;
 
+    private final transient String uuid;
     private final transient String name;
     private boolean enabled = true;
     private transient final boolean allowMultiple;
 
     public Component(String name, boolean allowMultiple) {
+        this.uuid = UUID.randomUUID().toString();
         this.name = name;
         this.allowMultiple = allowMultiple;
     }
@@ -45,6 +49,10 @@ public class Component {
 
     public boolean allowMultiple() {
         return allowMultiple;
+    }
+
+    public String getUUID() {
+        return uuid;
     }
 
 }

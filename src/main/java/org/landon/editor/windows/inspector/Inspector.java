@@ -1,9 +1,9 @@
-package org.landon.editor.windows;
+package org.landon.editor.windows.inspector;
 
 import imgui.ImGui;
-import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
+import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.math.Transform;
 import org.landon.scene.GameObject;
@@ -25,14 +25,29 @@ public class Inspector {
             selectedObject.setEnabled(!selectedObject.isEnabled());
         }
         ImGui.sameLine();
+        ImGui.pushItemWidth(ImGui.getContentRegionAvailX() - ImGui.calcTextSize("Name").x);
         if (ImGui.inputText("Name", name)) {
             selectedObject.setName(name.get());
         }
+        ImGui.popItemWidth();
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
+        transform();
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
+
+        for (Component c : selectedObject.getComponents()) {
+            ComponentFields.render(c);
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
+        }
+
+        ImGui.end();
+    }
+
+    private static void transform() {
         ImGui.image(Icons.getIcon("transform"), 20, 20);
         ImGui.sameLine();
         if (ImGui.treeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            ImGui.indent(6);
             ImGui.setCursorPosY(ImGui.getCursorPosY() + 3);
             Transform transform = selectedObject.getTransform();
 
@@ -51,10 +66,9 @@ public class Inspector {
                 transform.setLocalScale(scale[0], scale[1], scale[2]);
             }
 
+            ImGui.unindent(6);
             ImGui.treePop();
         }
-
-        ImGui.end();
     }
 
     public static void setSelectedObject(GameObject object) {
