@@ -22,7 +22,7 @@ public class Main {
         window.create();
         window.maximize();
 
-        Scene scene = SceneManager.readScene(new File("resources/scene.json"));
+        Scene scene = SceneManager.readScene(Project.getLastScene());
         SceneManager.loadScene(scene);
 
         scene.start();

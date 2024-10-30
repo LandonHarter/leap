@@ -71,7 +71,7 @@ public class Scene {
         }
 
         if (!hasCamera) {
-            GameObject camera = new GameObject();
+            GameObject camera = new GameObject("Camera");
             camera.addComponent(new Camera());
             addObject(camera);
         }

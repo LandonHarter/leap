@@ -44,6 +44,8 @@ public class ProjectConfig {
     }
 
     public static ProjectConfig load(File projectRoot) {
+        verifyProjectRoot(projectRoot);
+
         File file = new File(projectRoot, "project.json");
         if (!file.exists()) {
             ProjectConfig config = new ProjectConfig(projectRoot.getName());
@@ -52,6 +54,18 @@ public class ProjectConfig {
         }
         String json = FileUtil.readFile(file);
         return JSON.parseObject(json, ProjectConfig.class);
+    }
+
+    private static void verifyProjectRoot(File projectRoot) {
+        File assets = new File(projectRoot, "assets");
+        if (!assets.exists()) {
+            assets.mkdir();
+        }
+
+        File scenes = new File(assets, "scenes");
+        if (!scenes.exists()) {
+            scenes.mkdir();
+        }
     }
 
 }
