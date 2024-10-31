@@ -4,14 +4,32 @@ import imgui.ImColor;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiHoveredFlags;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiTreeNodeFlags;
 import org.landon.editor.Icons;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.scene.GameObject;
+import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
 
+import java.util.HashMap;
+
 public final class SceneHierarchy {
+
+    private static final HashMap<String, GameObjectData> gameObjectData = new HashMap<>();
+
+    public static void addObject(GameObject obj) {
+        gameObjectData.put(obj.getUuid(), new GameObjectData());
+    }
+
+    public static void removeObject(GameObject obj) {
+        gameObjectData.remove(obj.getUuid());
+    }
+
+    public static void clearObjectData() {
+        gameObjectData.clear();
+    }
 
     public static void render() {
         ImGui.begin("Scene Hierarchy");
@@ -33,10 +51,20 @@ public final class SceneHierarchy {
                 GameObject obj = SceneManager.getCurrentScene().getObjects().get(i);
                 if (obj.getParent() != null) continue;
 
-                renderGameObject(obj);
+                GameObjectData data = gameObjectData.get(obj.getUuid());
+                renderGameObject(obj, data);
+
+                ImGui.setCursorPosY(ImGui.getCursorPosY() + 5);
+                divider(obj, data);
+                ImGui.setCursorPosY(ImGui.getCursorPosY() + 5);
             }
 
             ImGui.unindent();
+        }
+
+        if (ImGui.button("Create Empty")) {
+            GameObject obj = new GameObject("GameObject" + SceneManager.getCurrentScene().getObjects().size());
+            SceneManager.getCurrentScene().addObject(obj);
         }
 
         if (ImGui.isMouseClicked(0) && ImGui.isWindowHovered() && !ImGui.isAnyItemHovered()) {
@@ -45,8 +73,9 @@ public final class SceneHierarchy {
         ImGui.end();
     }
 
-    private static final int HeaderColor = ImColor.floatToColor(11f / 255f, 90f / 255f, 113f / 255f, 1f);
-    private static void renderGameObject(GameObject obj) {
+    private static final int HeaderColor = ImColor.rgb("#0b5a71");
+    private static final int HoverColor = ImColor.rgb("#cccc00");
+    private static void renderGameObject(GameObject obj, GameObjectData data) {
         int flags = ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanFullWidth | ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.Framed;
         if (obj.getChildren().isEmpty()) {
             flags |= ImGuiTreeNodeFlags.Leaf;
@@ -64,7 +93,8 @@ public final class SceneHierarchy {
 
         ImVec2 cursorPos = ImGui.getCursorPos();
         ImGui.setCursorPos(cursorPos.x + 33, cursorPos.y);
-        boolean open = ImGui.treeNodeEx(obj.getName(), flags);
+        ImGui.setNextItemOpen(data.isOpen());
+        data.setOpen(ImGui.treeNodeEx(obj.getName(), flags));
         if (ImGui.isItemClicked()) {
             Inspector.setSelectedObject(obj);
         }
@@ -73,9 +103,21 @@ public final class SceneHierarchy {
         }
         ImGui.popStyleVar(2);
 
-        if (open) {
+        if (ImGui.beginDragDropSource()) {
+            ImGui.setDragDropPayload(obj);
+            ImGui.image(Icons.getIcon("gameobject"), 23, 23);
+            ImGui.sameLine();
+
+            float cursorY = ImGui.getCursorPosY();
+            ImGui.setCursorPosY(cursorY + 2);
+            ImGui.text(obj.getName());
+            ImGui.setCursorPosY(cursorY);
+            ImGui.endDragDropSource();
+        }
+
+        if (data.isOpen()) {
             for (int i = 0; i < obj.getChildren().size(); i++) {
-                renderGameObject(obj.getChildren().get(i));
+                renderGameObject(obj.getChildren().get(i), gameObjectData.get(obj.getChildren().get(i).getUuid()));
             }
 
             ImGui.treePop();
@@ -83,6 +125,51 @@ public final class SceneHierarchy {
 
         ImGui.setCursorPos(cursorPos.x + 6, cursorPos.y + 6);
         ImGui.image(Icons.getIcon("gameobject"), 23, 23);
+    }
+
+    private static void divider(GameObject obj, GameObjectData data) {
+        ImVec2 cursorPos = ImGui.getCursorScreenPos();
+        ImGui.pushStyleVar(ImGuiStyleVar.ItemSpacing, 0, 0);
+        ImGui.pushStyleColor(ImGuiCol.ChildBg, data.isHoveringDivider() ? HoverColor : ImGui.getColorU32(ImGuiCol.WindowBg));
+        ImGui.pushStyleColor(ImGuiCol.FrameBgHovered, HoverColor);
+        ImGui.setCursorPosX(0);
+        ImGui.beginChild("divider-" + obj.getUuid(), ImGui.getWindowWidth(), 2);
+        ImGui.endChild();
+        ImGui.popStyleColor(2);
+        ImGui.popStyleVar();
+
+        boolean hovering = ImGui.isMouseHoveringRect(cursorPos.x, cursorPos.y, cursorPos.x + ImGui.getWindowWidth(), cursorPos.y + 10);
+        data.setHoveringDivider(ImGui.getDragDropPayload() != null && hovering);
+
+        if (hovering && ImGui.isMouseReleased(0)) {
+            GameObject payload = ImGui.getDragDropPayload(GameObject.class);
+            if (payload != null) {
+                SceneManager.getCurrentScene().moveObject(payload, obj);
+            }
+        }
+    }
+
+    private static class GameObjectData {
+
+        private boolean hoveringDivider = false;
+        private boolean open = false;
+
+        public boolean isHoveringDivider() {
+            return hoveringDivider;
+        }
+
+        public void setHoveringDivider(boolean hoveringDivider) {
+            this.hoveringDivider = hoveringDivider;
+        }
+
+        public boolean isOpen() {
+            return open;
+        }
+
+        public void setOpen(boolean open) {
+            this.open = open;
+        }
+
     }
 
 }
