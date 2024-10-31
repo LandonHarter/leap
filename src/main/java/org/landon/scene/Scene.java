@@ -51,8 +51,8 @@ public class Scene {
     }
 
     public void removeObject(GameObject object) {
+        object.destroy();
         objects.remove(object);
-        object.setScene(null);
     }
 
     public void moveObject(GameObject object, int index) {

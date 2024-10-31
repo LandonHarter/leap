@@ -58,6 +58,14 @@ public class GameObject {
         }
 
         components.clear();
+        scene = null;
+        parent = null;
+        transform = null;
+
+        for (GameObject child : children) {
+            child.destroy();
+        }
+        children.clear();
     }
 
     public Component addComponent(Component component) {

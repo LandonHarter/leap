@@ -7,11 +7,16 @@ import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiTreeNodeFlags;
 import org.landon.editor.Icons;
+import org.landon.editor.popup.CreateObject;
+import org.landon.editor.popup.EditObject;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
 
 public final class SceneHierarchy {
+
+    private static final CreateObject createObject = new CreateObject();
+    private static final EditObject editObject = new EditObject();
 
     public static void render() {
         ImGui.begin("Scene Hierarchy");
@@ -42,9 +47,16 @@ public final class SceneHierarchy {
             ImGui.unindent();
         }
 
-        if (ImGui.isMouseClicked(0) && ImGui.isWindowHovered() && !ImGui.isAnyItemHovered()) {
-            Inspector.setSelectedObject(null);
+        if (ImGui.isWindowHovered() && !ImGui.isAnyItemHovered()) {
+            if (ImGui.isMouseClicked(0)) {
+                Inspector.setSelectedObject(null);
+            } else if (ImGui.isMouseClicked(1)) {
+                createObject.open();
+            }
         }
+
+        createObject.renderBase();
+        editObject.renderBase(Inspector.getSelectedObject());
         ImGui.end();
     }
 
@@ -68,9 +80,7 @@ public final class SceneHierarchy {
         ImVec2 cursorPos = ImGui.getCursorPos();
         ImGui.setCursorPos(cursorPos.x + 33, cursorPos.y);
         boolean open = ImGui.treeNodeEx(obj.getName(), flags);
-        if (ImGui.isItemClicked()) {
-            Inspector.setSelectedObject(obj);
-        }
+
         if (selected) {
             ImGui.popStyleColor(2);
         }
@@ -101,6 +111,12 @@ public final class SceneHierarchy {
             }
 
             ImGui.treePop();
+        }
+        if (ImGui.isItemClicked(0)) {
+            Inspector.setSelectedObject(obj);
+        } else if (ImGui.isItemClicked(1)) {
+            Inspector.setSelectedObject(obj);
+            editObject.open();
         }
 
         ImGui.setCursorPos(cursorPos.x + 6, cursorPos.y + 6);
