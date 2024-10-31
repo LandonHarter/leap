@@ -95,6 +95,11 @@ public final class Input {
         return scrollY;
     }
 
+    public static void resetScroll() {
+        scrollX = 0;
+        scrollY = 0;
+    }
+
     public static GLFWKeyCallback getKeyboardCallback() {
         return new GLFWKeyCallback() {
             @Override

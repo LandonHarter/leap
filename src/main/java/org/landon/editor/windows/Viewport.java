@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.core.Window;
+import org.landon.editor.Editor;
 import org.landon.graphics.framebuffers.Framebuffer;
 
 public final class Viewport {
@@ -21,6 +22,8 @@ public final class Viewport {
         ImVec2 aspectPosition = calculatePosition(aspectSize);
         ImGui.setCursorPos(aspectPosition.x, aspectPosition.y);
         ImGui.image(framebuffer.getTextureID(), aspectSize.x, aspectSize.y, 0, 1, 1, 0);
+
+        Editor.getCamera().movement(ImGui.isWindowHovered());
 
         ImGui.end();
     }
