@@ -43,21 +43,16 @@ public class Scene {
         for (GameObject object : objects) {
             object.destroy();
         }
-        SceneHierarchy.clearObjectData();
     }
 
     public void addObject(GameObject object) {
         objects.add(object);
         object.setScene(this);
-
-        SceneHierarchy.addObject(object);
     }
 
     public void removeObject(GameObject object) {
         objects.remove(object);
         object.setScene(null);
-
-        SceneHierarchy.removeObject(object);
     }
 
     public void moveObject(GameObject object, int index) {

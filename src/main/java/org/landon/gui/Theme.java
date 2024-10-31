@@ -166,7 +166,7 @@ public final class Theme {
         style.setColor(ImGuiCol.PlotHistogram, ImColor.floatToColor( 0.60f, 0.59f, 0.10f, 1.00f));
         style.setColor(ImGuiCol.PlotHistogramHovered, ImColor.floatToColor( 0.72f, 0.73f, 0.15f, 1.00f));
         style.setColor(ImGuiCol.TextSelectedBg, ImColor.floatToColor( 0.27f, 0.52f, 0.53f, 0.35f));
-        style.setColor(ImGuiCol.DragDropTarget, ImColor.floatToColor( 0.60f, 0.59f, 0.10f, 0.90f));
+        style.setColor(ImGuiCol.DragDropTarget, ImColor.rgb("#cccc00"));
         style.setColor(ImGuiCol.NavHighlight, ImColor.floatToColor( 0.51f, 0.65f, 0.60f, 1.00f));
         style.setColor(ImGuiCol.NavWindowingHighlight, ImColor.floatToColor( 1.00f, 1.00f, 1.00f, 0.70f));
         style.setColor(ImGuiCol.NavWindowingDimBg, ImColor.floatToColor( 0.80f, 0.80f, 0.80f, 0.20f));
