@@ -21,25 +21,8 @@ public class MeshRenderer extends Component {
 
     @Override
     public void update() {
+        meshFilter = gameObject.getComponent(MeshFilter.class);
         renderer.render(meshFilter);
     }
 
-    @Override
-    public void onAdd() {
-        meshFilter = gameObject.getComponent(MeshFilter.class);
-    }
-
-    @Override
-    public void onComponentAdded(Component component) {
-        if (component instanceof MeshFilter) {
-            meshFilter = (MeshFilter) component;
-        }
-    }
-
-    @Override
-    public void onComponentRemoved(Component component) {
-        if (component instanceof MeshFilter) {
-            meshFilter = null;
-        }
-    }
 }

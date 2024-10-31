@@ -31,6 +31,7 @@ public final class SceneHierarchy {
         ImGui.sameLine();
         ImGui.setCursorPosY(cursorPosY);
         ImGui.text(SceneManager.getCurrentScene().getName());
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 5);
         if (header) {
             ImGui.indent();
 
@@ -80,7 +81,13 @@ public final class SceneHierarchy {
         ImVec2 cursorPos = ImGui.getCursorPos();
         ImGui.setCursorPos(cursorPos.x + 33, cursorPos.y);
         boolean open = ImGui.treeNodeEx(obj.getName(), flags);
-
+        boolean openEditObject = false;
+        if (ImGui.isItemClicked(0)) {
+            Inspector.setSelectedObject(obj);
+        } else if (ImGui.isItemClicked(1)) {
+            Inspector.setSelectedObject(obj);
+            openEditObject = true;
+        }
         if (selected) {
             ImGui.popStyleColor(2);
         }
@@ -112,15 +119,14 @@ public final class SceneHierarchy {
 
             ImGui.treePop();
         }
-        if (ImGui.isItemClicked(0)) {
-            Inspector.setSelectedObject(obj);
-        } else if (ImGui.isItemClicked(1)) {
-            Inspector.setSelectedObject(obj);
-            editObject.open();
-        }
+
 
         ImGui.setCursorPos(cursorPos.x + 6, cursorPos.y + 6);
         ImGui.image(Icons.getIcon("gameobject"), 23, 23);
+
+        if (openEditObject) {
+            editObject.open();
+        }
     }
 
     private static void divider(GameObject obj) {

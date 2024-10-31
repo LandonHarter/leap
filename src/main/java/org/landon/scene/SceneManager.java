@@ -1,6 +1,9 @@
 package org.landon.scene;
 
 import com.alibaba.fastjson.JSON;
+import org.joml.Matrix4f;
+import org.landon.components.Camera;
+import org.landon.editor.Editor;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.project.Project;
 import org.landon.serialization.Serializer;
@@ -41,6 +44,30 @@ public final class SceneManager {
 
     public static Scene getCurrentScene() {
         return currentScene;
+    }
+
+    public static Matrix4f getViewMatrix() {
+        Camera camera = currentScene.getCamera();
+        if (!Editor.isPlaying()) {
+            return Editor.getCamera().getViewMatrix();
+        } else {
+            if (camera == null) {
+                return new Matrix4f();
+            }
+            return camera.getViewMatrix();
+        }
+    }
+
+    public static Matrix4f getProjectionMatrix() {
+        Camera camera = currentScene.getCamera();
+        if (!Editor.isPlaying()) {
+            return Editor.getCamera().getProjection();
+        } else {
+            if (camera == null) {
+                return new Matrix4f();
+            }
+            return camera.getProjection();
+        }
     }
 
 }

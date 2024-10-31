@@ -27,7 +27,6 @@ public class Scene {
     }
 
     public void start() {
-        checkForCamera();
         for (GameObject object : objects) {
             object.start();
         }
@@ -37,6 +36,7 @@ public class Scene {
         for (GameObject object : objects) {
             if (object.getParent() == null) object.update(); // Only update root objects
         }
+        checkForCamera();
     }
 
     public void destroy() {
@@ -74,24 +74,6 @@ public class Scene {
         return null;
     }
 
-    public void addCamera() {
-        GameObject camera = new GameObject("Camera");
-        camera.addComponent(new Camera());
-        addObject(camera);
-    }
-
-    private void checkForCamera() {
-        boolean hasCamera = false;
-        for (GameObject object : objects) {
-            if (object.getComponent(Camera.class) != null) {
-                hasCamera = true;
-                break;
-            }
-        }
-
-        if (!hasCamera) addCamera();
-    }
-
     public void save(String path) {
         SceneManager.saveScene(this, new File(path));
     }
@@ -99,6 +81,15 @@ public class Scene {
     public void save() {
         if (file == null) return;
         save(file.getAbsolutePath());
+    }
+
+    public void checkForCamera() {
+        for (GameObject object : objects) {
+            if (object.getComponent(Camera.class) != null) {
+                camera = object.getComponent(Camera.class);
+                break;
+            }
+        }
     }
 
     public List<GameObject> getObjects() {

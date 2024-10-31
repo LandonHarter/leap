@@ -6,7 +6,9 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
+import org.landon.components.Camera;
 import org.landon.core.Window;
+import org.landon.scene.GameObject;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
 import org.landon.util.ExplorerUtil;
@@ -35,7 +37,9 @@ public final class Dockspace {
         if (ImGui.beginMenu("File")) {
             if (ImGui.menuItem("New Scene")) {
                 Scene scene = new Scene("Untitled Scene",  false);
-                scene.addCamera();
+                GameObject camera = new GameObject("Camera");
+                camera.addComponent(new Camera());
+                scene.addObject(camera);
                 SceneManager.loadScene(scene);
             }
             if (ImGui.menuItem("Open Scene")) {

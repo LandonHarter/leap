@@ -58,10 +58,6 @@ public class GameObject {
         }
 
         components.clear();
-        scene = null;
-        parent = null;
-        transform = null;
-
         for (GameObject child : children) {
             child.destroy();
         }
@@ -127,6 +123,16 @@ public class GameObject {
     }
 
     public void addChild(GameObject child) {
+        GameObject p = child.getParent();
+        while (p != null) {
+            System.out.println(p.getName());
+            if (p.getUuid().equals(uuid)) {
+                System.err.println("GameObject is already a parent");
+                return;
+            }
+            p = p.getParent();
+        }
+
         children.add(child);
         child.setParent(this);
     }

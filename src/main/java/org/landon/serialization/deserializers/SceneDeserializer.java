@@ -30,7 +30,7 @@ public class SceneDeserializer implements ObjectDeserializer {
             GameObject childObject = scene.findObject(child);
             GameObject parentObject = scene.findObject(parent);
             if (childObject != null && parentObject != null) {
-                childObject.setParent(parentObject);
+                parentObject.addChild(childObject);
             }
         });
         parentMap.clear();

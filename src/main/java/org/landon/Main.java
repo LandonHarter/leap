@@ -29,7 +29,7 @@ public class Main {
         while (window.isOpen()) {
             window.startFrame();
 
-            scene.update(); // Renders scene to framebuffer and updates all components
+            SceneManager.getCurrentScene().update(); // Renders scene to framebuffer and updates all components
             window.postRender(); // Unbinds framebuffer
 
             Editor.render();

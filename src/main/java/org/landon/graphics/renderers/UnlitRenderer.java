@@ -1,6 +1,7 @@
 package org.landon.graphics.renderers;
 
 import org.landon.components.graphics.MeshFilter;
+import org.landon.editor.Editor;
 import org.landon.graphics.Material;
 import org.landon.graphics.Mesh;
 import org.landon.graphics.Shader;
@@ -19,6 +20,7 @@ public class UnlitRenderer extends Renderer {
 
     @Override
     public void render(MeshFilter meshFilter) {
+        if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) return;
         Transform transform = meshFilter.getGameObject().getTransform();
         Mesh mesh = meshFilter.getMesh();
         Material material = meshFilter.getMaterial();
@@ -40,8 +42,8 @@ public class UnlitRenderer extends Renderer {
         shader.bind();
 
         shader.setUniform("model", transform.getModelMatrix());
-        shader.setUniform("view", SceneManager.getCurrentScene().getCamera().getViewMatrix());
-        shader.setUniform("projection", SceneManager.getCurrentScene().getCamera().getProjection());
+        shader.setUniform("view", SceneManager.getViewMatrix());
+        shader.setUniform("projection", SceneManager.getProjectionMatrix());
         shader.setUniform("color", material.getColor());
 
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);
