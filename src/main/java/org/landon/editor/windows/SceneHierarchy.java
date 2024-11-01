@@ -3,9 +3,7 @@ package org.landon.editor.windows;
 import imgui.ImColor;
 import imgui.ImGui;
 import imgui.ImVec2;
-import imgui.flag.ImGuiCol;
-import imgui.flag.ImGuiStyleVar;
-import imgui.flag.ImGuiTreeNodeFlags;
+import imgui.flag.*;
 import org.landon.editor.Icons;
 import org.landon.editor.popup.CreateObject;
 import org.landon.editor.popup.EditObject;
@@ -18,8 +16,14 @@ public final class SceneHierarchy {
     private static final CreateObject createObject = new CreateObject();
     private static final EditObject editObject = new EditObject();
 
+    private static final int FRAME_ID = "SceneHierarchy".hashCode();
+
     public static void render() {
         ImGui.begin("Scene Hierarchy");
+
+        ImGui.pushStyleColor(ImGuiCol.FrameBg, ImGui.getColorU32(ImGuiCol.WindowBg));
+        ImGui.beginChildFrame(FRAME_ID, ImGui.getWindowWidth() - 24, ImGui.getWindowHeight() - 50);
+        ImGui.popStyleColor();
 
         ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, 4, 8);
         boolean header = ImGui.collapsingHeader("##SceneDropdown", ImGuiTreeNodeFlags.SpanAvailWidth | ImGuiTreeNodeFlags.DefaultOpen);
@@ -40,9 +44,9 @@ public final class SceneHierarchy {
                 if (obj.getParent() != null) continue;
 
                 renderGameObject(obj);
-                ImGui.setCursorPosY(ImGui.getCursorPosY() + 5);
+                ImGui.setCursorPosY(ImGui.getCursorPosY());
                 divider(obj);
-                ImGui.setCursorPosY(ImGui.getCursorPosY() + 5);
+                ImGui.setCursorPosY(ImGui.getCursorPosY());
             }
 
             ImGui.unindent();
@@ -53,6 +57,20 @@ public final class SceneHierarchy {
                 Inspector.setSelectedObject(null);
             } else if (ImGui.isMouseClicked(1)) {
                 createObject.open();
+            }
+        }
+
+        ImGui.endChildFrame();
+        GameObject grabbed = ImGui.getDragDropPayload(GameObject.class);
+        if (grabbed != null && grabbed.getParent() != null) {
+            if (ImGui.beginDragDropTarget()) {
+                GameObject payload = ImGui.acceptDragDropPayload(GameObject.class);
+                if (payload != null) {
+                    if (payload.getParent() != null) {
+                        payload.getParent().removeChild(payload);
+                    }
+                }
+                ImGui.endDragDropTarget();
             }
         }
 
