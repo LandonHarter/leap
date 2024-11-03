@@ -7,6 +7,8 @@ import imgui.extension.imnodes.ImNodes;
 import imgui.extension.implot.ImPlot;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
+import org.landon.core.Time;
+import org.landon.editor.Editor;
 import org.landon.input.Input;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -25,8 +27,7 @@ public class Gui {
     private static final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
     private static String glslVersion = "#version 330 core";
 
-    public static void initialize(long window) {
-
+    public static void init(long window) {
         windowPtr = window;
 
         ImGui.createContext();
@@ -35,7 +36,7 @@ public class Gui {
 
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename("EngineAssets/editor.ini");
+        io.setIniFilename("resources/editor.ini");
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
         io.setConfigFlags(ImGuiConfigFlags.DockingEnable);
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors);
@@ -121,6 +122,8 @@ public class Gui {
 
         imGuiGl3.init(glslVersion);
         Theme.modernDark(ImGui.getStyle());
+
+        Editor.init();
     }
 
     public static void setupKeyboard(long window, int key, int scancode, int action, int mods) {
@@ -174,6 +177,7 @@ public class Gui {
         io.setDisplaySize(winWidth[0], winHeight[0]);
         io.setDisplayFramebufferScale((float) fbWidth[0] / winWidth[0], (float) fbHeight[0] / winHeight[0]);
         io.setMousePos((float) mousePosX[0], (float) mousePosY[0]);
+        io.setFramerate(1 / (float) Time.getDelta());
 
         final int imguiCursor = imgui.ImGui.getMouseCursor();
         glfwSetCursor(windowPtr, mouseCursors[imguiCursor]);
@@ -183,11 +187,12 @@ public class Gui {
         imGuiGl3.renderDrawData(ImGui.getDrawData());
     }
 
-    public static void destroyGui() {
+    public static void destroy() {
         ImNodes.destroyContext();
         ImPlot.destroyContext(ImPlot.getCurrentContext());
 
         imGuiGl3.dispose();
         imgui.ImGui.destroyContext();
     }
+
 }

@@ -10,5 +10,5 @@ uniform vec3 color;
 out vec4 outColor;
 
 void main() {
-    outColor = texture(tex, vertex_textureCoord) * vec4(color, 1.0f);
+    outColor = vec4(vertex_normal, 1.0f) * vec4(color, 1.0f);
 }

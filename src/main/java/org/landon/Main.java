@@ -1,34 +1,43 @@
 package org.landon;
 
 import org.landon.core.Window;
-import org.landon.graphics.Material;
-import org.landon.graphics.Meshes;
-import org.landon.graphics.Texture;
-import org.landon.graphics.renderers.Renderer;
+import org.landon.editor.Editor;
+import org.landon.project.Project;
 import org.landon.scene.Scene;
-import org.landon.scene.SceneObject;
+import org.landon.scene.SceneManager;
+import org.landon.util.ExplorerUtil;
+
+import java.io.File;
 
 public class Main {
+
     public static void main(String[] args) {
-        Window window = new Window(800, 500, "LEAP Physics Engine");
+        String projectRoot = args.length > 0 ? args[0] : ExplorerUtil.chooseDirectory();
+        if (projectRoot == null) {
+            System.exit(0);
+        }
+        Project.load(new File(projectRoot));
+
+        Window window = new Window(1920, 1080, Project.getName() + " | Leap Game Engine");
         window.create();
+        window.maximize();
 
-        Scene scene = new Scene();
-        SceneObject object = new SceneObject(Meshes.createSphere(), new Material(new Texture("resources/images/box.jpg")));
-        object.getTransform().getPosition().set(0, 0, -5);
-        scene.addObject(object);
+        Scene scene = SceneManager.readScene(Project.getLastScene());
+        SceneManager.loadScene(scene);
 
-        scene.getCamera().getTransform().getPosition().set(0, 2, 0);
-
-        Renderer renderer = new Renderer();
-
+        scene.start();
         while (window.isOpen()) {
             window.startFrame();
 
-            scene.getCamera().update();
-            renderer.render(object);
+            SceneManager.getCurrentScene().update(); // Renders scene to framebuffer and updates all components
+            window.postRender(); // Unbinds framebuffer
+
+            Editor.render();
 
             window.endFrame();
         }
+
+        window.destroy();
     }
+
 }
