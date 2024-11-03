@@ -13,11 +13,13 @@ public class Component {
     private final transient String name;
     private boolean enabled = true;
     private transient final boolean allowMultiple;
+    private transient final boolean canDisable;
 
-    public Component(String name, boolean allowMultiple) {
+    public Component(String name, boolean allowMultiple, boolean canDisable) {
         this.uuid = UUID.randomUUID().toString();
         this.name = name;
         this.allowMultiple = allowMultiple;
+        this.canDisable = canDisable;
     }
 
     public void start() {}
@@ -50,6 +52,10 @@ public class Component {
 
     public boolean allowMultiple() {
         return allowMultiple;
+    }
+
+    public boolean canDisable() {
+        return canDisable;
     }
 
     public String getUUID() {

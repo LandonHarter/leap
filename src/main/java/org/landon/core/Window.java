@@ -121,7 +121,6 @@ public class Window {
 
         Gui.startFrame();
         ImGui.newFrame();
-        ImGui.getIO().setFramerate(60);
     }
 
     public void postRender() {

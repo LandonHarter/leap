@@ -1,6 +1,7 @@
 package org.landon.editor.windows.inspector;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
 import org.joml.Vector2f;
@@ -18,12 +19,17 @@ import java.lang.reflect.Modifier;
 public final class ComponentFields {
 
     public static void render(Component c) {
-        if (ImGui.checkbox("##enable-" + c.getUUID(), c.isEnabled())) {
-            c.setEnabled(!c.isEnabled());
+        ImVec2 cursorPos = ImGui.getCursorPos();
+        if (c.canDisable()) {
+            if (ImGui.checkbox("##enable-" + c.getUUID(), c.isEnabled())) {
+                c.setEnabled(!c.isEnabled());
+            }
+            ImGui.sameLine();
         }
-        ImGui.sameLine();
+        ImGui.setCursorPosY(cursorPos.y + 3);
         ImGui.image(Icons.getIcon(c.getClass().getSimpleName()), 20, 20);
         ImGui.sameLine();
+        ImGui.setCursorPosY(cursorPos.y);
         if (ImGui.treeNodeEx(c.getUUID(), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth, c.getName())) {
             ImGui.indent(3);
             Field[] fields = c.getClass().getDeclaredFields();

@@ -9,7 +9,7 @@ public class Camera extends Component {
     private float nearPlane = 0.01f, farPlane = 1000.0f;
 
     public Camera() {
-        super("Camera", false);
+        super("Camera", false, false);
     }
 
     @Override

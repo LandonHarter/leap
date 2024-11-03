@@ -11,11 +11,11 @@ public class MeshRenderer extends Component {
     private transient MeshFilter meshFilter;
 
     public MeshRenderer() {
-        super("Mesh Renderer", false);
+        super("Mesh Renderer", false, true);
     }
 
     public MeshRenderer(Renderer renderer) {
-        super("Mesh Renderer", false);
+        super("Mesh Renderer", false, true);
         this.renderer = renderer;
     }
 

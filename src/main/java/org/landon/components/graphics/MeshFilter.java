@@ -11,18 +11,18 @@ public class MeshFilter extends Component {
     private Material material;
 
     public MeshFilter() {
-        super("Mesh Filter", false);
+        super("Mesh Filter", false, false);
         this.material = new Material();
     }
 
     public MeshFilter(Mesh mesh) {
-        super("Mesh Filter", false);
+        super("Mesh Filter", false, false);
         this.mesh = mesh;
         this.material = new Material();
     }
 
     public MeshFilter(Mesh mesh, Material material) {
-        super("Mesh Filter", false);
+        super("Mesh Filter", false, false);
         this.mesh = mesh;
         this.material = material;
     }
