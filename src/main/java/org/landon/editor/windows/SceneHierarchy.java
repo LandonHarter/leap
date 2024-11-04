@@ -51,16 +51,17 @@ public final class SceneHierarchy {
 
             ImGui.unindent();
         }
-
         if (ImGui.isWindowHovered() && !ImGui.isAnyItemHovered()) {
             if (ImGui.isMouseClicked(0)) {
                 Inspector.setSelectedObject(null);
-            } else if (ImGui.isMouseClicked(1)) {
+            }
+            if (ImGui.isMouseClicked(1)) {
                 createObject.open();
             }
         }
 
         ImGui.endChildFrame();
+
         GameObject grabbed = ImGui.getDragDropPayload(GameObject.class);
         if (grabbed != null && grabbed.getParent() != null) {
             if (ImGui.beginDragDropTarget()) {
@@ -74,14 +75,12 @@ public final class SceneHierarchy {
             }
         }
 
-        createObject.renderBase();
-        editObject.renderBase(Inspector.getSelectedObject());
         ImGui.end();
     }
 
     private static final int HeaderColor = ImColor.rgb("#0b5a71");
     private static void renderGameObject(GameObject obj) {
-        int flags = ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanFullWidth | ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.Framed;
+        int flags = ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanFullWidth | ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen;
         if (obj.getChildren().isEmpty()) {
             flags |= ImGuiTreeNodeFlags.Leaf;
         }
@@ -99,12 +98,11 @@ public final class SceneHierarchy {
         ImVec2 cursorPos = ImGui.getCursorPos();
         ImGui.setCursorPos(cursorPos.x + 33, cursorPos.y);
         boolean open = ImGui.treeNodeEx(obj.getName(), flags);
-        boolean openEditObject = false;
         if (ImGui.isItemClicked(0)) {
             Inspector.setSelectedObject(obj);
         } else if (ImGui.isItemClicked(1)) {
+            editObject.open();
             Inspector.setSelectedObject(obj);
-            openEditObject = true;
         }
         if (selected) {
             ImGui.popStyleColor(2);
@@ -141,10 +139,6 @@ public final class SceneHierarchy {
 
         ImGui.setCursorPos(cursorPos.x + 6, cursorPos.y + 6);
         ImGui.image(Icons.getIcon("gameobject"), 23, 23);
-
-        if (openEditObject) {
-            editObject.open();
-        }
     }
 
     private static void divider(GameObject obj) {

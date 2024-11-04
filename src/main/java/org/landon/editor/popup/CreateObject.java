@@ -12,7 +12,7 @@ import org.landon.scene.SceneManager;
 public class CreateObject extends Popup {
 
     @Override
-    public void render(Object ...args) {
+    public void render() {
         if (ImGui.menuItem("Empty Object")) {
             GameObject obj = new GameObject("Empty Object");
             SceneManager.getCurrentScene().addObject(obj);

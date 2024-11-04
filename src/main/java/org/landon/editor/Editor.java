@@ -31,6 +31,7 @@ public final class Editor {
         Viewport.render();
         ViewportControls.render();
         Inspector.render();
+        Popup.renderPopups();
 
         ImGui.end();
     }
