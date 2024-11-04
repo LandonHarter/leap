@@ -17,6 +17,9 @@ public final class Icons {
         addIcon("meshfilter", "resources/icons/components/meshfilter.png");
         addIcon("meshrenderer", "resources/icons/components/meshrenderer.png");
 
+        addIcon("folder", "resources/icons/explorer/folder.png");
+        addIcon("file", "resources/icons/explorer/file.png");
+
         addIcon("leap", "resources/icons/logo.png");
     }
 

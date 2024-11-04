@@ -44,6 +44,7 @@ public class UnlitRenderer extends Renderer {
         shader.setUniform("model", transform.getModelMatrix());
         shader.setUniform("view", SceneManager.getViewMatrix());
         shader.setUniform("projection", SceneManager.getProjectionMatrix());
+        shader.setUniform("useTexture", material.getTexture() != null);
         shader.setUniform("color", material.getColor());
 
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);

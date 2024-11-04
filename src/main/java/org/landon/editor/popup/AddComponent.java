@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
+import org.apache.log4j.BasicConfigurator;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.editor.windows.inspector.Inspector;
@@ -16,7 +17,6 @@ import java.util.Set;
 
 public class AddComponent extends Popup {
 
-    private final static Reflections reflections = new Reflections("org.landon.components");
     private HashMap<String, List<Component>> submenus;
 
     private ImString search = new ImString();
@@ -25,6 +25,8 @@ public class AddComponent extends Popup {
     @Override
     public void init() {
         try {
+            BasicConfigurator.configure();
+            Reflections reflections = new Reflections("org.landon.components");
             submenus = new HashMap<>();
             Set<Class<? extends Component>> components = reflections.getSubTypesOf(Component.class);
             for (Class<? extends Component> c : components) {
@@ -48,7 +50,7 @@ public class AddComponent extends Popup {
 
     @Override
     public void renderBase() {
-        ImGui.setNextWindowSize(300, 400);
+        ImGui.setNextWindowSize(350, 300);
         if (ImGui.beginPopup(getId())) {
             render();
             ImGui.endPopup();
@@ -57,6 +59,7 @@ public class AddComponent extends Popup {
 
     @Override
     public void render() {
+        ImGui.setNextItemWidth(ImGui.getContentRegionAvailX() - ImGui.calcTextSize("Search").x - 10);
         if (ImGui.inputText("Search", search)) search();
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 4);
 

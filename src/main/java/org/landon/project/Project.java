@@ -16,7 +16,7 @@ public class Project {
         ProjectFiles.parseFiles(rootDirectory);
     }
 
-    public File getRootDirectory() {
+    public static File getRootDirectory() {
         return rootDirectory;
     }
 
