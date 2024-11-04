@@ -1,8 +1,7 @@
 package org.landon.scene;
 
-import com.alibaba.fastjson.JSON;
 import org.joml.Matrix4f;
-import org.landon.components.Camera;
+import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.project.Project;

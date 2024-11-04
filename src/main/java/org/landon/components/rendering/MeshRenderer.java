@@ -1,7 +1,7 @@
-package org.landon.components.graphics;
+package org.landon.components.rendering;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import org.landon.components.Component;
+import org.landon.components.graphics.MeshFilter;
 import org.landon.graphics.renderers.Renderer;
 import org.landon.graphics.renderers.Renderers;
 

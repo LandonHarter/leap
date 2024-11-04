@@ -19,15 +19,18 @@ public class Popup {
     public Popup() {
         this.id = UUID.randomUUID().toString();
         popups.add(this);
+
+        init();
     }
 
-    public void renderBase(Object ...args) {
+    public void renderBase() {
         if (ImGui.beginPopup(id)) {
             render();
             ImGui.endPopup();
         }
     }
 
+    public void init() {}
     public void render() {}
 
     public boolean isOpen() {
@@ -37,6 +40,11 @@ public class Popup {
     public void open() {
         open = true;
         popupsToOpen.add(id);
+    }
+
+    public void close() {
+        open = false;
+        ImGui.closeCurrentPopup();
     }
 
     public String getId() {

@@ -5,6 +5,8 @@ import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImString;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
+import org.landon.editor.popup.AddComponent;
+import org.landon.editor.popup.Popup;
 import org.landon.math.Transform;
 import org.landon.scene.GameObject;
 
@@ -12,6 +14,8 @@ public class Inspector {
 
     private static GameObject selectedObject;
     private final static ImString name = new ImString();
+
+    private final static Popup addComponentPopup = new AddComponent();
 
     public static void render() {
         ImGui.begin("Inspector");
@@ -38,6 +42,10 @@ public class Inspector {
         for (Component c : selectedObject.getComponents()) {
             ComponentFields.render(c);
             ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
+        }
+
+        if (ImGui.button("Add Component", ImGui.getContentRegionAvailX(), 32)) {
+            addComponentPopup.open();
         }
 
         ImGui.end();
