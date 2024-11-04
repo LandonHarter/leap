@@ -6,6 +6,7 @@ import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
+import org.landon.editor.windows.inspector.Inspector;
 import org.landon.project.Project;
 
 import java.io.File;
@@ -15,10 +16,7 @@ public final class ProjectExplorer {
 
     private static File currentDirectory;
     private static HashMap<String, Integer> fileIcons = new HashMap<>();
-
-    private static File selectedFile;
-
-    private static final int SELECTED_COLOR = ImColor.rgb("#4a90e2");
+    private static final int SELECTED_COLOR = ImColor.rgb("#0b5a71");
 
     public static void init() {
         currentDirectory = Project.getRootDirectory();
@@ -42,7 +40,7 @@ public final class ProjectExplorer {
                 String fileName = file.getName();
                 String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-                boolean isSelected = selectedFile != null && selectedFile.getName().equals(file.getName());
+                boolean isSelected = Inspector.getSelectedFile() != null && Inspector.getSelectedFile().getName().equals(file.getName());
                 ImGui.pushStyleColor(ImGuiCol.ChildBg, isSelected ? SELECTED_COLOR : ImGui.getColorU32(ImGuiCol.WindowBg));
                 ImGui.pushStyleVar(ImGuiStyleVar.CellPadding, 8, 8);
                 ImGui.beginChild(file.getAbsolutePath(), childSize, childSize, false, ImGuiWindowFlags.NoScrollbar);
@@ -65,11 +63,11 @@ public final class ProjectExplorer {
                 ImGui.endChild();
 
                 if (ImGui.isItemClicked(0)) {
-                    selectedFile = file;
+                    Inspector.setSelectedFile(file);
                 }
                 if (file.isDirectory() && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)) {
                     currentDirectory = file;
-                    selectedFile = null;
+                    Inspector.setSelectedFile(null);
                 }
 
                 if (i < columns - 1) {
