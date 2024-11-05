@@ -1,6 +1,8 @@
 package org.landon.scene;
 
 import org.landon.components.rendering.Camera;
+import org.landon.editor.Editor;
+import org.landon.skybox.Skybox;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ public class Scene {
     private transient File file;
     private final String name;
     private final List<GameObject> objects;
+
+    private final Skybox skybox = new Skybox();
 
     private transient Camera camera;
 
@@ -33,7 +37,9 @@ public class Scene {
 
     public void update() {
         for (GameObject object : objects) {
-            if (object.getParent() == null) object.update(); // Only update root objects
+            if (object.getParent() == null) {
+                object.update(); // Only update root objects
+            }
         }
         checkForCamera();
     }

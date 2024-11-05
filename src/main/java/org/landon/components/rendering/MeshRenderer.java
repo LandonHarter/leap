@@ -1,10 +1,12 @@
 package org.landon.components.rendering;
 
+import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.graphics.renderers.Renderer;
 import org.landon.graphics.renderers.Renderers;
 
+@RunInEditMode
 public class MeshRenderer extends Component {
 
     private transient Renderer renderer = Renderers.UNLIT_RENDERER;

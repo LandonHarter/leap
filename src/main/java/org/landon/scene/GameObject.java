@@ -1,6 +1,8 @@
 package org.landon.scene;
 
+import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
+import org.landon.editor.Editor;
 import org.landon.math.Transform;
 
 import java.util.ArrayList;
@@ -43,7 +45,9 @@ public class GameObject {
         transform.update(parent != null ? parent.getTransform() : null);
         for (Component component : components) {
             if (component.isEnabled()) {
-                component.update();
+                if (Editor.isPlaying() || component.getClass().isAnnotationPresent(RunInEditMode.class)) {
+                    component.update();
+                }
             }
         }
 

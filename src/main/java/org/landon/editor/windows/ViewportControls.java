@@ -20,6 +20,8 @@ public class ViewportControls {
                 LoadingUtil.openLoadingScreen("Saving original scene...");
                 originalScene = Serializer.toJson(SceneManager.getCurrentScene());
                 LoadingUtil.closeLoadingBar();
+
+                Editor.startPlaying();
             }
             if (playing) {
                 LoadingUtil.openLoadingScreen("Loading original scene...");

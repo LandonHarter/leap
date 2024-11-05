@@ -25,7 +25,6 @@ public class Main {
         Scene scene = SceneManager.readScene(Project.getLastScene());
         SceneManager.loadScene(scene);
 
-        scene.start();
         while (window.isOpen()) {
             window.startFrame();
 

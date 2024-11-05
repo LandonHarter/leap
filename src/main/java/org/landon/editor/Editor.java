@@ -8,6 +8,7 @@ import org.landon.editor.windows.ViewportControls;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.editor.windows.SceneHierarchy;
 import org.landon.editor.windows.Viewport;
+import org.landon.scene.SceneManager;
 
 public final class Editor {
 
@@ -31,6 +32,10 @@ public final class Editor {
         Popup.renderPopups();
 
         ImGui.end();
+    }
+
+    public static void startPlaying() {
+        SceneManager.getCurrentScene().start();
     }
 
     public static void setPlaying(boolean playing) {
