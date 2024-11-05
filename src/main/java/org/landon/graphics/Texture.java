@@ -1,5 +1,6 @@
 package org.landon.graphics;
 
+import org.landon.project.Project;
 import org.lwjgl.opengl.*;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
@@ -69,6 +70,10 @@ public class Texture {
 
     public String getTexturePath() {
         return file.getPath();
+    }
+
+    public String getLocalPath() {
+        return file.getAbsolutePath().replaceAll(Project.getRootDirectory().getAbsolutePath(), "");
     }
 
     public static int loadTexture(String filepath) {

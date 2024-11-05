@@ -1,7 +1,6 @@
 package org.landon.scene;
 
-import org.landon.components.Camera;
-import org.landon.editor.windows.SceneHierarchy;
+import org.landon.components.rendering.Camera;
 
 import java.io.File;
 import java.util.ArrayList;

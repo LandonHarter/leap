@@ -1,12 +1,7 @@
 package org.landon.editor;
 
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
-import imgui.flag.ImGuiCond;
-import imgui.flag.ImGuiStyleVar;
-import imgui.flag.ImGuiWindowFlags;
-import imgui.type.ImBoolean;
-import org.landon.core.Window;
+import org.landon.editor.windows.explorer.ProjectExplorer;
 import org.landon.editor.popup.Popup;
 import org.landon.editor.scene.EditorCamera;
 import org.landon.editor.windows.ViewportControls;
@@ -22,6 +17,7 @@ public final class Editor {
     public static void init() {
         Icons.init();
         Viewport.init();
+        ProjectExplorer.init();
     }
 
     public static void render() {
@@ -31,6 +27,8 @@ public final class Editor {
         Viewport.render();
         ViewportControls.render();
         Inspector.render();
+        ProjectExplorer.render();
+        Popup.renderPopups();
 
         ImGui.end();
     }

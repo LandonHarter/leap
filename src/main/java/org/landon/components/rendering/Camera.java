@@ -1,6 +1,7 @@
-package org.landon.components;
+package org.landon.components.rendering;
 
 import org.joml.Matrix4f;
+import org.landon.components.Component;
 import org.landon.core.Window;
 
 public class Camera extends Component {

@@ -9,6 +9,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Shader {
 
@@ -17,6 +19,8 @@ public class Shader {
 
     private int vertexId, fragmentId, programId;
     private boolean validated;
+
+    private LinkedHashMap<String, Integer> uniforms = new LinkedHashMap<>();
 
     private static int currentProgram = 0;
 
@@ -54,7 +58,8 @@ public class Shader {
     }
 
     private int getUniformLocation(String name) {
-        return GL20.glGetUniformLocation(programId, name);
+        if (uniforms.containsKey(name)) return uniforms.get(name);
+        return uniforms.computeIfAbsent(name, k -> GL20.glGetUniformLocation(programId, k));
     }
 
     public void setUniform(String name, int value) {
@@ -79,6 +84,10 @@ public class Shader {
 
     public void setUniform(String name, Matrix4f value) {
         GL20.glUniformMatrix4fv(getUniformLocation(name), false, value.get(new float[16]));
+    }
+
+    public void setUniform(String name, boolean value) {
+        GL20.glUniform1i(getUniformLocation(name), value ? 1 : 0);
     }
 
     public void destroy() {

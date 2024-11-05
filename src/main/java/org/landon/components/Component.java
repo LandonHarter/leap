@@ -30,6 +30,16 @@ public class Component {
     public void onComponentRemoved(Component component) {}
     public void executeGui(String name) {}
 
+    public Component clone() {
+        try {
+            return this.getClass().getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void setGameObject(GameObject gameObject) {
         this.gameObject = gameObject;
     }
