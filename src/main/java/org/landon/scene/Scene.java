@@ -3,6 +3,7 @@ package org.landon.scene;
 import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
 import org.landon.skybox.Skybox;
+import org.landon.skybox.SkyboxType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Scene {
     private final String name;
     private final List<GameObject> objects;
 
-    private final Skybox skybox = new Skybox();
+    private final Skybox skybox;
 
     private transient Camera camera;
 
@@ -23,6 +24,7 @@ public class Scene {
         this.name = name;
 
         if (load) SceneManager.loadScene(this);
+        skybox = new Skybox(SkyboxType.Cubemap);
     }
 
     public Scene() {
@@ -36,6 +38,7 @@ public class Scene {
     }
 
     public void update() {
+        skybox.render();
         for (GameObject object : objects) {
             if (object.getParent() == null) {
                 object.update(); // Only update root objects
@@ -119,6 +122,10 @@ public class Scene {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public Skybox getSkybox() {
+        return skybox;
     }
 
 }

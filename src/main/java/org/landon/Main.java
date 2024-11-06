@@ -25,6 +25,8 @@ public class Main {
         Scene scene = SceneManager.readScene(Project.getLastScene());
         SceneManager.loadScene(scene);
 
+        scene.getSkybox().createCubemap();
+
         while (window.isOpen()) {
             window.startFrame();
 
