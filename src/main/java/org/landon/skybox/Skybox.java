@@ -28,7 +28,7 @@ public class Skybox {
 
     public void render() {
         if (cubemapId == -1) return;
-        mesh.render(cubemapId, shader);
+        mesh.render(this, shader);
     }
 
     public void setType(SkyboxType type) {
@@ -37,6 +37,10 @@ public class Skybox {
 
     public SkyboxType getType() {
         return type;
+    }
+
+    public int getCubemap() {
+        return cubemapId;
     }
 
     public void setTextures(File[] textures) {

@@ -11,7 +11,11 @@ import java.nio.IntBuffer;
 public final class Meshes {
 
     public static Mesh createCube() {
-        return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(1));
+        return parShapeToMesh(ParShapes.par_shapes_create_cube());
+    }
+
+    public static Mesh createSkybox() {
+        return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(0));
     }
 
     public static Mesh createSphere() {

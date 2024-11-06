@@ -54,7 +54,10 @@ public class Popup {
     public static void renderPopups() {
         popupsToOpen.forEach(ImGui::openPopup);
         popupsToOpen.clear();
-        popups.forEach(Popup::renderBase);
+
+        for (int i = 0; i < popups.size(); i++) {
+            popups.get(i).renderBase();
+        }
     }
 
 }

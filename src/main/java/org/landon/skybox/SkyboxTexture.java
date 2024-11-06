@@ -3,6 +3,7 @@ package org.landon.skybox;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 
 import java.io.File;

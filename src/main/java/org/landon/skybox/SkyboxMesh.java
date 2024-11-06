@@ -15,10 +15,13 @@ public class SkyboxMesh {
     private Mesh mesh;
 
     public SkyboxMesh() {
-        mesh = Meshes.createCube();
+        mesh = Meshes.createSkybox();
     }
 
-    public void render(int cubemap, Shader shader) {
+    public void render(Skybox skybox, Shader shader) {
+        int cubemap = skybox.getCubemap();
+        SkyboxType type = skybox.getType();
+
         GL30.glBindVertexArray(mesh.getVao());
 
         Matrix4f view = new Matrix4f(SceneManager.getViewMatrix());
@@ -29,13 +32,14 @@ public class SkyboxMesh {
         GL30.glEnableVertexAttribArray(0);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getIbo());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL30.GL_TEXTURE_CUBE_MAP, cubemap);
+        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, cubemap);
 
         GL11.glDepthMask(false);
         shader.bind();
 
         shader.setUniform("view", view);
         shader.setUniform("projection", SceneManager.getProjectionMatrix());
+        shader.setUniform("cubemap", 0);
 
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);
 
