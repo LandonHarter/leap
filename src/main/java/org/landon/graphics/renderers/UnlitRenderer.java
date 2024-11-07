@@ -4,7 +4,7 @@ import org.landon.components.graphics.MeshFilter;
 import org.landon.editor.Editor;
 import org.landon.graphics.Material;
 import org.landon.graphics.Mesh;
-import org.landon.graphics.Shader;
+import org.landon.graphics.shaders.Shader;
 import org.landon.math.Transform;
 import org.landon.scene.SceneManager;
 import org.lwjgl.opengl.GL11;

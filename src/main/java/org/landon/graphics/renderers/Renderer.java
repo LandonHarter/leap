@@ -1,6 +1,6 @@
 package org.landon.graphics.renderers;
 import org.landon.components.graphics.MeshFilter;
-import org.landon.graphics.Shader;
+import org.landon.graphics.shaders.Shader;
 
 public abstract class Renderer {
 

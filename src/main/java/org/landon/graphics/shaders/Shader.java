@@ -1,4 +1,4 @@
-package org.landon.graphics;
+package org.landon.graphics.shaders;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -9,13 +9,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Shader {
 
     private String vertexContent, fragmentContent;
     private File vertexFile, fragmentFile;
+
+    private List<ShaderLibrary> libraries;
 
     private int vertexId, fragmentId, programId;
     private boolean validated;
@@ -29,6 +32,7 @@ public class Shader {
         fragmentFile = new File(fragmentPath);
         vertexContent = FileUtil.readFile(vertexFile);
         fragmentContent = FileUtil.readFile(fragmentFile);
+        libraries = ShaderLibrary.getDefaultLibraries();
 
         createShader();
     }
@@ -101,8 +105,18 @@ public class Shader {
     private void createShader() {
         programId = GL20.glCreateProgram();
 
+        String vertexSource = vertexContent, fragmentSource = fragmentContent;
+        for (ShaderLibrary library : libraries) {
+            if (library.getType() == ShaderLibrary.ShaderType.VERTEX || library.getType() == ShaderLibrary.ShaderType.ALL) {
+                vertexSource = library.inject(vertexSource);
+            }
+            if (library.getType() == ShaderLibrary.ShaderType.FRAGMENT || library.getType() == ShaderLibrary.ShaderType.ALL) {
+                fragmentSource = library.inject(fragmentSource);
+            }
+        }
+
         vertexId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-        GL20.glShaderSource(vertexId, vertexContent);
+        GL20.glShaderSource(vertexId, vertexSource);
         GL20.glCompileShader(vertexId);
         if (GL20.glGetShaderi(vertexId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
             System.err.println("Failed to compile vertex shader: " + GL20.glGetShaderInfoLog(vertexId));
@@ -110,7 +124,7 @@ public class Shader {
         }
 
         fragmentId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        GL20.glShaderSource(fragmentId, fragmentContent);
+        GL20.glShaderSource(fragmentId, fragmentSource);
         GL20.glCompileShader(fragmentId);
         if (GL20.glGetShaderi(fragmentId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
             System.err.println("Failed to compile fragment shader: " + GL20.glGetShaderInfoLog(fragmentId));

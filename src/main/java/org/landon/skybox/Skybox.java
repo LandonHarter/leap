@@ -1,6 +1,6 @@
 package org.landon.skybox;
 
-import org.landon.graphics.Shader;
+import org.landon.graphics.shaders.Shader;
 import org.landon.project.Project;
 
 import java.io.File;
