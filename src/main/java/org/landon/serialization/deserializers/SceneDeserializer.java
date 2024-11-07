@@ -41,15 +41,8 @@ public class SceneDeserializer implements ObjectDeserializer {
         parentMap.clear();
 
         SkyboxType skyboxType = SkyboxType.valueOf(skybox.getString("type"));
-        String[] texturePaths = skybox.getObject("textures", String[].class);
-        File[] textures = new File[texturePaths.length];
-        for (int i = 0; i < texturePaths.length; i++) {
-            textures[i] = new File(Project.getRootDirectory().getAbsolutePath() + texturePaths[i]);
-        }
-        if (textures.length == 0) {
-            textures = DefaultSkyboxes.CITY;
-        }
-
+        File[] textures = skybox.getObject("textures", File[].class);
+        if (textures.length == 0) textures = DefaultSkyboxes.CITY;
         scene.getSkybox().setType(skyboxType);
         scene.getSkybox().setTextures(textures);
 

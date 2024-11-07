@@ -19,8 +19,8 @@ public final class SceneSerializer implements ObjectSerializer {
         object.put("objects", scene.getObjects().toArray());
 
         JSONObject skybox = new JSONObject();
-        skybox.put("type", scene.getSkybox().getType());
-        skybox.put("textures", scene.getSkybox().getTexturePaths());
+        skybox.put("type", scene.getSkybox().getType().name());
+        skybox.put("textures", scene.getSkybox().getTextures());
         object.put("skybox", skybox);
 
         serializer.write(object);

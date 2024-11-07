@@ -45,6 +45,7 @@ public class Skybox {
 
     public void setTextures(File[] textures) {
         this.textures = textures;
+        createCubemap();
     }
 
     public File[] getTextures() {
