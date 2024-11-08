@@ -3,6 +3,7 @@ package org.landon.components;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.landon.scene.GameObject;
 
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 public class Component {
@@ -29,6 +30,7 @@ public class Component {
     public void onComponentAdded(Component component) {}
     public void onComponentRemoved(Component component) {}
     public void executeGui(String name) {}
+    public void variableUpdated(Field field) {}
 
     public Component clone() {
         try {

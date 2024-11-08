@@ -1,7 +1,21 @@
 package org.landon.graphics.renderers;
 
+import java.util.List;
+
 public final class Renderers {
 
-    public static final Renderer UNLIT_RENDERER = new UnlitRenderer();
+    private static final List<Renderer> RENDERERS = List.of(
+        new UnlitRenderer(),
+        new LitRenderer()
+    );
+
+    public static Renderer getRenderer(RendererType type) {
+        return RENDERERS.get(type.ordinal());
+    }
+
+    public enum RendererType {
+        UNLIT,
+        LIT
+    }
 
 }

@@ -6,10 +6,10 @@ import org.landon.graphics.shaders.Shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-public class UnlitRenderer extends Renderer {
+public class LitRenderer extends Renderer {
 
-    public UnlitRenderer() {
-        super(new Shader("resources/shaders/unlit/vert.glsl", "resources/shaders/unlit/frag.glsl"), 2);
+    public LitRenderer() {
+        super(new Shader("resources/shaders/lit/vert.glsl", "resources/shaders/lit/frag.glsl"), 3);
     }
 
     @Override
