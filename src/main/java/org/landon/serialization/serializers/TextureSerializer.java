@@ -12,7 +12,7 @@ public class TextureSerializer implements ObjectSerializer {
     @Override
     public void write(JSONSerializer serializer, Object o, Object o1, Type type, int i) throws IOException {
         Texture texture = (Texture) o;
-        serializer.write(texture.getLocalPath());
+        serializer.write(texture.getFile());
     }
 
 }
