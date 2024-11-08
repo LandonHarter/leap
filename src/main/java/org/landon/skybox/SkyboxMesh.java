@@ -22,6 +22,7 @@ public class SkyboxMesh {
         int cubemap = skybox.getCubemap();
         SkyboxType type = skybox.getType();
 
+        GL11.glDisable(GL11.GL_CULL_FACE);
         GL30.glBindVertexArray(mesh.getVao());
 
         Matrix4f view = new Matrix4f(SceneManager.getViewMatrix());
@@ -52,6 +53,7 @@ public class SkyboxMesh {
         GL30.glDisableVertexAttribArray(0);
 
         GL30.glBindVertexArray(0);
+        GL11.glEnable(GL11.GL_CULL_FACE);
     }
 
 }

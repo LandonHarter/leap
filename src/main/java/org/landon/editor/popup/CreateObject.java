@@ -6,7 +6,9 @@ import org.landon.components.graphics.MeshFilter;
 import org.landon.components.rendering.MeshRenderer;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.graphics.Meshes;
+import org.landon.graphics.ModelLoader;
 import org.landon.scene.GameObject;
+import org.landon.scene.GameObjects;
 import org.landon.scene.SceneManager;
 
 public class CreateObject extends Popup {
@@ -20,16 +22,12 @@ public class CreateObject extends Popup {
         }
         if (ImGui.beginMenu("Meshes")) {
             if (ImGui.menuItem("Cube")) {
-                GameObject obj = new GameObject("Cube");
-                obj.addComponent(new MeshFilter(Meshes.createCube()));
-                obj.addComponent(new MeshRenderer());
+                GameObject obj = GameObjects.createCube();
                 SceneManager.getCurrentScene().addObject(obj);
                 Inspector.setSelectedObject(obj);
             }
             if (ImGui.menuItem("Sphere")) {
-                GameObject obj = new GameObject("Sphere");
-                obj.addComponent(new MeshFilter(Meshes.createSphere()));
-                obj.addComponent(new MeshRenderer());
+                GameObject obj = GameObjects.createSphere();
                 SceneManager.getCurrentScene().addObject(obj);
                 Inspector.setSelectedObject(obj);
             }

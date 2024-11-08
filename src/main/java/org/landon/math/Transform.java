@@ -41,6 +41,12 @@ public class Transform {
         }
     }
 
+    public void reset() {
+        localPosition.set(0);
+        localRotation.set(0);
+        localScale.set(1);
+    }
+
     public Matrix4f getModelMatrix() {
         return new Matrix4f().translate(worldPosition).rotateX((float) Math.toRadians(worldRotation.x)).rotateY((float) Math.toRadians(worldRotation.y)).rotateZ((float) Math.toRadians(worldRotation.z)).scale(worldScale);
     }
