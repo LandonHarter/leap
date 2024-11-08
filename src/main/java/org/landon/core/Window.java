@@ -1,6 +1,7 @@
 package org.landon.core;
 
 import imgui.ImGui;
+import org.landon.core.profiling.ProfilingTimer;
 import org.landon.graphics.framebuffers.Framebuffer;
 import org.landon.graphics.renderers.FramebufferRenderer;
 import org.landon.gui.Gui;
@@ -30,6 +31,8 @@ public class Window {
 
     private Framebuffer framebuffer;
     private FramebufferRenderer framebufferRenderer;
+
+    private ProfilingTimer frameTimer = new ProfilingTimer(false);
 
     public Window(int width, int height, String title) {
         this.width = width;
@@ -116,6 +119,7 @@ public class Window {
     }
 
     public void startFrame() {
+        frameTimer.startSampling();
         framebuffer.bind();
         Time.startFrame();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -139,6 +143,7 @@ public class Window {
         GLFW.glfwPollEvents();
         GLFW.glfwSwapBuffers(window);
         Time.endFrame();
+        frameTimer.endSampling();
     }
 
     public void maximize() {
@@ -167,6 +172,10 @@ public class Window {
 
     public Framebuffer getFramebuffer() {
         return framebuffer;
+    }
+
+    public ProfilingTimer getFrameTimer() {
+        return frameTimer;
     }
 
     public static Window getInstance() {

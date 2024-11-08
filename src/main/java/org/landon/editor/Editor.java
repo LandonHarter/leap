@@ -1,6 +1,7 @@
 package org.landon.editor;
 
 import imgui.ImGui;
+import org.landon.editor.windows.Profiler;
 import org.landon.editor.windows.explorer.ProjectExplorer;
 import org.landon.editor.popup.Popup;
 import org.landon.editor.scene.EditorCamera;
@@ -29,6 +30,7 @@ public final class Editor {
         ViewportControls.render();
         Inspector.render();
         ProjectExplorer.render();
+        Profiler.render();
         Popup.renderPopups();
 
         ImGui.end();
