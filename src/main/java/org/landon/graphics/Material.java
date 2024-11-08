@@ -9,7 +9,7 @@ public class Material {
     private Vector3f color;
 
     public Material() {
-        this.texture = null;
+        this.texture = new Texture("resources/textures/default.png");
         this.color = new Vector3f(1, 1, 1);
     }
 

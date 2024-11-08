@@ -7,7 +7,9 @@ import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
 import org.landon.editor.windows.inspector.Inspector;
+import org.landon.graphics.Texture;
 import org.landon.project.Project;
+import org.landon.project.ProjectFiles;
 
 import java.io.File;
 import java.util.HashMap;
@@ -19,7 +21,7 @@ public final class ProjectExplorer {
     private static final int SELECTED_COLOR = ImColor.rgb("#0b5a71");
 
     public static void init() {
-        currentDirectory = Project.getRootDirectory();
+        currentDirectory = Project.getAssetsDirectory();
         assignFileIcons();
     }
 
@@ -38,8 +40,6 @@ public final class ProjectExplorer {
             int i = 0;
             for (File file : currentDirectory.listFiles()) {
                 String fileName = file.getName();
-                String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-
                 boolean isSelected = Inspector.getSelectedFile() != null && Inspector.getSelectedFile().getName().equals(file.getName());
                 ImGui.pushStyleColor(ImGuiCol.ChildBg, isSelected ? SELECTED_COLOR : ImGui.getColorU32(ImGuiCol.WindowBg));
                 ImGui.pushStyleVar(ImGuiStyleVar.CellPadding, 8, 8);
@@ -49,7 +49,7 @@ public final class ProjectExplorer {
 
                 if (file.isFile() && ImGui.beginDragDropSource()) {
                     ImGui.setDragDropPayload(file);
-                    ImGui.image(getIcon(extension), 20, 20);
+                    ImGui.image(getIcon(file), 20, 20);
                     ImGui.sameLine();
                     ImGui.text(file.getName());
                     ImGui.endDragDropSource();
@@ -57,12 +57,12 @@ public final class ProjectExplorer {
 
                 ImGui.setCursorPosX(childSize / 2 - iconSize / 2);
                 ImGui.setCursorPosY((childSize - (iconSize + ImGui.getFontSize() + 4)) / 2);
-                ImGui.image(file.isDirectory() ? getIcon("folder") : getIcon(extension), iconSize, iconSize);
+                ImGui.image(getIcon(file), iconSize, iconSize);
                 ImGui.setCursorPosX(childSize / 2 - ImGui.calcTextSize(fileName).x / 2);
                 ImGui.text(fileName);
                 ImGui.endChild();
 
-                if (ImGui.isItemClicked(0)) {
+                if (ImGui.isItemHovered() && ImGui.isMouseReleased(0)) {
                     Inspector.setSelectedFile(file);
                 }
                 if (file.isDirectory() && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)) {
@@ -89,7 +89,18 @@ public final class ProjectExplorer {
         fileIcons.put("folder", Icons.getIcon("folder"));
     }
 
-    private static int getIcon(String extension) {
+    public static int getIcon(File file) {
+        String extension = file.isDirectory() ? "folder" : file.getName().substring(file.getName().lastIndexOf(".") + 1);
+
+        for (String imageExtension : ProjectFiles.IMAGE_EXTENSIONS) {
+            if (extension.equals(imageExtension)) {
+                int textureId = Texture.getTexture(file.getPath());
+                if (textureId != -1) {
+                    return textureId;
+                }
+            }
+        }
+
         return fileIcons.getOrDefault(extension, Icons.getIcon("file"));
     }
 

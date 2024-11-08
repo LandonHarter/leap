@@ -13,12 +13,19 @@ import org.landon.annoations.RangeFloat;
 import org.landon.annoations.RangeInt;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
+import org.landon.editor.popup.FileChooser;
 import org.landon.graphics.Material;
+import org.landon.graphics.Texture;
+import org.landon.project.ProjectFiles;
+import org.landon.util.FileUtil;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public final class ComponentFields {
+
+    private static FileChooser fileChooser = new FileChooser(new String[] {}, file -> {});
 
     public static void render(Component c) {
         ImVec2 cursorPos = ImGui.getCursorPos();
@@ -34,7 +41,7 @@ public final class ComponentFields {
         ImGui.setCursorPosY(cursorPos.y);
         if (ImGui.treeNodeEx(c.getUUID(), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth, c.getName())) {
             ImGui.indent(6);
-            ImGui.setCursorPosY(ImGui.getCursorPosY() + 3);
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 4);
             Field[] fields = c.getClass().getDeclaredFields();
             for (Field field : fields) {
                 if (Modifier.isTransient(field.getModifiers())) continue;
@@ -44,6 +51,7 @@ public final class ComponentFields {
                 field.setAccessible(true);
                 try {
                     renderField(field, c);
+                    ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -133,6 +141,32 @@ public final class ComponentFields {
         if (ImGui.colorEdit3("Color", color)) {
             material.setColor(new Vector3f(color[0], color[1], color[2]));
             c.variableUpdated(field);
+        }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+        if (ImGui.button("Choose")) {
+            fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setOnFileSelected(file -> {
+                material.setTexture(new Texture(file.getPath()));
+                c.variableUpdated(field);
+            });
+            fileChooser.setSelectedFile(material.getTexture().getFile());
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Texture (" + material.getTexture().getName() + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.IMAGE_EXTENSIONS)) {
+                    material.setTexture(new Texture(file.getPath()));
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
         }
     }
 

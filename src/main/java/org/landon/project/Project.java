@@ -20,6 +20,10 @@ public class Project {
         return rootDirectory;
     }
 
+    public static File getAssetsDirectory() {
+        return new File(rootDirectory, "assets");
+    }
+
     public ProjectConfig getConfig() {
         return config;
     }

@@ -76,6 +76,18 @@ public class Texture {
         return file.getAbsolutePath().replaceAll(Project.getRootDirectory().getAbsolutePath(), "");
     }
 
+    public File getFile() {
+        return file;
+    }
+
+    public String getName() {
+        return file.getName();
+    }
+
+    public static int getTexture(String filepath) {
+        return loadedTextures.getOrDefault(filepath, -1);
+    }
+
     public static int loadTexture(String filepath) {
         return new Texture(filepath).getTextureId();
     }

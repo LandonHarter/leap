@@ -3,6 +3,7 @@ package org.landon;
 import org.landon.core.Window;
 import org.landon.editor.Editor;
 import org.landon.project.Project;
+import org.landon.project.ProjectFiles;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
 import org.landon.util.ExplorerUtil;
@@ -21,6 +22,8 @@ public class Main {
         Window window = new Window(1920, 1080, Project.getName() + " | Leap Game Engine");
         window.create();
         window.maximize();
+
+        ProjectFiles.loadTextures();
 
         Scene scene = SceneManager.readScene(Project.getLastScene());
         SceneManager.loadScene(scene);
