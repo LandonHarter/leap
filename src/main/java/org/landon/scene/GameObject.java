@@ -136,6 +136,11 @@ public class GameObject {
         return parent;
     }
 
+    public Transform getParentTransform() {
+        if (parent == null) return null;
+        return parent.getTransform();
+    }
+
     public void setParent(GameObject parent) {
         this.parent = parent;
     }
