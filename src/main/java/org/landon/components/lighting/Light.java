@@ -30,12 +30,14 @@ public class Light extends Component {
     }
 
     @Override
-    public void editorStart() {
+    public void onAdd() {
+        if (SceneManager.getCurrentScene() == null) return;
         SceneManager.getCurrentScene().addLight(this);
     }
 
     @Override
     public void onRemove() {
+        if (SceneManager.getCurrentScene() == null) return;
         SceneManager.getCurrentScene().removeLight(this);
     }
 

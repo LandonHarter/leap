@@ -20,6 +20,7 @@ public final class SceneManager {
             currentScene.destroy();
         }
         currentScene = scene;
+        scene.loadLights();
         Inspector.setSelectedObject(null);
 
         if (scene.getFile() != null) {

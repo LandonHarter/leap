@@ -94,6 +94,15 @@ public class Scene {
         return null;
     }
 
+    public void loadLights() {
+        for (GameObject object : objects) {
+            Light light = object.getComponent(Light.class);
+            if (light != null) {
+                lights.add(light);
+            }
+        }
+    }
+
     public void addLight(Light light) {
         lights.add(light);
     }
