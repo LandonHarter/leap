@@ -27,14 +27,23 @@ public class Shader {
 
     private static int currentProgram = 0;
 
-    public Shader(String vertexPath, String fragmentPath) {
+    public Shader(String vertexPath, String fragmentPath, boolean create) {
         vertexFile = new File(vertexPath);
         fragmentFile = new File(fragmentPath);
         vertexContent = FileUtil.readFile(vertexFile);
         fragmentContent = FileUtil.readFile(fragmentFile);
         libraries = ShaderLibrary.getDefaultLibraries();
 
-        createShader();
+        if (create) createShader();
+    }
+
+    public Shader(String vertexPath, String fragmentPath) {
+        this(vertexPath, fragmentPath, true);
+    }
+
+    public Shader addLibrary(ShaderLibrary library) {
+        libraries.add(library);
+        return this;
     }
 
     public void validate() {
@@ -102,11 +111,12 @@ public class Shader {
         GL20.glDeleteProgram(programId);
     }
 
-    private void createShader() {
+    public void createShader() {
         programId = GL20.glCreateProgram();
 
         String vertexSource = vertexContent, fragmentSource = fragmentContent;
-        for (ShaderLibrary library : libraries) {
+        for (int i = libraries.size() - 1; i >= 0; i--) {
+            ShaderLibrary library = libraries.get(i);
             if (library.getType() == ShaderLibrary.ShaderType.VERTEX || library.getType() == ShaderLibrary.ShaderType.ALL) {
                 vertexSource = library.inject(vertexSource);
             }

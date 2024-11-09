@@ -25,8 +25,11 @@ public class Component {
 
     public void start() {}
     public void update() {}
+    public void editorStart() {}
     public void onAdd() {}
     public void onRemove() {}
+    public void onAddToScene() {}
+    public void onRemoveFromScene() {}
     public void onComponentAdded(Component component) {}
     public void onComponentRemoved(Component component) {}
     public void executeGui(String name) {}

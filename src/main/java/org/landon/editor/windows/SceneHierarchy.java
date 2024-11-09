@@ -97,7 +97,7 @@ public final class SceneHierarchy {
 
         ImVec2 cursorPos = ImGui.getCursorPos();
         ImGui.setCursorPos(cursorPos.x + 33, cursorPos.y);
-        boolean open = ImGui.treeNodeEx(obj.getName(), flags);
+        boolean open = ImGui.treeNodeEx(obj.getUuid(), flags, obj.getName());
         if (ImGui.isItemClicked(0)) {
             Inspector.setSelectedObject(obj);
         } else if (ImGui.isItemClicked(1)) {

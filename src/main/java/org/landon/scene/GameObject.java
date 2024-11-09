@@ -40,6 +40,12 @@ public class GameObject {
         }
     }
 
+    public void editorStart() {
+        for (Component component : components) {
+            component.editorStart();
+        }
+    }
+
     public void update() {
         if (!enabled) return;
         transform.update(parent != null ? parent.getTransform() : null);
@@ -66,6 +72,18 @@ public class GameObject {
             child.destroy();
         }
         children.clear();
+    }
+
+    public void onAddToScene() {
+        for (Component component : components) {
+            component.onAddToScene();
+        }
+    }
+
+    public void onRemoveFromScene() {
+        for (Component component : components) {
+            component.onRemoveFromScene();
+        }
     }
 
     public Component addComponent(Component component) {

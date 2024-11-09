@@ -7,6 +7,7 @@ import imgui.type.ImInt;
 import imgui.type.ImString;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.landon.annoations.ExecuteGui;
 import org.landon.annoations.HideField;
 import org.landon.annoations.RangeFloat;
@@ -14,6 +15,7 @@ import org.landon.annoations.RangeInt;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.editor.popup.FileChooser;
+import org.landon.graphics.Color;
 import org.landon.graphics.Material;
 import org.landon.graphics.Texture;
 import org.landon.project.ProjectFiles;
@@ -72,6 +74,7 @@ public final class ComponentFields {
             else if (field.getType() == Vector3f.class) vector3Field(field, c);
             else if (field.getType() == Material.class) materialField(field, c);
             else if (field.getType().isEnum()) enumField(field, c);
+            else if (field.getType() == Color.class) colorField(field, c);
         }
 
         ExecuteGui executeGui = field.getAnnotation(ExecuteGui.class);
@@ -145,6 +148,22 @@ public final class ComponentFields {
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
 
+        float[] shine = new float[] { material.getShineDamper() };
+        if (ImGui.dragFloat("Shine Damper", shine)) {
+            material.setShineDamper(shine[0]);
+            c.variableUpdated(field);
+        }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+        float[] reflectivity = new float[] { material.getReflectivity() };
+        if (ImGui.dragFloat("Reflectivity", reflectivity)) {
+            material.setReflectivity(reflectivity[0]);
+            c.variableUpdated(field);
+        }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
         if (ImGui.button("Choose")) {
             fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
             fileChooser.setOnFileSelected(file -> {
@@ -185,8 +204,21 @@ public final class ComponentFields {
         }
     }
 
+    private static void colorField(Field field, Component c) throws IllegalAccessException {
+        Color value = (Color) field.get(c);
+        float[] color = toFloatArray(value.getColor());
+        if (ImGui.colorEdit4(formatFieldName(field.getName()), color)) {
+            value.setColor(color[0], color[1], color[2], color[3]);
+            c.variableUpdated(field);
+        }
+    }
+
     private static float[] toFloatArray(Vector3f vector) {
         return new float[] { vector.x, vector.y, vector.z };
+    }
+
+    private static float[] toFloatArray(Vector4f vector) {
+        return new float[] { vector.x, vector.y, vector.z, vector.w };
     }
 
     private static String formatFieldName(String name) {

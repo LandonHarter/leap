@@ -1,5 +1,6 @@
 package org.landon.scene;
 
+import org.landon.components.lighting.Light;
 import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
 import org.landon.skybox.Skybox;
@@ -7,6 +8,7 @@ import org.landon.skybox.SkyboxType;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Scene {
@@ -18,6 +20,7 @@ public class Scene {
     private final Skybox skybox;
 
     private transient Camera camera;
+    private transient List<Light> lights;
 
     public Scene(String name, boolean load) {
         objects = new ArrayList<>();
@@ -25,6 +28,7 @@ public class Scene {
 
         if (load) SceneManager.loadScene(this);
         skybox = new Skybox(SkyboxType.Cubemap);
+        lights = new LinkedList<>();
     }
 
     public Scene() {
@@ -34,6 +38,12 @@ public class Scene {
     public void start() {
         for (GameObject object : objects) {
             object.start();
+        }
+    }
+
+    public void editorStart() {
+        for (GameObject object : objects) {
+            object.editorStart();
         }
     }
 
@@ -56,9 +66,11 @@ public class Scene {
     public void addObject(GameObject object) {
         objects.add(object);
         object.setScene(this);
+        object.onAddToScene();
     }
 
     public void removeObject(GameObject object) {
+        object.onRemoveFromScene();
         object.destroy();
         objects.remove(object);
     }
@@ -80,6 +92,18 @@ public class Scene {
             }
         }
         return null;
+    }
+
+    public void addLight(Light light) {
+        lights.add(light);
+    }
+
+    public void removeLight(Light light) {
+        lights.remove(light);
+    }
+
+    public List<Light> getLights() {
+        return lights;
     }
 
     public void save(String path) {

@@ -4,17 +4,26 @@ in vec3 vertex_position;
 in vec2 vertex_textureCoord;
 in vec3 vertex_normal;
 
-uniform bool useTexture;
-uniform sampler2D tex;
-uniform vec3 color;
+uniform Material material;
+uniform Light[4] lights;
 
 out vec4 outColor;
 
 void main() {
-    outColor = vec4(color, 1.0f);
-    if (useTexture) {
-        outColor = texture(tex, vertex_textureCoord);
+    outColor = vec4(material.color, 1.0f);
+    if (material.useTexture) {
+        outColor = texture(material.tex, vertex_textureCoord);
     }
 
-    outColor = vec4(vertex_normal, 1.0f);
+    vec3 normal = normalize(vertex_normal);
+    vec3 totalLight = vec3(0);
+    for (int i = 0; i < lights.length(); i++) {
+        Light light = lights[i];
+        if (light.intensity == 0) continue;
+
+        vec3 l = calculateLight(light, material, normal, vertex_position);
+        totalLight += l;
+    }
+
+    outColor *= vec4(totalLight, 1.0f);
 }

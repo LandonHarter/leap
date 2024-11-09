@@ -3,6 +3,7 @@ package org.landon.graphics.shaders;
 import org.landon.util.FileUtil;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ShaderLibrary {
@@ -24,9 +25,10 @@ public class ShaderLibrary {
     }
 
     public static List<ShaderLibrary> getDefaultLibraries() {
-        return List.of(
-                new ShaderLibrary("resources/shaders/libraries/math.glsl", ShaderType.ALL)
-        );
+        LinkedList<ShaderLibrary> lib = new LinkedList<>();
+        lib.add(new ShaderLibrary("resources/shaders/libraries/types.glsl", ShaderType.FRAGMENT));
+        lib.add(new ShaderLibrary("resources/shaders/libraries/math.glsl", ShaderType.ALL));
+        return lib;
     }
 
     public enum ShaderType {

@@ -13,9 +13,8 @@ import org.lwjgl.opengl.GL30;
 
 public abstract class Renderer {
 
-    protected final Shader shader;
-
-    private int numLayouts = 3;
+    protected Shader shader;
+    protected int numLayouts = 3;
 
     public Renderer() {
         shader = new Shader("resources/shaders/unlit/vert.glsl", "resources/shaders/unlit/frag.glsl");

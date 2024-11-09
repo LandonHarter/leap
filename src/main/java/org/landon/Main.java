@@ -29,6 +29,7 @@ public class Main {
         SceneManager.loadScene(scene);
 
         scene.getSkybox().createCubemap();
+        scene.editorStart();
 
         while (window.isOpen()) {
             window.startFrame();
