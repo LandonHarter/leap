@@ -47,7 +47,7 @@ public final class Viewport {
         ImGui.image(framebuffer.getTextureID(), aspectSize.x, aspectSize.y, 0, 1, 1, 0);
         Editor.getCamera().movement(ImGui.isWindowHovered());
 
-        TransformationGizmo.update(aspectSize);
+        TransformationGizmo.update();
 
         ImGui.end();
     }

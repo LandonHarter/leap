@@ -55,6 +55,10 @@ public class EditorCamera {
         return new Matrix4f().identity().perspective((float) Math.toRadians(fov), aspect, nearPlane, farPlane);
     }
 
+    public Transform getTransform() {
+        return transform;
+    }
+
     public void setFov(float fov) {
         this.fov = fov;
     }

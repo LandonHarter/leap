@@ -3,6 +3,7 @@ package org.landon.scene;
 import org.landon.components.lighting.Light;
 import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
+import org.landon.editor.scene.Grid;
 import org.landon.skybox.Skybox;
 import org.landon.skybox.SkyboxType;
 
@@ -54,6 +55,7 @@ public class Scene {
                 object.update(); // Only update root objects
             }
         }
+        Grid.render();
         checkForCamera();
     }
 

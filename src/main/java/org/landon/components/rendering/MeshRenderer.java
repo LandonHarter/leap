@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 @RunInEditMode
 public class MeshRenderer extends Component {
 
-    private Renderers.RendererType rendererType = Renderers.RendererType.UNLIT;
+    private Renderers.RendererType rendererType = Renderers.RendererType.LIT;
 
     private transient Renderer renderer = Renderers.getRenderer(rendererType);
     private transient MeshFilter meshFilter;

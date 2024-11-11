@@ -1,6 +1,7 @@
 package org.landon.editor;
 
 import imgui.ImGui;
+import org.landon.editor.scene.Grid;
 import org.landon.editor.windows.Profiler;
 import org.landon.editor.windows.explorer.ProjectExplorer;
 import org.landon.editor.popup.Popup;
@@ -20,6 +21,7 @@ public final class Editor {
         Icons.init();
         Viewport.init();
         ProjectExplorer.init();
+        Grid.init();
     }
 
     public static void render() {

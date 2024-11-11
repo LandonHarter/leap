@@ -12,7 +12,7 @@ public class Light extends Component {
     private Color color = new Color(1, 1, 1);
 
     public Light() {
-        super("Point Light", false, true);
+        super("Light", false, true);
     }
 
     @Override

@@ -14,9 +14,9 @@ public class TransformationGizmo {
 
     private static int operation = Operation.TRANSLATE;
 
-    public static boolean update(ImVec2 size) {
+    public static boolean update() {
         if (Editor.isPlaying() || Inspector.getSelectedObject() == null) return false;
-        setupImGuizmo(size);
+        setupImGuizmo();
 
         float[] cameraProjection = Editor.getCamera().getProjection().get(new float[16]);
         float[] cameraView = Editor.getCamera().getViewMatrix().get(new float[16]);
@@ -39,7 +39,7 @@ public class TransformationGizmo {
         return false;
     }
 
-    private static void setupImGuizmo(ImVec2 size) {
+    private static void setupImGuizmo() {
         ImGuizmo.setOrthographic(false);
         ImGuizmo.setEnabled(true);
         ImGuizmo.setDrawList();

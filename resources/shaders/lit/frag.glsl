@@ -24,6 +24,8 @@ void main() {
         vec3 l = calculateLight(light, material, normal, vertex_position);
         totalLight += l;
     }
+    // ambient light
+    totalLight = max(totalLight, vec3(0.1f));
 
     outColor *= vec4(totalLight, 1.0f);
 }
