@@ -16,8 +16,13 @@ public final class Editor {
 
     private static boolean playing = false;
     private static final EditorCamera camera = new EditorCamera();
+    private static EditorSettings settings;
 
     public static void init() {
+        settings = EditorSettings.load();
+        camera.setPosition(settings.getCameraPosition()); // must set targetDest as well
+        camera.getTransform().setLocalRotation(settings.getCameraRotation());
+
         Icons.init();
         Viewport.init();
         ProjectExplorer.init();
@@ -52,6 +57,10 @@ public final class Editor {
 
     public static EditorCamera getCamera() {
         return camera;
+    }
+
+    public static EditorSettings getSettings() {
+        return settings;
     }
 
 }

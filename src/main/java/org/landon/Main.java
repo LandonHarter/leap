@@ -42,6 +42,7 @@ public class Main {
             window.endFrame();
         }
 
+        Editor.getSettings().save();
         window.destroy();
     }
 

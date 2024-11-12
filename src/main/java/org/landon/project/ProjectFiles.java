@@ -24,7 +24,7 @@ public class ProjectFiles {
                 if (files.containsKey(extension)) {
                     files.get(extension).add(file);
                 } else {
-                    files.put(extension, List.of(file));
+                    files.put(extension, new ArrayList<>(List.of(file)));
                 }
             }
         }

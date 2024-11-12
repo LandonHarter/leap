@@ -43,6 +43,8 @@ public class EditorCamera {
             transform.setLocalRotation(transform.getLocalRotation().sub(new Vector3f(dy * sensitivity, dx * sensitivity, 0).mul((float) Time.getDelta())));
         }
         oldMousePos.set(newMousePos);
+
+        Editor.getSettings().setCameraPosition(transform.getLocalPosition());
     }
 
     public Matrix4f getViewMatrix() {
@@ -57,6 +59,11 @@ public class EditorCamera {
 
     public Transform getTransform() {
         return transform;
+    }
+
+    public void setPosition(Vector3f position) {
+        transform.setLocalPosition(position);
+        targetDest = position;
     }
 
     public void setFov(float fov) {
