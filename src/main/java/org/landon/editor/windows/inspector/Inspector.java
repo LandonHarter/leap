@@ -1,83 +1,41 @@
 package org.landon.editor.windows.inspector;
 
 import imgui.ImGui;
-import imgui.flag.ImGuiTreeNodeFlags;
-import imgui.type.ImString;
-import org.landon.components.Component;
-import org.landon.editor.Icons;
-import org.landon.math.Transform;
 import org.landon.scene.GameObject;
+
+import java.io.File;
 
 public class Inspector {
 
     private static GameObject selectedObject;
-    private final static ImString name = new ImString();
+    private static File selectedFile;
 
     public static void render() {
         ImGui.begin("Inspector");
-        if (selectedObject == null) {
-            ImGui.end();
-            return;
-        }
 
-        ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
-        if (ImGui.checkbox("##enabled", selectedObject.isEnabled())) {
-            selectedObject.setEnabled(!selectedObject.isEnabled());
-        }
-        ImGui.sameLine();
-        ImGui.pushItemWidth(ImGui.getContentRegionAvailX() - ImGui.calcTextSize("Name").x);
-        if (ImGui.inputText("Name", name)) {
-            selectedObject.setName(name.get());
-        }
-        ImGui.popItemWidth();
-
-        ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
-        transform();
-        ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
-
-        for (Component c : selectedObject.getComponents()) {
-            ComponentFields.render(c);
-            ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
-        }
+        if (selectedObject != null) InspectGameObject.render(selectedObject);
+        if (selectedFile != null) InspectFile.render(selectedFile);
 
         ImGui.end();
     }
 
-    private static void transform() {
-        ImGui.image(Icons.getIcon("transform"), 20, 20);
-        ImGui.sameLine();
-        if (ImGui.treeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth)) {
-            ImGui.indent(6);
-            ImGui.setCursorPosY(ImGui.getCursorPosY() + 3);
-            Transform transform = selectedObject.getTransform();
-
-            float[] position = new float[] { transform.getLocalPosition().x, transform.getLocalPosition().y, transform.getLocalPosition().z };
-            if (ImGui.dragFloat3("Position", position)) {
-                transform.setLocalPosition(position[0], position[1], position[2]);
-            }
-
-            float[] rotation = new float[] { transform.getLocalRotation().x, transform.getLocalRotation().y, transform.getLocalRotation().z };
-            if (ImGui.dragFloat3("Rotation", rotation)) {
-                transform.setLocalRotation(rotation[0], rotation[1], rotation[2]);
-            }
-
-            float[] scale = new float[] { transform.getLocalScale().x, transform.getLocalScale().y, transform.getLocalScale().z };
-            if (ImGui.dragFloat3("Scale", scale)) {
-                transform.setLocalScale(scale[0], scale[1], scale[2]);
-            }
-
-            ImGui.unindent(6);
-            ImGui.treePop();
-        }
-    }
-
     public static void setSelectedObject(GameObject object) {
         selectedObject = object;
-        if (object != null) name.set(object.getName());
+        selectedFile = null;
+        if (object != null) InspectGameObject.setName(object.getName());
     }
 
     public static GameObject getSelectedObject() {
         return selectedObject;
+    }
+
+    public static void setSelectedFile(File file) {
+        selectedFile = file;
+        selectedObject = null;
+    }
+
+    public static File getSelectedFile() {
+        return selectedFile;
     }
 
 }

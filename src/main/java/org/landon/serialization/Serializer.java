@@ -11,10 +11,12 @@ import org.landon.graphics.Texture;
 import org.landon.scene.GameObject;
 import org.landon.scene.Scene;
 import org.landon.serialization.deserializers.*;
+import org.landon.serialization.serializers.FileSerializer;
 import org.landon.serialization.serializers.GameObjectSerializer;
 import org.landon.serialization.serializers.SceneSerializer;
 import org.landon.serialization.serializers.TextureSerializer;
 
+import java.io.File;
 import java.lang.reflect.Type;
 
 public final class Serializer {
@@ -25,6 +27,7 @@ public final class Serializer {
         serializeConfig.put(Scene.class, new SceneSerializer());
         serializeConfig.put(GameObject.class, new GameObjectSerializer());
         serializeConfig.put(Texture.class, new TextureSerializer());
+        serializeConfig.put(File.class, new FileSerializer());
     }
 
     public static String toJson(Object object) {
@@ -39,6 +42,7 @@ public final class Serializer {
         parser.getConfig().putDeserializer(Component.class, new ComponentDeserializer());
         parser.getConfig().putDeserializer(Texture.class, new TextureDeserializer());
         parser.getConfig().putDeserializer(Mesh.class, new MeshDeserializer());
+        parser.getConfig().putDeserializer(File.class, new FileDeserializer());
 
         return parser.parseObject(type);
     }

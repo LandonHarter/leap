@@ -16,8 +16,12 @@ public class Project {
         ProjectFiles.parseFiles(rootDirectory);
     }
 
-    public File getRootDirectory() {
+    public static File getRootDirectory() {
         return rootDirectory;
+    }
+
+    public static File getAssetsDirectory() {
+        return new File(rootDirectory, "assets");
     }
 
     public ProjectConfig getConfig() {

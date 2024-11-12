@@ -33,4 +33,13 @@ public final class FileUtil {
         }
     }
 
+    public static boolean isExtension(File f, String[] extensions) {
+        for (String extension : extensions) {
+            if (f.getName().endsWith(extension)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

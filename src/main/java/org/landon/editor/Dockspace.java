@@ -6,7 +6,7 @@ import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
-import org.landon.components.Camera;
+import org.landon.components.rendering.Camera;
 import org.landon.core.Window;
 import org.landon.scene.GameObject;
 import org.landon.scene.Scene;

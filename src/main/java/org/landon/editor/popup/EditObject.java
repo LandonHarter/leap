@@ -8,11 +8,10 @@ import org.landon.scene.SceneManager;
 public class EditObject extends Popup {
 
     @Override
-    public void render(Object... args) {
-        GameObject object = (GameObject) args[0];
+    public void render() {
         if (ImGui.menuItem("Delete")) {
+            SceneManager.getCurrentScene().removeObject(Inspector.getSelectedObject());
             Inspector.setSelectedObject(null);
-            SceneManager.getCurrentScene().removeObject(object);
         }
     }
 }

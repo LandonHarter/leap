@@ -1,6 +1,8 @@
 package org.landon.scene;
 
+import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
+import org.landon.editor.Editor;
 import org.landon.math.Transform;
 
 import java.util.ArrayList;
@@ -38,12 +40,20 @@ public class GameObject {
         }
     }
 
+    public void editorStart() {
+        for (Component component : components) {
+            component.editorStart();
+        }
+    }
+
     public void update() {
         if (!enabled) return;
         transform.update(parent != null ? parent.getTransform() : null);
         for (Component component : components) {
             if (component.isEnabled()) {
-                component.update();
+                if (Editor.isPlaying() || component.getClass().isAnnotationPresent(RunInEditMode.class)) {
+                    component.update();
+                }
             }
         }
 
@@ -62,6 +72,18 @@ public class GameObject {
             child.destroy();
         }
         children.clear();
+    }
+
+    public void onAddToScene() {
+        for (Component component : components) {
+            component.onAddToScene();
+        }
+    }
+
+    public void onRemoveFromScene() {
+        for (Component component : components) {
+            component.onRemoveFromScene();
+        }
     }
 
     public Component addComponent(Component component) {
@@ -112,6 +134,11 @@ public class GameObject {
 
     public GameObject getParent() {
         return parent;
+    }
+
+    public Transform getParentTransform() {
+        if (parent == null) return null;
+        return parent.getTransform();
     }
 
     public void setParent(GameObject parent) {

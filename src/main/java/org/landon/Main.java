@@ -3,6 +3,7 @@ package org.landon;
 import org.landon.core.Window;
 import org.landon.editor.Editor;
 import org.landon.project.Project;
+import org.landon.project.ProjectFiles;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
 import org.landon.util.ExplorerUtil;
@@ -22,10 +23,14 @@ public class Main {
         window.create();
         window.maximize();
 
+        ProjectFiles.loadTextures();
+
         Scene scene = SceneManager.readScene(Project.getLastScene());
         SceneManager.loadScene(scene);
 
-        scene.start();
+        scene.getSkybox().createCubemap();
+        scene.editorStart();
+
         while (window.isOpen()) {
             window.startFrame();
 
@@ -37,6 +42,7 @@ public class Main {
             window.endFrame();
         }
 
+        Editor.getSettings().save();
         window.destroy();
     }
 

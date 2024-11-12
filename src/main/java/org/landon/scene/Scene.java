@@ -1,10 +1,15 @@
 package org.landon.scene;
 
-import org.landon.components.Camera;
-import org.landon.editor.windows.SceneHierarchy;
+import org.landon.components.lighting.Light;
+import org.landon.components.rendering.Camera;
+import org.landon.editor.Editor;
+import org.landon.editor.scene.Grid;
+import org.landon.skybox.Skybox;
+import org.landon.skybox.SkyboxType;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Scene {
@@ -13,13 +18,18 @@ public class Scene {
     private final String name;
     private final List<GameObject> objects;
 
+    private final Skybox skybox;
+
     private transient Camera camera;
+    private transient List<Light> lights;
 
     public Scene(String name, boolean load) {
         objects = new ArrayList<>();
         this.name = name;
 
         if (load) SceneManager.loadScene(this);
+        skybox = new Skybox(SkyboxType.Cubemap);
+        lights = new LinkedList<>();
     }
 
     public Scene() {
@@ -32,10 +42,20 @@ public class Scene {
         }
     }
 
-    public void update() {
+    public void editorStart() {
         for (GameObject object : objects) {
-            if (object.getParent() == null) object.update(); // Only update root objects
+            object.editorStart();
         }
+    }
+
+    public void update() {
+        skybox.render();
+        for (GameObject object : objects) {
+            if (object.getParent() == null) {
+                object.update(); // Only update root objects
+            }
+        }
+        Grid.render();
         checkForCamera();
     }
 
@@ -48,9 +68,11 @@ public class Scene {
     public void addObject(GameObject object) {
         objects.add(object);
         object.setScene(this);
+        object.onAddToScene();
     }
 
     public void removeObject(GameObject object) {
+        object.onRemoveFromScene();
         object.destroy();
         objects.remove(object);
     }
@@ -72,6 +94,27 @@ public class Scene {
             }
         }
         return null;
+    }
+
+    public void loadLights() {
+        for (GameObject object : objects) {
+            Light light = object.getComponent(Light.class);
+            if (light != null) {
+                lights.add(light);
+            }
+        }
+    }
+
+    public void addLight(Light light) {
+        lights.add(light);
+    }
+
+    public void removeLight(Light light) {
+        lights.remove(light);
+    }
+
+    public List<Light> getLights() {
+        return lights;
     }
 
     public void save(String path) {
@@ -114,6 +157,10 @@ public class Scene {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public Skybox getSkybox() {
+        return skybox;
     }
 
 }

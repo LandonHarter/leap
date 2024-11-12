@@ -1,32 +1,50 @@
-package org.landon.graphics;
+package org.landon.graphics.shaders;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.landon.graphics.Color;
 import org.landon.util.FileUtil;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Shader {
 
     private String vertexContent, fragmentContent;
     private File vertexFile, fragmentFile;
 
+    private List<ShaderLibrary> libraries;
+
     private int vertexId, fragmentId, programId;
     private boolean validated;
 
+    private LinkedHashMap<String, Integer> uniforms = new LinkedHashMap<>();
+
     private static int currentProgram = 0;
 
-    public Shader(String vertexPath, String fragmentPath) {
+    public Shader(String vertexPath, String fragmentPath, boolean create) {
         vertexFile = new File(vertexPath);
         fragmentFile = new File(fragmentPath);
         vertexContent = FileUtil.readFile(vertexFile);
         fragmentContent = FileUtil.readFile(fragmentFile);
+        libraries = ShaderLibrary.getDefaultLibraries();
 
-        createShader();
+        if (create) createShader();
+    }
+
+    public Shader(String vertexPath, String fragmentPath) {
+        this(vertexPath, fragmentPath, true);
+    }
+
+    public Shader addLibrary(ShaderLibrary library) {
+        libraries.add(library);
+        return this;
     }
 
     public void validate() {
@@ -54,7 +72,8 @@ public class Shader {
     }
 
     private int getUniformLocation(String name) {
-        return GL20.glGetUniformLocation(programId, name);
+        if (uniforms.containsKey(name)) return uniforms.get(name);
+        return uniforms.computeIfAbsent(name, k -> GL20.glGetUniformLocation(programId, k));
     }
 
     public void setUniform(String name, int value) {
@@ -81,6 +100,10 @@ public class Shader {
         GL20.glUniformMatrix4fv(getUniformLocation(name), false, value.get(new float[16]));
     }
 
+    public void setUniform(String name, boolean value) {
+        GL20.glUniform1i(getUniformLocation(name), value ? 1 : 0);
+    }
+
     public void destroy() {
         GL20.glDetachShader(programId, vertexId);
         GL20.glDetachShader(programId, fragmentId);
@@ -89,11 +112,22 @@ public class Shader {
         GL20.glDeleteProgram(programId);
     }
 
-    private void createShader() {
+    public void createShader() {
         programId = GL20.glCreateProgram();
 
+        String vertexSource = vertexContent, fragmentSource = fragmentContent;
+        for (int i = libraries.size() - 1; i >= 0; i--) {
+            ShaderLibrary library = libraries.get(i);
+            if (library.getType() == ShaderLibrary.ShaderType.VERTEX || library.getType() == ShaderLibrary.ShaderType.ALL) {
+                vertexSource = library.inject(vertexSource);
+            }
+            if (library.getType() == ShaderLibrary.ShaderType.FRAGMENT || library.getType() == ShaderLibrary.ShaderType.ALL) {
+                fragmentSource = library.inject(fragmentSource);
+            }
+        }
+
         vertexId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-        GL20.glShaderSource(vertexId, vertexContent);
+        GL20.glShaderSource(vertexId, vertexSource);
         GL20.glCompileShader(vertexId);
         if (GL20.glGetShaderi(vertexId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
             System.err.println("Failed to compile vertex shader: " + GL20.glGetShaderInfoLog(vertexId));
@@ -101,7 +135,7 @@ public class Shader {
         }
 
         fragmentId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        GL20.glShaderSource(fragmentId, fragmentContent);
+        GL20.glShaderSource(fragmentId, fragmentSource);
         GL20.glCompileShader(fragmentId);
         if (GL20.glGetShaderi(fragmentId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
             System.err.println("Failed to compile fragment shader: " + GL20.glGetShaderInfoLog(fragmentId));

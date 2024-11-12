@@ -14,6 +14,10 @@ public final class Meshes {
         return parShapeToMesh(ParShapes.par_shapes_create_cube());
     }
 
+    public static Mesh createSkybox() {
+        return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(0));
+    }
+
     public static Mesh createSphere() {
         return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(4));
     }

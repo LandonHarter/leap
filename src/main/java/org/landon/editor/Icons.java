@@ -12,15 +12,20 @@ public final class Icons {
         // Components
         addIcon("gameobject", "resources/icons/misc/gameobject.png");
         addIcon("transform", "resources/icons/components/transform.png");
+
         addIcon("camera", "resources/icons/components/camera.png");
         addIcon("meshfilter", "resources/icons/components/meshfilter.png");
         addIcon("meshrenderer", "resources/icons/components/meshrenderer.png");
+        addIcon("light", "resources/icons/components/light.png");
+
+        addIcon("folder", "resources/icons/explorer/folder.png");
+        addIcon("file", "resources/icons/explorer/file.png");
 
         addIcon("leap", "resources/icons/logo.png");
     }
 
     public static int getIcon(String name) {
-        return icons.get(name.toLowerCase());
+        return icons.getOrDefault(name.toLowerCase().replaceAll(" ", ""), 0);
     }
 
     private static void addIcon(String name, String filepath) {

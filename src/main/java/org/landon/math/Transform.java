@@ -41,6 +41,12 @@ public class Transform {
         }
     }
 
+    public void reset() {
+        localPosition.set(0);
+        localRotation.set(0);
+        localScale.set(1);
+    }
+
     public Matrix4f getModelMatrix() {
         return new Matrix4f().translate(worldPosition).rotateX((float) Math.toRadians(worldRotation.x)).rotateY((float) Math.toRadians(worldRotation.y)).rotateZ((float) Math.toRadians(worldRotation.z)).scale(worldScale);
     }
@@ -91,6 +97,33 @@ public class Transform {
 
     public void setLocalScale(float x, float y, float z) {
         localScale.set(x, y, z);
+    }
+
+    public void setWorldPosition(Vector3f newWorldPosition, Transform parent) {
+        Vector3f parentWorldPosition = parent == null ? new Vector3f(0) : parent.getWorldPosition();
+        localPosition = newWorldPosition.sub(parentWorldPosition, new Vector3f());
+    }
+
+    public void setWorldRotation(Vector3f newWorldRotation, Transform parent) {
+        Vector3f parentWorldRotation = parent == null ? new Vector3f(0) : parent.getWorldRotation();
+        localRotation = newWorldRotation.sub(parentWorldRotation, new Vector3f());
+    }
+
+    public void setWorldScale(Vector3f newWorldScale, Transform parent) {
+        Vector3f parentWorldScale = parent == null ? new Vector3f(1) : parent.getWorldScale();
+        localScale = newWorldScale.div(parentWorldScale, new Vector3f());
+    }
+
+    public void setWorldPosition(float x, float y, float z, Transform parent) {
+        setWorldPosition(new Vector3f(x, y, z), parent);
+    }
+
+    public void setWorldRotation(float x, float y, float z, Transform parent) {
+        setWorldRotation(new Vector3f(x, y, z), parent);
+    }
+
+    public void setWorldScale(float x, float y, float z, Transform parent) {
+        setWorldScale(new Vector3f(x, y, z), parent);
     }
 
     public Vector3f getWorldPosition() {
