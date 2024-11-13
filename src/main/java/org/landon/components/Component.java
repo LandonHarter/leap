@@ -1,6 +1,7 @@
 package org.landon.components;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.landon.editor.scene.EditorObject;
 import org.landon.scene.GameObject;
 
 import java.lang.reflect.Field;
@@ -15,6 +16,8 @@ public class Component {
     private boolean enabled = true;
     private transient final boolean allowMultiple;
     private transient final boolean canDisable;
+
+    protected transient EditorObject gizmo;
 
     public Component(String name, boolean allowMultiple, boolean canDisable) {
         this.uuid = UUID.randomUUID().toString();
@@ -34,6 +37,7 @@ public class Component {
     public void onComponentRemoved(Component component) {}
     public void executeGui(String name) {}
     public void variableUpdated(Field field) {}
+    public void createGizmo() {}
 
     public Component clone() {
         try {

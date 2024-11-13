@@ -1,6 +1,8 @@
 package org.landon.components.lighting;
 
 import org.landon.components.Component;
+import org.landon.editor.Icons;
+import org.landon.editor.gizmos.ComponentGizmo;
 import org.landon.graphics.Color;
 import org.landon.graphics.shaders.Shader;
 import org.landon.scene.SceneManager;
@@ -13,11 +15,6 @@ public class Light extends Component {
 
     public Light() {
         super("Light", false, true);
-    }
-
-    @Override
-    public void update() {
-
     }
 
     public void updateUniforms(Shader shader, int index) {
@@ -41,4 +38,8 @@ public class Light extends Component {
         SceneManager.getCurrentScene().removeLight(this);
     }
 
+    @Override
+    public void createGizmo() {
+        gizmo = new ComponentGizmo(gameObject, Icons.getIcon("light"));
+    }
 }

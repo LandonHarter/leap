@@ -106,6 +106,7 @@ public class GameObject {
         }
         components.add(component);
         component.onAdd();
+        component.createGizmo();
         return component;
     }
 

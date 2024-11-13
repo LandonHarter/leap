@@ -1,6 +1,7 @@
 package org.landon.editor;
 
 import imgui.ImGui;
+import org.landon.editor.scene.EditorScene;
 import org.landon.editor.scene.Grid;
 import org.landon.editor.windows.Profiler;
 import org.landon.editor.windows.explorer.ProjectExplorer;
@@ -15,7 +16,10 @@ import org.landon.scene.SceneManager;
 public final class Editor {
 
     private static boolean playing = false;
+
+    private static final EditorScene scene = new EditorScene();
     private static final EditorCamera camera = new EditorCamera();
+
     private static EditorSettings settings;
 
     public static void init() {
@@ -61,6 +65,10 @@ public final class Editor {
 
     public static EditorSettings getSettings() {
         return settings;
+    }
+
+    public static EditorScene getScene() {
+        return scene;
     }
 
 }

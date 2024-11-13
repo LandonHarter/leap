@@ -26,6 +26,7 @@ public class GameObjectDeserializer implements ObjectDeserializer {
         gameObject.setTransform(transform);
         for (Component component : components) {
             gameObject.addComponent(component);
+            component.createGizmo();
         }
 
         if (parent != null) {

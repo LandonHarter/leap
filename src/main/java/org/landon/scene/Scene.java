@@ -55,7 +55,12 @@ public class Scene {
                 object.update(); // Only update root objects
             }
         }
-        Grid.render();
+
+        if (!Editor.isPlaying()) {
+            Editor.getScene().update();
+            Grid.render();
+        }
+
         checkForCamera();
     }
 

@@ -3,6 +3,8 @@ package org.landon.components.rendering;
 import org.joml.Matrix4f;
 import org.landon.components.Component;
 import org.landon.core.Window;
+import org.landon.editor.Icons;
+import org.landon.editor.gizmos.ComponentGizmo;
 
 public class Camera extends Component {
 
@@ -16,6 +18,11 @@ public class Camera extends Component {
     @Override
     public void start() {
         gameObject.getScene().setCamera(this);
+    }
+
+    @Override
+    public void createGizmo() {
+        gizmo = new ComponentGizmo(gameObject, Icons.getIcon("camera"));
     }
 
     public Matrix4f getViewMatrix() {
