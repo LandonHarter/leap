@@ -3,7 +3,6 @@ package org.landon.editor.windows.explorer;
 import imgui.ImColor;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
-import imgui.flag.ImGuiDir;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
@@ -13,7 +12,6 @@ import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -155,7 +153,7 @@ public final class ProjectExplorer {
 
         for (String imageExtension : ProjectFiles.IMAGE_EXTENSIONS) {
             if (extension.equals(imageExtension)) {
-                int textureId = Texture.getTexture(file.getPath());
+                int textureId = Texture.getTextureId(file.getPath());
                 if (textureId != -1) {
                     return textureId;
                 }

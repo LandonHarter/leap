@@ -5,7 +5,6 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -13,24 +12,24 @@ import java.util.HashMap;
 
 public class Texture {
 
-    private static final HashMap<String, Integer> loadedTextures = new HashMap<>();
+    private static final HashMap<String, Texture> loadedTextures = new HashMap<>();
 
+    private int width = 0, height = 0;
     private final File file;
     private int textureId;
 
     public Texture(String filepath) {
         this.file = new File(filepath);
         if (loadedTextures.containsKey(filepath)) {
-            textureId = loadedTextures.get(filepath);
+            textureId = loadedTextures.get(filepath).getTextureId();
         } else {
             loadTexture();
-            loadedTextures.put(filepath, textureId);
+            loadedTextures.put(filepath, this);
         }
     }
 
     private void loadTexture() {
         ByteBuffer image;
-        int width, height;
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer w = stack.mallocInt(1);
@@ -76,6 +75,14 @@ public class Texture {
         return file.getAbsolutePath().replaceAll(Project.getRootDirectory().getAbsolutePath(), "");
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public File getFile() {
         return file;
     }
@@ -84,8 +91,17 @@ public class Texture {
         return file.getName();
     }
 
-    public static int getTexture(String filepath) {
-        return loadedTextures.getOrDefault(filepath, -1);
+    public static int getTextureId(String filepath) {
+        Texture t = loadedTextures.get(filepath);
+        if (t != null) {
+            return t.getTextureId();
+        } else {
+            return -1;
+        }
+    }
+
+    public static Texture getTexture(String filepath) {
+        return loadedTextures.get(filepath);
     }
 
     public static int loadTexture(String filepath) {
