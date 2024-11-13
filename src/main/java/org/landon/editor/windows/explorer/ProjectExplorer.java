@@ -3,6 +3,7 @@ package org.landon.editor.windows.explorer;
 import imgui.ImColor;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiDir;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
@@ -12,7 +13,11 @@ import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ProjectExplorer {
 
@@ -26,9 +31,46 @@ public final class ProjectExplorer {
     }
 
     public static void render() {
-        ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 20, 20);
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 0, 0);
         ImGui.begin("Project Explorer");
         ImGui.popStyleVar();
+
+        if (ImGui.isWindowHovered() && ImGui.isMouseClicked(0)) {
+            Inspector.setSelectedFile(null);
+        }
+
+        ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, 15, 8);
+        ImGui.pushStyleColor(ImGuiCol.FrameBg, ImGui.getColorU32(0.15f, 0.15f, 0.15f, 1));
+        if (ImGui.beginChildFrame("project-explorer".hashCode(), ImGui.getContentRegionMaxX(), ImGui.calcTextSize("assets").y + 16, ImGuiWindowFlags.NoScrollbar)) {
+            String path = currentDirectory.getPath().replace(Project.getRootDirectory().getPath() + "\\", "");
+            String[] directories = path.split("\\\\");
+
+            for (String breadcrumb : directories) {
+                ImGui.beginGroup();
+                ImGui.text(breadcrumb);
+                ImGui.sameLine();
+                if (!breadcrumb.equals(directories[directories.length - 1])) {
+                    ImGui.text(">");
+                    ImGui.sameLine();
+                }
+                ImGui.endGroup();
+                ImGui.sameLine();
+
+                if (ImGui.isItemHovered() && ImGui.isMouseClicked(0)) {
+                    if (breadcrumb.equals(directories[directories.length - 1])) {
+                        currentDirectory = Project.getAssetsDirectory();
+                    } else {
+                        currentDirectory = new File(Objects.requireNonNull(currentDirectory.getParent()));
+                    }
+                }
+            }
+
+            ImGui.endChildFrame();
+        }
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);
+        ImGui.setCursorPosX(ImGui.getCursorPosX() + 15);
 
         float availableWidth = ImGui.getContentRegionAvailX();
         float childSize = 96;
@@ -37,51 +79,70 @@ public final class ProjectExplorer {
         int columns = (int) (availableWidth / (iconSize + margins * 2));
 
         if (currentDirectory != null) {
-            int i = 0;
-            for (File file : currentDirectory.listFiles()) {
-                String fileName = file.getName();
-                boolean isSelected = Inspector.getSelectedFile() != null && Inspector.getSelectedFile().getName().equals(file.getName());
-                ImGui.pushStyleColor(ImGuiCol.ChildBg, isSelected ? SELECTED_COLOR : ImGui.getColorU32(ImGuiCol.WindowBg));
-                ImGui.pushStyleVar(ImGuiStyleVar.CellPadding, 8, 8);
-                ImGui.beginChild(file.getAbsolutePath(), childSize, childSize, false, ImGuiWindowFlags.NoScrollbar);
-                ImGui.popStyleColor();
-                ImGui.popStyleVar();
-
-                if (file.isFile() && ImGui.beginDragDropSource()) {
-                    ImGui.setDragDropPayload(file);
-                    ImGui.image(getIcon(file), 20, 20);
-                    ImGui.sameLine();
-                    ImGui.text(file.getName());
-                    ImGui.endDragDropSource();
-                }
-
-                ImGui.setCursorPosX(childSize / 2 - iconSize / 2);
-                ImGui.setCursorPosY((childSize - (iconSize + ImGui.getFontSize() + 4)) / 2);
-                ImGui.image(getIcon(file), iconSize, iconSize);
-                ImGui.setCursorPosX(childSize / 2 - ImGui.calcTextSize(fileName).x / 2);
-                ImGui.text(fileName);
-                ImGui.endChild();
-
-                if (ImGui.isItemHovered() && ImGui.isMouseReleased(0)) {
-                    Inspector.setSelectedFile(file);
-                }
-                if (file.isDirectory() && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)) {
-                    currentDirectory = file;
-                    Inspector.setSelectedFile(null);
-                }
-
-                if (i < columns - 1) {
-                    ImGui.sameLine();
-                    ImGui.dummy(margins, 0);
-                    ImGui.sameLine();
-                    i++;
-                } else {
-                    i = 0;
-                }
+            File[] directoriesArray = currentDirectory.listFiles(File::isDirectory);
+            if (directoriesArray == null) {
+                directoriesArray = new File[0];
             }
+            List<File> directories = List.of(directoriesArray);
+
+            File[] filesArray = currentDirectory.listFiles(file -> !file.isDirectory());
+            if (filesArray == null) {
+                filesArray = new File[0];
+            }
+            List<File> files = List.of(filesArray);
+
+            AtomicInteger i = new AtomicInteger();
+            directories.forEach((directory) -> { renderFile(directory, childSize, iconSize); i.set(checkForNewLine(i.get(), columns, margins)); });
+            files.forEach((file) -> { renderFile(file, childSize, iconSize); i.set(checkForNewLine(i.get(), columns, margins)); });
         }
 
         ImGui.end();
+    }
+
+    private static void renderFile(File file, float childSize, float iconSize) {
+        String fileName = file.getName();
+        boolean isSelected = Inspector.getSelectedFile() != null && Inspector.getSelectedFile().getName().equals(file.getName());
+        ImGui.pushStyleColor(ImGuiCol.ChildBg, isSelected ? SELECTED_COLOR : ImGui.getColorU32(ImGuiCol.WindowBg));
+        ImGui.pushStyleVar(ImGuiStyleVar.CellPadding, 8, 8);
+        ImGui.beginChild(file.getAbsolutePath(), childSize, childSize, false, ImGuiWindowFlags.NoScrollbar);
+        ImGui.popStyleColor();
+        ImGui.popStyleVar();
+
+        if (file.isFile() && ImGui.beginDragDropSource()) {
+            ImGui.setDragDropPayload(file);
+            ImGui.image(getIcon(file), 20, 20);
+            ImGui.sameLine();
+            ImGui.text(file.getName());
+            ImGui.endDragDropSource();
+        }
+
+        ImGui.setCursorPosX(childSize / 2 - iconSize / 2);
+        ImGui.setCursorPosY((childSize - (iconSize + ImGui.getFontSize() + 4)) / 2);
+        ImGui.image(getIcon(file), iconSize, iconSize);
+        ImGui.setCursorPosX(childSize / 2 - ImGui.calcTextSize(fileName).x / 2);
+        ImGui.text(fileName);
+        ImGui.endChild();
+
+        if (ImGui.isItemHovered() && ImGui.isMouseReleased(0)) {
+            Inspector.setSelectedFile(file);
+        }
+        if (file.isDirectory() && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)) {
+            currentDirectory = file;
+            Inspector.setSelectedFile(null);
+        }
+    }
+
+    private static int checkForNewLine(int i, int columns, float margins) {
+        if (i < columns - 1) {
+            ImGui.sameLine();
+            ImGui.dummy(margins, 0);
+            ImGui.sameLine();
+            i++;
+        } else {
+            i = 0;
+        }
+
+        return i;
     }
 
     private static void assignFileIcons() {
