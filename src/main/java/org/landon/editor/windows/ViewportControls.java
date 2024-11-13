@@ -2,6 +2,7 @@ package org.landon.editor.windows;
 
 import imgui.ImGui;
 import org.landon.editor.Editor;
+import org.landon.editor.Icons;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
 import org.landon.serialization.Serializer;
@@ -14,26 +15,41 @@ public class ViewportControls {
     public static void render() {
         ImGui.begin("Viewport Controls");
 
-        if (ImGui.button("Play/Stop")) {
-            boolean playing = Editor.isPlaying();
-            if (!playing) {
-                LoadingUtil.openLoadingScreen("Saving original scene...");
-                originalScene = Serializer.toJson(SceneManager.getCurrentScene());
-                LoadingUtil.closeLoadingBar();
-
-                Editor.startPlaying();
-            }
-            if (playing) {
-                LoadingUtil.openLoadingScreen("Loading original scene...");
-                Scene scene = Serializer.fromJson(originalScene, SceneManager.getCurrentScene().getClass());
-                scene.checkForCamera();
-                SceneManager.loadScene(scene);
-                LoadingUtil.closeLoadingBar();
-            }
-            Editor.setPlaying(!playing);
+        ImGui.indent((ImGui.getWindowSizeX() / 2) - 60);
+        ImGui.setCursorPosY(ImGui.getWindowSizeY() / 2 - 7.5f);
+        if (ImGui.imageButton(Editor.isPlaying() ? Icons.getIcon("nowplaying") : Icons.getIcon("play"), 40, 30)) {
+            start();
         }
+        ImGui.sameLine();
+        if (ImGui.imageButton(Icons.getIcon("stop"), 40, 30)) {
+            stop();
+        }
+        ImGui.unindent((ImGui.getWindowSizeX() / 2) - 60);
 
         ImGui.end();
+    }
+
+    private static void start() {
+        if (Editor.isPlaying()) return;
+
+        LoadingUtil.openLoadingScreen("Saving original scene...");
+        originalScene = Serializer.toJson(SceneManager.getCurrentScene());
+        LoadingUtil.closeLoadingBar();
+
+        Editor.setPlaying(true);
+        Editor.startPlaying();
+    }
+
+    private static void stop() {
+        if (!Editor.isPlaying()) return;
+
+        LoadingUtil.openLoadingScreen("Loading original scene...");
+        Scene scene = Serializer.fromJson(originalScene, SceneManager.getCurrentScene().getClass());
+        scene.checkForCamera();
+        SceneManager.loadScene(scene);
+        LoadingUtil.closeLoadingBar();
+
+        Editor.setPlaying(false);
     }
 
 }
