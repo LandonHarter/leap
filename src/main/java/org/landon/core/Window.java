@@ -17,6 +17,8 @@ import org.lwjgl.stb.STBImage;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Window {
 
@@ -29,8 +31,8 @@ public class Window {
     private long window;
     private GLFWWindowSizeCallback windowSize;
 
+    private final List<Framebuffer> framebuffers;
     private Framebuffer framebuffer;
-    private FramebufferRenderer framebufferRenderer;
 
     private ProfilingTimer frameTimer = new ProfilingTimer(false);
 
@@ -38,6 +40,7 @@ public class Window {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.framebuffers = new ArrayList<>();
 
         instance = this;
     }
@@ -58,7 +61,6 @@ public class Window {
         GL.createCapabilities();
 
         framebuffer = new Framebuffer(width, height);
-        framebufferRenderer = new FramebufferRenderer();
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
@@ -75,7 +77,7 @@ public class Window {
                 GL11.glViewport(0, 0, width, height);
                 ImGui.getIO().setDisplaySize(width, height);
 
-                framebuffer.resize(width, height);
+                framebuffers.forEach(fb -> fb.resize(width, height));
             }
         };
 
@@ -144,6 +146,10 @@ public class Window {
         GLFW.glfwSwapBuffers(window);
         Time.endFrame();
         frameTimer.endSampling();
+    }
+
+    public void addFramebuffer(Framebuffer framebuffer) {
+        framebuffers.add(framebuffer);
     }
 
     public void maximize() {

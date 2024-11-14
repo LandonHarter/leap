@@ -1,5 +1,6 @@
 package org.landon.graphics.framebuffers;
 
+import org.landon.core.Window;
 import org.lwjgl.opengl.GL30C;
 
 public class Framebuffer {
@@ -9,6 +10,7 @@ public class Framebuffer {
 
     public Framebuffer(int width, int height) {
         generateFramebuffer(width, height);
+        Window.getInstance().addFramebuffer(this);
     }
 
     public void bind() {

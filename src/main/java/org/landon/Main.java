@@ -2,6 +2,7 @@ package org.landon;
 
 import org.landon.core.Window;
 import org.landon.editor.Editor;
+import org.landon.editor.MousePicking;
 import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
 import org.landon.scene.Scene;
@@ -31,6 +32,7 @@ public class Main {
         scene.getSkybox().createCubemap();
         scene.editorStart();
 
+        MousePicking.click();
         while (window.isOpen()) {
             window.startFrame();
 

@@ -16,7 +16,7 @@ public class EditorScene {
     public void update() {
         if (Editor.isPlaying()) return;
         for (EditorObject object : objects) {
-            object.update();
+            if (object.isEnabled()) object.update();
         }
     }
 

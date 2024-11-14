@@ -2,12 +2,16 @@ package org.landon.editor.windows;
 
 import imgui.ImGui;
 import imgui.ImVec2;
+import imgui.extension.imguizmo.ImGuizmo;
 import imgui.flag.ImGuiWindowFlags;
 import org.joml.Vector2f;
 import org.landon.core.Window;
 import org.landon.editor.Editor;
+import org.landon.editor.MousePicking;
 import org.landon.editor.gizmos.TransformationGizmo;
+import org.landon.editor.windows.inspector.Inspector;
 import org.landon.graphics.framebuffers.Framebuffer;
+import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
 
 public final class Viewport {
@@ -48,6 +52,11 @@ public final class Viewport {
         Editor.getCamera().movement(ImGui.isWindowHovered());
 
         TransformationGizmo.update();
+
+        if (ImGui.isMouseClicked(0) && ImGui.isWindowHovered() && !ImGuizmo.isOver()) {
+            GameObject selected = MousePicking.click();
+            Inspector.setSelectedObject(selected);
+        }
 
         ImGui.end();
     }

@@ -31,6 +31,7 @@ public final class Editor {
         Viewport.init();
         ProjectExplorer.init();
         Grid.init();
+        MousePicking.init();
     }
 
     public static void render() {
