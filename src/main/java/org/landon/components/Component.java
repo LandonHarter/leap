@@ -38,6 +38,7 @@ public class Component {
     public void executeGui(String name) {}
     public void variableUpdated(Field field) {}
     public void createGizmo() {}
+    public void onTransformChange() {}
 
     public Component clone() {
         try {

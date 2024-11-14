@@ -26,6 +26,7 @@ public abstract class Renderer {
     }
 
     public void render(MeshFilter meshFilter, boolean outline) {
+        if (!meshFilter.isInFrustum()) return;
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) return;
         Transform transform = meshFilter.getGameObject().getTransform();
         Mesh mesh = meshFilter.getMesh();

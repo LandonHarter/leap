@@ -3,6 +3,7 @@ package org.landon.components.rendering;
 import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
 import org.landon.components.graphics.MeshFilter;
+import org.landon.editor.Editor;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.graphics.renderers.OutlineRenderer;
 import org.landon.graphics.renderers.Renderer;
@@ -25,7 +26,7 @@ public class MeshRenderer extends Component {
     @Override
     public void update() {
         meshFilter = gameObject.getComponent(MeshFilter.class);
-        renderer.render(meshFilter, gameObject.equals(Inspector.getSelectedObject()));
+        renderer.render(meshFilter, gameObject.equals(Inspector.getSelectedObject()) && !Editor.isPlaying());
     }
 
     @Override

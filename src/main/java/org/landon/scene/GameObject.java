@@ -16,7 +16,10 @@ public class GameObject {
     private String uuid;
     private String name;
     private boolean enabled = true;
+
     private Transform transform;
+    private Transform lastTransform;
+
     private final List<Component> components;
 
     private GameObject parent;
@@ -59,6 +62,13 @@ public class GameObject {
 
         for (GameObject child : children) {
             child.update();
+        }
+
+        if (!transform.equals(lastTransform)) {
+            for (Component component : components) {
+                component.onTransformChange();
+            }
+            lastTransform = transform.clone();
         }
     }
 

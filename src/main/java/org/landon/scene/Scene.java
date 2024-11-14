@@ -4,6 +4,7 @@ import org.landon.components.lighting.Light;
 import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
 import org.landon.editor.scene.Grid;
+import org.landon.frustum.Frustum;
 import org.landon.skybox.Skybox;
 import org.landon.skybox.SkyboxType;
 
@@ -50,6 +51,8 @@ public class Scene {
 
     public void update() {
         skybox.render();
+        Frustum.update();
+
         for (GameObject object : objects) {
             if (object.getParent() == null) {
                 object.update(); // Only update root objects
