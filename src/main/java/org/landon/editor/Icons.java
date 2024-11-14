@@ -25,6 +25,10 @@ public final class Icons {
         addIcon("nowplaying", "resources/icons/misc/nowplaying.png");
         addIcon("stop", "resources/icons/misc/stop.png");
 
+        addIcon("info", "resources/icons/logger/log.png");
+        addIcon("warning", "resources/icons/logger/warning.png");
+        addIcon("error", "resources/icons/logger/error.png");
+
         addIcon("leap", "resources/icons/logo.png");
     }
 

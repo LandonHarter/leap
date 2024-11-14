@@ -32,7 +32,6 @@ public final class ProjectExplorer {
         ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 0, 0);
         ImGui.begin("Project Explorer");
         ImGui.popStyleVar();
-
         if (ImGui.isWindowHovered() && ImGui.isMouseClicked(0)) {
             Inspector.setSelectedFile(null);
         }
@@ -90,8 +89,14 @@ public final class ProjectExplorer {
             List<File> files = List.of(filesArray);
 
             AtomicInteger i = new AtomicInteger();
-            directories.forEach((directory) -> { renderFile(directory, childSize, iconSize); i.set(checkForNewLine(i.get(), columns, margins)); });
-            files.forEach((file) -> { renderFile(file, childSize, iconSize); i.set(checkForNewLine(i.get(), columns, margins)); });
+            directories.forEach((directory) -> {
+                renderFile(directory, childSize, iconSize);
+                i.set(checkForNewLine(i.get(), columns, margins));
+            });
+            files.forEach((file) -> {
+                renderFile(file, childSize, iconSize);
+                i.set(checkForNewLine(i.get(), columns, margins));
+            });
         }
 
         ImGui.end();

@@ -17,7 +17,7 @@ import java.io.File;
 
 public final class Dockspace {
 
-    public static void render() {
+    public static boolean render() {
         int windowFlags = ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoDocking;
         ImGui.setNextWindowPos(0, ImGuiCond.Always);
         ImGui.setNextWindowSize(Window.getInstance().getWidth(), Window.getInstance().getHeight());
@@ -25,7 +25,7 @@ public final class Dockspace {
         ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
         windowFlags |= ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
 
-        ImGui.begin(" ", new ImBoolean(true), windowFlags);
+        boolean render = ImGui.begin(" ", new ImBoolean(true), windowFlags);
         ImGui.popStyleVar(2);
 
         ImGui.pushStyleColor(ImGuiCol.DockingEmptyBg, 0);
@@ -66,6 +66,8 @@ public final class Dockspace {
         }
 
         ImGui.endMainMenuBar();
+
+        return render;
     }
 
 }

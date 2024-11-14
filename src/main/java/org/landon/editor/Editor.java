@@ -4,6 +4,7 @@ import imgui.ImGui;
 import org.landon.editor.scene.EditorScene;
 import org.landon.editor.scene.Grid;
 import org.landon.editor.windows.Profiler;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.editor.windows.explorer.ProjectExplorer;
 import org.landon.editor.popup.Popup;
 import org.landon.editor.scene.EditorCamera;
@@ -35,17 +36,18 @@ public final class Editor {
     }
 
     public static void render() {
-        Dockspace.render();
+        if (Dockspace.render()) {
+            SceneHierarchy.render();
+            Viewport.render();
+            ViewportControls.render();
+            Inspector.render();
+            ProjectExplorer.render();
+            Logger.render();
+            Profiler.render();
+            Popup.renderPopups();
 
-        SceneHierarchy.render();
-        Viewport.render();
-        ViewportControls.render();
-        Inspector.render();
-        ProjectExplorer.render();
-        Profiler.render();
-        Popup.renderPopups();
-
-        ImGui.end();
+            ImGui.end();
+        }
     }
 
     public static void startPlaying() {
