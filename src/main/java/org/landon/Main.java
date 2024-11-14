@@ -37,7 +37,6 @@ public class Main {
         MousePicking.click();
         OutlineRenderer.init();
 
-        Logger.info("Project loaded: " + Project.getName());
         while (window.isOpen()) {
             window.startFrame();
 

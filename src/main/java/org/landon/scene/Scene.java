@@ -5,6 +5,7 @@ import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
 import org.landon.editor.scene.Grid;
 import org.landon.frustum.Frustum;
+import org.landon.skybox.DefaultSkyboxes;
 import org.landon.skybox.Skybox;
 import org.landon.skybox.SkyboxType;
 
@@ -30,6 +31,7 @@ public class Scene {
 
         if (load) SceneManager.loadScene(this);
         skybox = new Skybox(SkyboxType.Cubemap);
+        skybox.setTextures(DefaultSkyboxes.CITY);
         lights = new LinkedList<>();
     }
 

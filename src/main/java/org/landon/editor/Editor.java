@@ -33,21 +33,23 @@ public final class Editor {
         ProjectExplorer.init();
         Grid.init();
         MousePicking.init();
+        Keybinds.init();
     }
 
     public static void render() {
-        if (Dockspace.render()) {
-            SceneHierarchy.render();
-            Viewport.render();
-            ViewportControls.render();
-            Inspector.render();
-            ProjectExplorer.render();
-            Logger.render();
-            Profiler.render();
-            Popup.renderPopups();
+        Dockspace.render();
 
-            ImGui.end();
-        }
+        SceneHierarchy.render();
+        Viewport.render();
+        ViewportControls.render();
+        Inspector.render();
+        ProjectExplorer.render();
+        Profiler.render();
+        Popup.renderPopups();
+        Keybinds.update();
+        Logger.render();
+
+        ImGui.end();
     }
 
     public static void startPlaying() {
