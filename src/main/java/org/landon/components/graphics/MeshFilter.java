@@ -1,16 +1,14 @@
 package org.landon.components.graphics;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import org.joml.Vector3f;
 import org.landon.annoations.HideField;
 import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.frustum.AABB;
 import org.landon.frustum.Frustum;
 import org.landon.graphics.Material;
 import org.landon.graphics.Mesh;
-
-import java.lang.reflect.Field;
 
 @RunInEditMode
 public class MeshFilter extends Component {
@@ -66,7 +64,7 @@ public class MeshFilter extends Component {
         }
 
         for (Mesh.Vertex vertex : mesh.getVertices()) {
-            Vector3f position = vertex.getPosition();
+            Vector3f position = new Vector3f(vertex.getPosition());
             position.mul(scale);
 
             if (position.x < min.x) min.x = position.x;

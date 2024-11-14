@@ -16,7 +16,7 @@ public class FileSerializer implements ObjectSerializer {
         File file = (File) object;
 
         boolean isEngineFile = !file.getAbsolutePath().contains(Project.getRootDirectory().getAbsolutePath());
-        String path = isEngineFile ? file.getPath() : file.getAbsolutePath().replace(Project.getRootDirectory().getAbsolutePath(), "");
+        String path = isEngineFile ? file.getPath().replace(System.getProperty("user.dir"), "") : file.getAbsolutePath().replace(Project.getRootDirectory().getAbsolutePath(), "");
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("path", path);

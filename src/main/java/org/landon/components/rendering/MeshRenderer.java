@@ -5,6 +5,7 @@ import org.landon.components.Component;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.editor.Editor;
 import org.landon.editor.windows.inspector.Inspector;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.renderers.OutlineRenderer;
 import org.landon.graphics.renderers.Renderer;
 import org.landon.graphics.renderers.Renderers;

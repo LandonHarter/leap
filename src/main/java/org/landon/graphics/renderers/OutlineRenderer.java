@@ -23,6 +23,9 @@ public class OutlineRenderer {
     public static void render(MeshFilter meshFilter) {
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) return;
 
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(false);
+
         shader.bind();
 
         Matrix4f model = meshFilter.getGameObject().getTransform().getModelMatrix();
@@ -30,10 +33,9 @@ public class OutlineRenderer {
         shader.setUniform("model", model);
         shader.setUniform("view", SceneManager.getViewMatrix());
         shader.setUniform("projection", SceneManager.getProjectionMatrix());
-
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(false);
         GL11.glDrawElements(GL11.GL_TRIANGLES, meshFilter.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
+        shader.unbind();
+
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }

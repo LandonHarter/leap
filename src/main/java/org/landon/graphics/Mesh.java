@@ -2,6 +2,7 @@ package org.landon.graphics;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.landon.editor.windows.logger.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;

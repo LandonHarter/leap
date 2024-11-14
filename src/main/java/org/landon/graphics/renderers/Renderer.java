@@ -1,6 +1,7 @@
 package org.landon.graphics.renderers;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.editor.Editor;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.Material;
 import org.landon.graphics.Mesh;
 import org.landon.graphics.shaders.Shader;

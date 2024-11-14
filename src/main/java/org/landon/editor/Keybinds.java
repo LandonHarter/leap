@@ -1,6 +1,7 @@
 package org.landon.editor;
 
 import org.landon.components.rendering.Camera;
+import org.landon.editor.windows.inspector.Inspector;
 import org.landon.editor.windows.logger.Logger;
 import org.landon.input.Input;
 import org.landon.scene.GameObject;
@@ -54,6 +55,21 @@ public class Keybinds {
             camera.addComponent(new Camera());
             scene.addObject(camera);
             SceneManager.loadScene(scene);
+        });
+        registerKeybind(new int[] {
+                GLFW.GLFW_KEY_DELETE
+        }, () -> {
+            GameObject selectedObject = Inspector.getSelectedObject();
+            if (selectedObject != null) {
+                SceneManager.getCurrentScene().removeObject(selectedObject);
+                Inspector.setSelectedObject(null);
+            }
+
+            File selectedFile = Inspector.getSelectedFile();
+            if (selectedFile != null && selectedFile.isFile()) {
+                selectedFile.delete();
+                Inspector.setSelectedFile(null);
+            }
         });
     }
 

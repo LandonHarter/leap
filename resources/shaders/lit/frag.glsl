@@ -12,7 +12,7 @@ out vec4 outColor;
 void main() {
     outColor = vec4(material.color, 1.0f);
     if (material.useTexture) {
-        outColor = texture(material.tex, vertex_textureCoord);
+        outColor = texture(material.tex, vertex_textureCoord) * vec4(material.color, 1.0f);
     }
 
     vec3 normal = normalize(vertex_normal);
