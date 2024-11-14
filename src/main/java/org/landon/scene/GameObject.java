@@ -214,4 +214,11 @@ public class GameObject {
         this.uuid = uuid;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof GameObject other)) return false;
+        return other.getUuid().equals(uuid);
+    }
 }

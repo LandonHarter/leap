@@ -73,10 +73,9 @@ public class MousePicking {
         if (rendered) {
             int pickedId = data[0] + data[1] * 256 + data[2] * 256 * 256;
             if (pickedId == 0 || pickedId < 0 || pickedId - 1 >= SceneManager.getCurrentScene().getObjects().size()) {
-                Inspector.setSelectedObject(null);
+                return null;
             } else {
-                GameObject selected = SceneManager.getCurrentScene().getObjects().get(pickedId - 1);
-                return selected;
+                return SceneManager.getCurrentScene().getObjects().get(pickedId - 1);
             }
         }
 

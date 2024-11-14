@@ -3,6 +3,7 @@ package org.landon;
 import org.landon.core.Window;
 import org.landon.editor.Editor;
 import org.landon.editor.MousePicking;
+import org.landon.graphics.renderers.OutlineRenderer;
 import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
 import org.landon.scene.Scene;
@@ -33,6 +34,8 @@ public class Main {
         scene.editorStart();
 
         MousePicking.click();
+        OutlineRenderer.init();
+
         while (window.isOpen()) {
             window.startFrame();
 

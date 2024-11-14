@@ -25,7 +25,7 @@ public abstract class Renderer {
         this.numLayouts = numLayouts;
     }
 
-    public void render(MeshFilter meshFilter) {
+    public void render(MeshFilter meshFilter, boolean outline) {
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) return;
         Transform transform = meshFilter.getGameObject().getTransform();
         Mesh mesh = meshFilter.getMesh();
@@ -38,6 +38,7 @@ public abstract class Renderer {
         }
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getIbo());
+        if (outline) OutlineRenderer.render(meshFilter);
 
         bindTextures(meshFilter);
 
@@ -62,6 +63,10 @@ public abstract class Renderer {
         }
 
         GL30.glBindVertexArray(0);
+    }
+
+    public void render(MeshFilter meshFilter) {
+        render(meshFilter, false);
     }
 
     public void bindTextures(MeshFilter meshFilter) {}
