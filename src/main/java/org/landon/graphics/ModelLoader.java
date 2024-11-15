@@ -6,9 +6,12 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.components.rendering.MeshRenderer;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.scene.GameObject;
 import org.landon.util.LoadingUtil;
 import org.lwjgl.assimp.*;
+
+import java.io.File;
 
 public class ModelLoader {
 
@@ -18,11 +21,14 @@ public class ModelLoader {
         AIScene scene = Assimp.aiImportFile(path, fast);
 
         if (scene == null) {
-            System.err.println("Could not load model: " + path);
-            return null;
+            Logger.error("Failed to load model: " + path);
+            LoadingUtil.closeLoadingBar();
+            return new GameObject();
         }
 
         GameObject root = loadGameObject(scene, scene.mRootNode());
+        root.setName(new File(path).getName().split("[.]")[0]);
+
         Assimp.aiFreeScene(scene);
 
         LoadingUtil.closeLoadingBar();
@@ -35,7 +41,7 @@ public class ModelLoader {
 
         Matrix4f transform = fromAssimpMatrix(node.mTransformation());
         Vector3f position = transform.getTranslation(new Vector3f());
-        Quaternionf rotation = transform.getNormalizedRotation(new Quaternionf());
+        Quaternionf rotation = transform.getUnnormalizedRotation(new Quaternionf());
         Vector3f scale = transform.getScale(new Vector3f());
 
         gameObject.getTransform().setLocalPosition(position);
@@ -52,20 +58,19 @@ public class ModelLoader {
         return gameObject;
     }
 
-    private static void loadComponents(AIScene scene, AINode node,GameObject gameObject) {
-        Mesh mesh = loadMesh(scene, node);
-        if (mesh == null) return;
+    private static void loadComponents(AIScene scene, AINode node, GameObject gameObject) {
+        for (int i = 0; i < node.mNumMeshes(); i++) {
+            AIMesh mesh = AIMesh.create(scene.mMeshes().get(node.mMeshes().get(i)));
+            Mesh m = loadMesh(scene, mesh);
 
-        gameObject.addComponent(new MeshFilter(mesh));
-        gameObject.addComponent(new MeshRenderer());
+            GameObject child = new GameObject(mesh.mName().dataString());
+            child.addComponent(new MeshFilter(m));
+            child.addComponent(new MeshRenderer());
+            gameObject.addChild(child);
+        }
     }
 
-    private static Mesh loadMesh(AIScene scene, AINode node) {
-        if (node.mNumMeshes() == 0) {
-            return null;
-        }
-
-        AIMesh mesh = AIMesh.create(scene.mMeshes().get(node.mMeshes().get(0)));
+    private static Mesh loadMesh(AIScene scene, AIMesh mesh) {
         Mesh.Vertex[] vertices = new Mesh.Vertex[mesh.mNumVertices()];
         for (int i = 0; i < mesh.mNumVertices(); i++) {
             AIVector3D vertex = mesh.mVertices().get(i);

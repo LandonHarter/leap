@@ -171,6 +171,9 @@ public final class ProjectExplorer {
     private static void assignFileIcons() {
         fileIcons.put("leap", Icons.getIcon("leap"));
         fileIcons.put("folder", Icons.getIcon("folder"));
+        fileIcons.put("fbx", Icons.getIcon("model"));
+        fileIcons.put("obj", Icons.getIcon("model"));
+        fileIcons.put("gltf", Icons.getIcon("model"));
     }
 
     public static int getIcon(File file) {

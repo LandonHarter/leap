@@ -20,6 +20,7 @@ public final class Icons {
 
         addIcon("folder", "resources/icons/explorer/folder.png");
         addIcon("file", "resources/icons/explorer/file.png");
+        addIcon("model", "resources/icons/explorer/model.png");
 
         addIcon("play", "resources/icons/misc/play.png");
         addIcon("nowplaying", "resources/icons/misc/nowplaying.png");

@@ -8,9 +8,12 @@ import org.landon.editor.Icons;
 import org.landon.editor.popup.CreateObject;
 import org.landon.editor.popup.EditObject;
 import org.landon.editor.windows.inspector.Inspector;
+import org.landon.graphics.ModelLoader;
 import org.landon.gui.Gui;
 import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
+
+import java.io.File;
 
 public final class SceneHierarchy {
 
@@ -63,17 +66,24 @@ public final class SceneHierarchy {
 
         ImGui.endChildFrame();
 
-        GameObject grabbed = ImGui.getDragDropPayload(GameObject.class);
-        if (grabbed != null && grabbed.getParent() != null) {
-            if (ImGui.beginDragDropTarget()) {
-                GameObject payload = ImGui.acceptDragDropPayload(GameObject.class);
-                if (payload != null) {
-                    if (payload.getParent() != null) {
-                        payload.getParent().removeChild(payload);
-                    }
+        if (ImGui.beginDragDropTarget()) {
+            GameObject payload = ImGui.acceptDragDropPayload(GameObject.class);
+            if (payload != null) {
+                if (payload.getParent() != null) {
+                    payload.getParent().removeChild(payload);
                 }
-                ImGui.endDragDropTarget();
             }
+
+            File file = ImGui.acceptDragDropPayload(File.class);
+            if (file != null) {
+                GameObject obj = ModelLoader.loadModel(file.getAbsolutePath());
+                if (obj != null) {
+                    SceneManager.getCurrentScene().addObject(obj);
+                    Inspector.setSelectedObject(obj);
+                }
+            }
+
+            ImGui.endDragDropTarget();
         }
 
         ImGui.end();
