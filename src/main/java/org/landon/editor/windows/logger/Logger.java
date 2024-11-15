@@ -21,7 +21,7 @@ public class Logger {
     private static LogPopup popup = new LogPopup();
 
     public static void render() {
-        ImGui.begin("Logger", ImGuiWindowFlags.MenuBar);
+        ImGui.begin("Logger (" + logs.size() + ")###Logger", ImGuiWindowFlags.MenuBar);
         if (ImGui.beginMenuBar()) {
             if (ImGui.menuItem("Clear")) {
                 clear();

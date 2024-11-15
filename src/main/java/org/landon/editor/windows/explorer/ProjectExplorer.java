@@ -30,6 +30,7 @@ public final class ProjectExplorer {
     public static void init() {
         currentDirectory = Project.getAssetsDirectory();
         assignFileIcons();
+        FileActions.init();
     }
 
     public static void render() {
@@ -133,19 +134,23 @@ public final class ProjectExplorer {
         if (ImGui.isItemHovered() && ImGui.isMouseReleased(0) && canSelect) {
             Inspector.setSelectedFile(file);
         }
-        if (file.isDirectory() && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)) {
-            currentDirectory = file;
-            Inspector.setSelectedFile(null);
+        if (ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)) {
+            if (file.isDirectory()) {
+                currentDirectory = file;
+                Inspector.setSelectedFile(null);
 
-            canSelect = false;
-            ThreadUtil.run(() -> {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                canSelect = true;
-            });
+                canSelect = false;
+                ThreadUtil.run(() -> {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    canSelect = true;
+                });
+            } else {
+                FileActions.executeAction(file);
+            }
         }
     }
 
