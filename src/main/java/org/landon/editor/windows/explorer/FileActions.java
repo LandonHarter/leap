@@ -1,10 +1,9 @@
 package org.landon.editor.windows.explorer;
 
-import org.landon.editor.windows.logger.Logger;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
+import org.landon.util.DialogUtil;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -15,12 +14,10 @@ public class FileActions {
 
     public static void init() {
         actions.put("leap", (file) -> {
-            JFrame frame = new JFrame();
-            if (JOptionPane.showConfirmDialog(frame, "Do you want to open this scene?", "Confirm open scene", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (DialogUtil.yesNo("Do you want to open this scene?")) {
                 Scene scene = SceneManager.readScene(file);
                 SceneManager.loadScene(scene);
             }
-            frame.dispose();
         });
     }
 
