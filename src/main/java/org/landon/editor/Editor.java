@@ -8,10 +8,10 @@ import org.landon.editor.windows.logger.Logger;
 import org.landon.editor.windows.explorer.ProjectExplorer;
 import org.landon.editor.popup.Popup;
 import org.landon.editor.scene.EditorCamera;
-import org.landon.editor.windows.ViewportControls;
+import org.landon.editor.windows.viewport.ViewportControls;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.editor.windows.SceneHierarchy;
-import org.landon.editor.windows.Viewport;
+import org.landon.editor.windows.viewport.Viewport;
 import org.landon.scene.SceneManager;
 
 public final class Editor {

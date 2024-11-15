@@ -1,13 +1,11 @@
 package org.landon.editor.gizmos;
 
-import imgui.ImGui;
-import imgui.ImVec2;
 import imgui.extension.imguizmo.ImGuizmo;
 import imgui.extension.imguizmo.flag.Mode;
 import imgui.extension.imguizmo.flag.Operation;
 import org.joml.Vector2f;
 import org.landon.editor.Editor;
-import org.landon.editor.windows.Viewport;
+import org.landon.editor.windows.viewport.Viewport;
 import org.landon.editor.windows.inspector.Inspector;
 
 public class TransformationGizmo {

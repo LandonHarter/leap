@@ -1,12 +1,10 @@
 package org.landon.editor;
 
-import imgui.extension.imguizmo.ImGuizmo;
 import org.joml.Vector2f;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.components.rendering.MeshRenderer;
 import org.landon.core.Window;
-import org.landon.editor.windows.Viewport;
-import org.landon.editor.windows.inspector.Inspector;
+import org.landon.editor.windows.viewport.Viewport;
 import org.landon.graphics.framebuffers.Framebuffer;
 import org.landon.graphics.renderers.MousePickingRenderer;
 import org.landon.input.Input;

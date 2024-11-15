@@ -3,6 +3,7 @@ package org.landon.editor.windows.explorer;
 import imgui.ImColor;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiHoveredFlags;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
@@ -10,6 +11,7 @@ import org.landon.editor.windows.inspector.Inspector;
 import org.landon.graphics.Texture;
 import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
+import org.landon.util.ThreadUtil;
 
 import java.io.File;
 import java.util.HashMap;
@@ -22,6 +24,8 @@ public final class ProjectExplorer {
     private static File currentDirectory;
     private static HashMap<String, Integer> fileIcons = new HashMap<>();
     private static final int SELECTED_COLOR = ImColor.rgb("#0b5a71");
+
+    private static boolean canSelect = true;
 
     public static void init() {
         currentDirectory = Project.getAssetsDirectory();
@@ -125,12 +129,23 @@ public final class ProjectExplorer {
         ImGui.text(fileName);
         ImGui.endChild();
 
-        if (ImGui.isItemHovered() && ImGui.isMouseReleased(0)) {
+
+        if (ImGui.isItemHovered() && ImGui.isMouseReleased(0) && canSelect) {
             Inspector.setSelectedFile(file);
         }
         if (file.isDirectory() && ImGui.isItemHovered() && ImGui.isMouseDoubleClicked(0)) {
             currentDirectory = file;
             Inspector.setSelectedFile(null);
+
+            canSelect = false;
+            ThreadUtil.run(() -> {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                canSelect = true;
+            });
         }
     }
 

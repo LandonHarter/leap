@@ -1,4 +1,4 @@
-package org.landon.editor.windows;
+package org.landon.editor.windows.viewport;
 
 import imgui.ImGui;
 import org.landon.editor.Editor;
