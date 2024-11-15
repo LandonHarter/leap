@@ -13,7 +13,7 @@ public class ViewportControls {
     private static String originalScene;
 
     public static void render() {
-        ImGui.begin("Viewport Controls");
+        ImGui.begin("\uf04b  Viewport Controls");
 
         ImGui.indent((ImGui.getWindowSizeX() / 2) - 60);
         ImGui.setCursorPosY(ImGui.getWindowSizeY() / 2 - 7.5f);

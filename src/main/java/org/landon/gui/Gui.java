@@ -11,6 +11,8 @@ import org.landon.core.Time;
 import org.landon.editor.Editor;
 import org.landon.input.Input;
 
+import java.util.HashMap;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL32.*;
 
@@ -26,6 +28,8 @@ public class Gui {
     private static final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
     private static final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
     private static String glslVersion = "#version 330 core";
+
+    private static HashMap<String, ImFont> fonts = new HashMap<>();
 
     public static void init(long window) {
         windowPtr = window;
@@ -110,6 +114,7 @@ public class Gui {
 
         final ImFontAtlas fontAtlas = io.getFonts();
         fontAtlas.addFontDefault();
+
         final ImFontConfig fontConfig = new ImFontConfig();
         fontConfig.setMergeMode(true);
         fontConfig.setPixelSnapH(true);
@@ -117,13 +122,30 @@ public class Gui {
         fontConfig.setMergeMode(false);
         fontConfig.setPixelSnapH(false);
         fontConfig.setRasterizerMultiply(1.2f);
-        io.setFontDefault(fontAtlas.addFontFromFileTTF("resources/ptsans.ttf", 18));
+
+        ImFont ptSans = fontAtlas.addFontFromFileTTF("resources/ptsans.ttf", 18, fontConfig);
+        fonts.put("ptSans", ptSans);
+        io.setFontDefault(ptSans);
+
+        final ImFontConfig fontConfig2 = new ImFontConfig();
+        fontConfig2.setMergeMode(true);
+        fontConfig2.setPixelSnapH(true);
+        fontConfig2.setGlyphMinAdvanceX(13.0f * 2.0f / 3.0f);
+        ImFont fontAwesome = fontAtlas.addFontFromFileTTF("resources/FontAwesome.ttf", 13, fontConfig2, new short[] { (short) 0xe005, (short) 0xf8ff, 0 });
+        fonts.put("fontAwesome", fontAwesome);
+        ImFont fontAwesome2 = fontAtlas.addFontFromFileTTF("resources/FontAwesome2.ttf", 13, fontConfig2, new short[] { (short) 0xe005, (short) 0xf8ff, 0 });
+        fonts.put("fontAwesome2", fontAwesome2);
+
         fontConfig.destroy();
 
         imGuiGl3.init(glslVersion);
         Theme.modernDark(ImGui.getStyle());
 
         Editor.init();
+    }
+
+    public static ImFont getFont(String name) {
+        return fonts.get(name);
     }
 
     public static void setupKeyboard(long window, int key, int scancode, int action, int mods) {

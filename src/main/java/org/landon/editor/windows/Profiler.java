@@ -4,6 +4,8 @@ import imgui.ImGui;
 import org.landon.core.Window;
 
 import com.sun.management.OperatingSystemMXBean;
+import org.landon.gui.Gui;
+
 import java.lang.management.ManagementFactory;
 
 public class Profiler {
@@ -11,7 +13,7 @@ public class Profiler {
     private static final OperatingSystemMXBean os = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 
     public static void render() {
-        ImGui.begin("Profiler");
+        ImGui.begin("\uf625  Profiler");
 
         ImGui.text("CPU Usage: " + Math.round((float) os.getCpuLoad() * 100) + "%");
 

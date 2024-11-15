@@ -11,6 +11,7 @@ import org.landon.editor.MousePicking;
 import org.landon.editor.gizmos.TransformationGizmo;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.graphics.framebuffers.Framebuffer;
+import org.landon.gui.Gui;
 import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
 
@@ -27,7 +28,7 @@ public final class Viewport {
     }
 
     public static void render() {
-        ImGui.begin("Viewport", ImGuiWindowFlags.NoCollapse);
+        ImGui.begin("\ue163  Viewport", ImGuiWindowFlags.NoCollapse);
 
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) {
             ImVec2 windowSize = new ImVec2();

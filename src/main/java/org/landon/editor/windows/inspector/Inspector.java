@@ -1,6 +1,7 @@
 package org.landon.editor.windows.inspector;
 
 import imgui.ImGui;
+import org.landon.gui.Gui;
 import org.landon.scene.GameObject;
 
 import java.io.File;
@@ -11,7 +12,7 @@ public class Inspector {
     private static File selectedFile;
 
     public static void render() {
-        ImGui.begin("Inspector");
+        ImGui.begin("\uf002  Inspector");
 
         if (selectedObject != null) InspectGameObject.render(selectedObject);
         if (selectedFile != null) InspectFile.render(selectedFile);

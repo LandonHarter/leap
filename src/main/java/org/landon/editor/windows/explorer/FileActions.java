@@ -16,7 +16,7 @@ public class FileActions {
     public static void init() {
         actions.put("leap", (file) -> {
             JFrame frame = new JFrame();
-            if (JOptionPane.showConfirmDialog(frame, "Do you want to open this scene?") == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(frame, "Do you want to open this scene?", "Confirm open scene", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 Scene scene = SceneManager.readScene(file);
                 SceneManager.loadScene(scene);
             }

@@ -7,6 +7,7 @@ import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
 import org.landon.editor.popup.LogPopup;
+import org.landon.gui.Gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Logger {
     private static LogPopup popup = new LogPopup();
 
     public static void render() {
-        ImGui.begin("Logger (" + logs.size() + ")###Logger", ImGuiWindowFlags.MenuBar);
+        ImGui.begin("\uF075  Logger (" + logs.size() + ")###Logger", ImGuiWindowFlags.MenuBar);
         if (ImGui.beginMenuBar()) {
             if (ImGui.menuItem("Clear")) {
                 clear();

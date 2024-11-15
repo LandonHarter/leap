@@ -8,6 +8,7 @@ import org.landon.editor.Icons;
 import org.landon.editor.popup.CreateObject;
 import org.landon.editor.popup.EditObject;
 import org.landon.editor.windows.inspector.Inspector;
+import org.landon.gui.Gui;
 import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
 
@@ -19,7 +20,7 @@ public final class SceneHierarchy {
     private static final int FRAME_ID = "SceneHierarchy".hashCode();
 
     public static void render() {
-        ImGui.begin("Scene Hierarchy");
+        ImGui.begin("\uf0e8  Scene Hierarchy");
 
         ImGui.pushStyleColor(ImGuiCol.FrameBg, ImGui.getColorU32(ImGuiCol.WindowBg));
         ImGui.beginChildFrame(FRAME_ID, ImGui.getWindowWidth() - 24, ImGui.getWindowHeight() - 50);

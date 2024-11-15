@@ -9,6 +9,7 @@ import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.graphics.Texture;
+import org.landon.gui.Gui;
 import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
 import org.landon.util.ThreadUtil;
@@ -35,7 +36,7 @@ public final class ProjectExplorer {
 
     public static void render() {
         ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 0, 0);
-        ImGui.begin("Project Explorer");
+        ImGui.begin("\uf07b  Project Explorer");
         ImGui.popStyleVar();
         if (ImGui.isWindowHovered() && ImGui.isMouseClicked(0)) {
             Inspector.setSelectedFile(null);
