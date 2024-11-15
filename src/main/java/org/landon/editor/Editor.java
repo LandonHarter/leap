@@ -12,6 +12,7 @@ import org.landon.editor.windows.viewport.ViewportControls;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.editor.windows.SceneHierarchy;
 import org.landon.editor.windows.viewport.Viewport;
+import org.landon.project.ProjectFiles;
 import org.landon.scene.SceneManager;
 
 public final class Editor {
@@ -34,6 +35,8 @@ public final class Editor {
         Grid.init();
         MousePicking.init();
         Keybinds.init();
+
+        ProjectFiles.init();
     }
 
     public static void render() {

@@ -7,7 +7,6 @@ import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
 import org.landon.editor.Icons;
 import org.landon.editor.popup.LogPopup;
-import org.landon.gui.Gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +99,10 @@ public class Logger {
 
     public static void error(String message) {
         log(message, Log.LogType.ERROR);
+    }
+
+    public static void error(Exception e) {
+        error(e.getMessage());
     }
 
     public static void checkLogSize() {

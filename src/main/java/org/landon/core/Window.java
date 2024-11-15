@@ -6,6 +6,7 @@ import org.landon.graphics.framebuffers.Framebuffer;
 import org.landon.graphics.renderers.FramebufferRenderer;
 import org.landon.gui.Gui;
 import org.landon.input.Input;
+import org.landon.project.ProjectFiles;
 import org.landon.serialization.Serializer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -114,6 +115,8 @@ public class Window {
     }
 
     public void destroy() {
+        ProjectFiles.destroy();
+
         windowSize.free();
         framebuffer.destroy();
 

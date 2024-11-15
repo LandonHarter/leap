@@ -3,7 +3,6 @@ package org.landon;
 import org.landon.core.Window;
 import org.landon.editor.Editor;
 import org.landon.editor.MousePicking;
-import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.renderers.OutlineRenderer;
 import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
