@@ -61,9 +61,8 @@ public final class ProjectExplorer {
                     }
                 }
             }
-
-            ImGui.endChildFrame();
         }
+        ImGui.endChildFrame();
         ImGui.popStyleColor();
         ImGui.popStyleVar();
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);

@@ -27,7 +27,7 @@ public final class Dockspace {
         ImGui.popStyleVar(2);
 
         ImGui.pushStyleColor(ImGuiCol.DockingEmptyBg, 0);
-        ImGui.dockSpace(ImGui.getID("dockspace"), ImGui.getContentRegionAvailX(), ImGui.getContentRegionAvailY(), ImGuiDockNodeFlags.NoDockingOverMe);
+        ImGui.dockSpace(ImGui.getID("dockspace"));
         ImGui.popStyleColor();
 
         ImGui.beginMainMenuBar();
