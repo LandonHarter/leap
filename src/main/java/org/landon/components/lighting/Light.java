@@ -2,12 +2,15 @@ package org.landon.components.lighting;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.editor.gizmos.ComponentGizmo;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.shaders.Shader;
 import org.landon.scene.SceneManager;
 
+@RunInEditMode
 public class Light extends Component {
 
     private float intensity = 1.0f;
@@ -19,12 +22,27 @@ public class Light extends Component {
     }
 
     public void updateUniforms(Shader shader, int index) {
-        if (!isEnabled()) return;
         String name = "lights[" + index + "]";
         shader.setUniform(name + ".position", getGameObject().getTransform().getWorldPosition());
         shader.setUniform(name + ".intensity", intensity);
         shader.setUniform(name + ".color", color.xyz(new Vector3f()));
         shader.setUniform(name + ".attenuation", attenuation);
+    }
+
+    public void resetUniforms(Shader shader, int index) {
+        String name = "lights[" + index + "]";
+        shader.setUniform(name + ".position", new Vector3f());
+        shader.setUniform(name + ".intensity", 0.0f);
+        shader.setUniform(name + ".color", new Vector3f());
+        shader.setUniform(name + ".attenuation", 0.0f);
+    }
+
+    public void setUniforms(Shader shader, int index) {
+        if (isEnabled() && gameObject.isEnabled()) {
+            updateUniforms(shader, index);
+        } else {
+            resetUniforms(shader, index);
+        }
     }
 
     @Override

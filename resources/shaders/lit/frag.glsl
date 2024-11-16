@@ -5,7 +5,7 @@ in vec2 vertex_textureCoord;
 in vec3 vertex_normal;
 
 uniform Material material;
-uniform Light[4] lights;
+uniform Light[16] lights;
 
 out vec4 outColor;
 

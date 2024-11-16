@@ -44,7 +44,7 @@ public class LitRenderer extends Renderer {
 
         for (int i = 0; i < SceneManager.getCurrentScene().getLights().size(); i++) {
             Light light = SceneManager.getCurrentScene().getLights().get(i);
-            light.updateUniforms(shader, i);
+            light.setUniforms(shader, i);
         }
     }
 

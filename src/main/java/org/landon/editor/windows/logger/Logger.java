@@ -15,7 +15,7 @@ public class Logger {
 
     private static List<Log> logs = new ArrayList<>();
     private static Log selectedLog;
-    private static final int MAX_LOGS = 1000;
+    private static final int MAX_LOGS = 250;
     private static boolean scroll;
 
     private static LogPopup popup = new LogPopup();
@@ -83,21 +83,21 @@ public class Logger {
         }
     }
 
-    public static void log(String message, Log.LogType type) {
-        logs.add(new Log(message, type));
+    public static void log(Object message, Log.LogType type) {
+        logs.add(new Log(message == null ? "null" : message.toString(), type));
         checkLogSize();
         scroll = true;
     }
 
-    public static void info(String message) {
+    public static void info(Object message) {
         log(message, Log.LogType.INFO);
     }
 
-    public static void warning(String message) {
+    public static void warning(Object message) {
         log(message, Log.LogType.WARNING);
     }
 
-    public static void error(String message) {
+    public static void error(Object message) {
         log(message, Log.LogType.ERROR);
     }
 

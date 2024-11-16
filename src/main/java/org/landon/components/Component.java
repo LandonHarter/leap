@@ -66,8 +66,8 @@ public class Component {
         return name;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setEnabled(boolean e) {
+        this.enabled = e;
     }
 
     public boolean isEnabled() {
