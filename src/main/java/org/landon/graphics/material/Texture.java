@@ -31,6 +31,7 @@ public class Texture {
         this.file = file;
         if (loadedTextures.containsKey(file.getPath())) {
             textureId = loadedTextures.get(file.getPath()).getTextureId();
+            transparent = loadedTextures.get(file.getPath()).isTransparent();
         } else {
             loadTexture();
             loadedTextures.put(file.getPath(), this);

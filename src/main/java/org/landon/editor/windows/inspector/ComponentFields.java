@@ -2,6 +2,7 @@ package org.landon.editor.windows.inspector;
 
 import imgui.ImGui;
 import imgui.ImVec2;
+import imgui.flag.ImGuiColorEditFlags;
 import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
@@ -141,8 +142,8 @@ public final class ComponentFields {
         Material material = (Material) field.get(c);
 
         float[] color = toFloatArray(material.getColor());
-        if (ImGui.colorEdit4(formatFieldName(field.getName()), color)) {
-            material.getColor().set(color[0], color[1], color[2], color[3]);
+        if (ImGui.colorEdit4(formatFieldName(field.getName()), color, ImGuiColorEditFlags.AlphaBar)) {
+            material.setColor(color[0], color[1], color[2], color[3]);
             c.variableUpdated(field);
         }
 

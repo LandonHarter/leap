@@ -28,7 +28,7 @@ public class MeshRenderer extends Component {
     @Override
     public void update() {
         meshFilter = gameObject.getComponent(MeshFilter.class);
-        boolean transparent = meshFilter.getMaterial().getTexture().isTransparent();
+        boolean transparent = meshFilter.getMaterial().hasTransparency();
         if (transparent) RenderQueue.addTransparentRenderer(this);
         else RenderQueue.addOpaqueRenderer(this);
     }

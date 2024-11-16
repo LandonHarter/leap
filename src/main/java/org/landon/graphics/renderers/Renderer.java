@@ -29,16 +29,9 @@ public abstract class Renderer {
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) return;
         Transform transform = meshFilter.getGameObject().getTransform();
         Mesh mesh = meshFilter.getMesh();
-        boolean transparent = meshFilter.getMaterial().getTexture().isTransparent();
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL30.glBindVertexArray(mesh.getVao());
-
-        if (transparent) {
-            GL11.glDisable(GL11.GL_CULL_FACE);
-        } else {
-            GL11.glEnable(GL11.GL_CULL_FACE);
-        }
 
         for (int i = 0; i < numLayouts; i++) {
             GL30.glEnableVertexAttribArray(i);
@@ -70,10 +63,6 @@ public abstract class Renderer {
         }
 
         GL30.glBindVertexArray(0);
-
-        if (transparent) {
-            GL11.glEnable(GL11.GL_CULL_FACE);
-        }
     }
 
     public void render(MeshFilter meshFilter) {

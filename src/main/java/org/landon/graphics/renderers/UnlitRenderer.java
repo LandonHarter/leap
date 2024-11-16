@@ -24,7 +24,6 @@ public class UnlitRenderer extends Renderer {
     @Override
     public void setUniforms(MeshFilter meshFilter) {
         Material material = meshFilter.getMaterial();
-        shader.setUniform("useTexture", material.getTexture() != null);
         shader.setUniform("tex", 0);
         shader.setUniform("color", material.getColor());
     }

@@ -9,19 +9,24 @@ public class Material {
     private float shineDamper = 1;
     private float reflectivity = 0;
 
+    private transient boolean hasTransparency = false;
+
     public Material() {
         this.texture = new Texture("resources/textures/default.png");
         this.color = new Vector4f(1, 1, 1, 1);
+        hasTransparency = false;
     }
 
     public Material(Texture texture) {
         this.texture = texture;
         this.color = new Vector4f(1, 1, 1, 1);
+        hasTransparency = texture.isTransparent() || color.w < 1;
     }
 
     public Material(Texture texture, Vector4f color) {
         this.texture = texture;
         this.color = color;
+        hasTransparency = texture.isTransparent() || color.w < 1;
     }
 
     public Texture getTexture() {
@@ -30,6 +35,11 @@ public class Material {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+        hasTransparency = texture.isTransparent();
+    }
+
+    public boolean hasTransparency() {
+        return hasTransparency;
     }
 
     public Vector4f getColor() {
@@ -38,6 +48,12 @@ public class Material {
 
     public void setColor(Vector4f color) {
         this.color = color;
+        hasTransparency = color.w < 1 || texture.isTransparent();
+    }
+
+    public void setColor(float r, float g, float b, float a) {
+        this.color.set(r, g, b, a);
+        hasTransparency = a < 1 || texture.isTransparent();
     }
 
     public float getShineDamper() {
