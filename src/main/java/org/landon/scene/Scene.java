@@ -1,9 +1,15 @@
 package org.landon.scene;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.components.lighting.Light;
 import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
 import org.landon.editor.scene.Grid;
+import org.landon.frustum.Frustum;
+import org.landon.graphics.renderers.RenderQueue;
+import org.landon.serialization.deserializers.SceneDeserializer;
+import org.landon.serialization.serializers.SceneSerializer;
+import org.landon.skybox.DefaultSkyboxes;
 import org.landon.skybox.Skybox;
 import org.landon.skybox.SkyboxType;
 
@@ -12,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+@JSONType(serializer = SceneSerializer.class, deserializer = SceneDeserializer.class)
 public class Scene {
 
     private transient File file;
@@ -29,6 +36,7 @@ public class Scene {
 
         if (load) SceneManager.loadScene(this);
         skybox = new Skybox(SkyboxType.Cubemap);
+        skybox.setTextures(DefaultSkyboxes.CITY);
         lights = new LinkedList<>();
     }
 
@@ -50,12 +58,20 @@ public class Scene {
 
     public void update() {
         skybox.render();
+        Frustum.update();
+
         for (GameObject object : objects) {
             if (object.getParent() == null) {
                 object.update(); // Only update root objects
             }
         }
-        Grid.render();
+        RenderQueue.render();
+
+        if (!Editor.isPlaying()) {
+            Editor.getScene().update();
+            Grid.render();
+        }
+
         checkForCamera();
     }
 
@@ -67,6 +83,11 @@ public class Scene {
 
     public void addObject(GameObject object) {
         objects.add(object);
+
+        for (GameObject child : object.getChildren()) {
+            addObject(child);
+        }
+
         object.setScene(this);
         object.onAddToScene();
     }

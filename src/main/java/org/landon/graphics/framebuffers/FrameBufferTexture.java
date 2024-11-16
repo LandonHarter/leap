@@ -1,5 +1,6 @@
 package org.landon.graphics.framebuffers;
 
+import org.landon.editor.windows.logger.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -58,7 +59,7 @@ public class FrameBufferTexture {
             STBImage.stbi_image_free(image);
         }
         catch (Exception e) {
-            System.err.println(e.getMessage());
+            Logger.error(e);
         }
     }
 
@@ -106,7 +107,7 @@ public class FrameBufferTexture {
             return image;
         }
         catch (Exception e) {
-            System.err.println(e.getMessage());
+            Logger.error(e);
         }
 
         return null;

@@ -1,27 +1,30 @@
 package org.landon.serialization.deserializers;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.reader.ObjectReader;
+import org.landon.components.Component;
+import org.landon.editor.windows.logger.Logger;
 
 import java.lang.reflect.Type;
 
-public class ComponentDeserializer implements ObjectDeserializer {
+public class ComponentDeserializer implements ObjectReader<Component> {
 
     @Override
-    public <T> T deserialze(DefaultJSONParser parser, Type type, Object o) {
-        JSONObject jsonObject = parser.parseObject();
+    public Component readObject(JSONReader jsonReader, Type fieldType, Object fieldName, long features) {
+        JSONObject jsonObject = jsonReader.readJSONObject();
 
         String typeName = jsonObject.getString("type");
         Class<?> typeClass = null;
         try {
             typeClass = Class.forName(typeName);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            Logger.error(e);
         }
 
-        Object component = jsonObject.getObject("properties", typeClass);
-        return (T) component;
+        JSONObject properties = jsonObject.getJSONObject("properties");
+        return (Component) JSON.parseObject(properties.toString(), typeClass);
     }
 
 }

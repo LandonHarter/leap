@@ -5,15 +5,12 @@ in vec2 vertex_textureCoord;
 in vec3 vertex_normal;
 
 uniform Material material;
-uniform Light[4] lights;
+uniform Light[16] lights;
 
 out vec4 outColor;
 
 void main() {
-    outColor = vec4(material.color, 1.0f);
-    if (material.useTexture) {
-        outColor = texture(material.tex, vertex_textureCoord);
-    }
+    outColor = texture(material.tex, vertex_textureCoord) * material.color;
 
     vec3 normal = normalize(vertex_normal);
     vec3 totalLight = vec3(0);
@@ -24,8 +21,6 @@ void main() {
         vec3 l = calculateLight(light, material, normal, vertex_position);
         totalLight += l;
     }
-    // ambient light
     totalLight = max(totalLight, vec3(0.1f));
-
     outColor *= vec4(totalLight, 1.0f);
 }

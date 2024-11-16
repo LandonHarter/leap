@@ -1,8 +1,8 @@
 package org.landon.skybox;
 
 import org.joml.Matrix4f;
-import org.landon.graphics.Mesh;
-import org.landon.graphics.Meshes;
+import org.landon.graphics.mesh.Mesh;
+import org.landon.graphics.mesh.Meshes;
 import org.landon.graphics.shaders.Shader;
 import org.landon.scene.SceneManager;
 import org.lwjgl.opengl.GL11;

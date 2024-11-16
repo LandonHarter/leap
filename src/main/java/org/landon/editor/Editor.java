@@ -1,21 +1,27 @@
 package org.landon.editor;
 
 import imgui.ImGui;
+import org.landon.editor.scene.EditorScene;
 import org.landon.editor.scene.Grid;
 import org.landon.editor.windows.Profiler;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.editor.windows.explorer.ProjectExplorer;
 import org.landon.editor.popup.Popup;
 import org.landon.editor.scene.EditorCamera;
-import org.landon.editor.windows.ViewportControls;
+import org.landon.editor.windows.viewport.ViewportControls;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.editor.windows.SceneHierarchy;
-import org.landon.editor.windows.Viewport;
+import org.landon.editor.windows.viewport.Viewport;
+import org.landon.project.ProjectFiles;
 import org.landon.scene.SceneManager;
 
 public final class Editor {
 
     private static boolean playing = false;
+
+    private static final EditorScene scene = new EditorScene();
     private static final EditorCamera camera = new EditorCamera();
+
     private static EditorSettings settings;
 
     public static void init() {
@@ -27,6 +33,10 @@ public final class Editor {
         Viewport.init();
         ProjectExplorer.init();
         Grid.init();
+        MousePicking.init();
+        Keybinds.init();
+
+        ProjectFiles.init();
     }
 
     public static void render() {
@@ -39,6 +49,8 @@ public final class Editor {
         ProjectExplorer.render();
         Profiler.render();
         Popup.renderPopups();
+        Keybinds.update();
+        Logger.render();
 
         ImGui.end();
     }
@@ -61,6 +73,10 @@ public final class Editor {
 
     public static EditorSettings getSettings() {
         return settings;
+    }
+
+    public static EditorScene getScene() {
+        return scene;
     }
 
 }

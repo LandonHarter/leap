@@ -1,5 +1,7 @@
 package org.landon.util;
 
+import org.landon.editor.windows.logger.Logger;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -29,7 +31,7 @@ public final class FileUtil {
             writer.write(content);
             writer.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e);
         }
     }
 

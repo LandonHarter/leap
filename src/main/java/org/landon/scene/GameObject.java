@@ -1,14 +1,19 @@
 package org.landon.scene;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
 import org.landon.editor.Editor;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.math.Transform;
+import org.landon.serialization.deserializers.GameObjectDeserializer;
+import org.landon.serialization.serializers.GameObjectSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@JSONType(serializer = GameObjectSerializer.class, deserializer = GameObjectDeserializer.class)
 public class GameObject {
 
     private transient Scene scene;
@@ -16,7 +21,10 @@ public class GameObject {
     private String uuid;
     private String name;
     private boolean enabled = true;
+
     private Transform transform;
+    private transient Transform lastTransform;
+
     private final List<Component> components;
 
     private GameObject parent;
@@ -60,6 +68,13 @@ public class GameObject {
         for (GameObject child : children) {
             child.update();
         }
+
+        if (!transform.equals(lastTransform)) {
+            for (Component component : components) {
+                component.onTransformChange();
+            }
+            lastTransform = transform.clone();
+        }
     }
 
     public void destroy() {
@@ -69,7 +84,7 @@ public class GameObject {
 
         components.clear();
         for (GameObject child : children) {
-            child.destroy();
+            SceneManager.getCurrentScene().removeObject(child);
         }
         children.clear();
     }
@@ -106,6 +121,7 @@ public class GameObject {
         }
         components.add(component);
         component.onAdd();
+        component.createGizmo();
         return component;
     }
 
@@ -152,9 +168,7 @@ public class GameObject {
     public void addChild(GameObject child) {
         GameObject p = child.getParent();
         while (p != null) {
-            System.out.println(p.getName());
             if (p.getUuid().equals(uuid)) {
-                System.err.println("GameObject is already a parent");
                 return;
             }
             p = p.getParent();
@@ -213,4 +227,11 @@ public class GameObject {
         this.uuid = uuid;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof GameObject other)) return false;
+        return other.getUuid().equals(uuid);
+    }
 }

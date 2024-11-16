@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public class Popup {
 
-    private final String id;
-    private boolean open;
+    protected final String id;
+    protected boolean open;
 
     private static final List<Popup> popups = new ArrayList<>();
     private static final List<String> popupsToOpen = new ArrayList<>();

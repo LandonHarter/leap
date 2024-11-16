@@ -1,7 +1,9 @@
-package org.landon.graphics;
+package org.landon.graphics.mesh;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.landon.serialization.deserializers.MeshDeserializer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -11,6 +13,7 @@ import org.lwjgl.system.MemoryUtil;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+@JSONType(deserializer = MeshDeserializer.class)
 public class Mesh {
 
     private final Vertex[] vertices;

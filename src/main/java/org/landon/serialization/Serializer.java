@@ -1,50 +1,55 @@
 package org.landon.serialization;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONFactory;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.JSONWriter;
+import com.alibaba.fastjson2.modules.ObjectReaderModule;
+import com.alibaba.fastjson2.reader.ObjectReaderBaseModule;
+import com.alibaba.fastjson2.reader.ObjectReaderProvider;
+import com.alibaba.fastjson2.writer.ObjectWriterProvider;
 import org.landon.components.Component;
-import org.landon.graphics.Mesh;
-import org.landon.graphics.Texture;
+import org.landon.graphics.material.Texture;
+import org.landon.graphics.mesh.Mesh;
+import org.landon.project.LeapFile;
 import org.landon.scene.GameObject;
 import org.landon.scene.Scene;
 import org.landon.serialization.deserializers.*;
-import org.landon.serialization.serializers.FileSerializer;
-import org.landon.serialization.serializers.GameObjectSerializer;
-import org.landon.serialization.serializers.SceneSerializer;
-import org.landon.serialization.serializers.TextureSerializer;
+import org.landon.serialization.serializers.*;
 
 import java.io.File;
 import java.lang.reflect.Type;
 
 public final class Serializer {
 
-    private static final SerializeConfig serializeConfig = new SerializeConfig(true);
+    private static JSONWriter.Context writeContext;
+    private static JSONReader.Context readContext;
 
     public static void init() {
-        serializeConfig.put(Scene.class, new SceneSerializer());
-        serializeConfig.put(GameObject.class, new GameObjectSerializer());
-        serializeConfig.put(Texture.class, new TextureSerializer());
-        serializeConfig.put(File.class, new FileSerializer());
+        ObjectWriterProvider writeProvider = JSONFactory.getDefaultObjectWriterProvider();
+        writeProvider.register(LeapFile.class, new FileSerializer());
+        writeProvider.register(Texture.class, new TextureSerializer());
+        writeProvider.register(GameObject.class, new GameObjectSerializer());
+        writeProvider.register(Scene.class, new SceneSerializer());
+        writeContext = JSONFactory.createWriteContext(writeProvider, JSONWriter.Feature.LargeObject, JSONWriter.Feature.FieldBased, JSONWriter.Feature.PrettyFormat);
+        writeContext.setPropertyPreFilter(new TransientFilter());
+
+        ObjectReaderProvider readProvider = JSONFactory.getDefaultObjectReaderProvider();
+        readProvider.register(LeapFile.class, new FileDeserializer());
+        readProvider.register(Texture.class, new TextureDeserializer());
+        readProvider.register(GameObject.class, new GameObjectDeserializer());
+        readProvider.register(Scene.class, new SceneDeserializer());
+        readProvider.register(Component.class, new ComponentDeserializer());
+        readProvider.register(Mesh.class, new MeshDeserializer());
+        readContext = JSONFactory.createReadContext(readProvider);;
     }
 
     public static String toJson(Object object) {
-        return JSON.toJSONStringZ(object, serializeConfig, SerializerFeature.PrettyFormat, SerializerFeature.SkipTransientField, SerializerFeature.QuoteFieldNames);
+        return JSON.toJSONString(object, writeContext);
     }
 
     public static <T> T fromJson(String json, Type type) {
-        DefaultJSONParser parser = new DefaultJSONParser(json);
-
-        parser.getConfig().putDeserializer(Scene.class, new SceneDeserializer());
-        parser.getConfig().putDeserializer(GameObject.class, new GameObjectDeserializer());
-        parser.getConfig().putDeserializer(Component.class, new ComponentDeserializer());
-        parser.getConfig().putDeserializer(Texture.class, new TextureDeserializer());
-        parser.getConfig().putDeserializer(Mesh.class, new MeshDeserializer());
-        parser.getConfig().putDeserializer(File.class, new FileDeserializer());
-
-        return parser.parseObject(type);
+        return JSON.parseObject(json, type, readContext);
     }
 
 }

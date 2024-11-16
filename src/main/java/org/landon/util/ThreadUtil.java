@@ -11,7 +11,7 @@ public final class ThreadUtil {
         return threads.containsKey(threadName);
     }
 
-    public static String run(Runnable action) {
+    public static Thread run(Runnable action) {
         String name = UUID.randomUUID().toString();
 
         Thread thread = new Thread(action);
@@ -19,7 +19,7 @@ public final class ThreadUtil {
         thread.start();
 
         threads.put(name, thread);
-        return name;
+        return thread;
     }
 
     public static void run(Runnable action, String name) {

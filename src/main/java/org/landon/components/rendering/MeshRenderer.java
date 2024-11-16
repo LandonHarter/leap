@@ -3,6 +3,11 @@ package org.landon.components.rendering;
 import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
 import org.landon.components.graphics.MeshFilter;
+import org.landon.editor.Editor;
+import org.landon.editor.windows.inspector.Inspector;
+import org.landon.editor.windows.logger.Logger;
+import org.landon.graphics.renderers.OutlineRenderer;
+import org.landon.graphics.renderers.RenderQueue;
 import org.landon.graphics.renderers.Renderer;
 import org.landon.graphics.renderers.Renderers;
 
@@ -23,7 +28,9 @@ public class MeshRenderer extends Component {
     @Override
     public void update() {
         meshFilter = gameObject.getComponent(MeshFilter.class);
-        renderer.render(meshFilter);
+        boolean transparent = meshFilter.getMaterial().getTexture().isTransparent();
+        if (transparent) RenderQueue.addTransparentRenderer(this);
+        else RenderQueue.addOpaqueRenderer(this);
     }
 
     @Override
@@ -36,6 +43,10 @@ public class MeshRenderer extends Component {
     public void setRendererType(Renderers.RendererType rendererType) {
         this.rendererType = rendererType;
         renderer = Renderers.getRenderer(rendererType);
+    }
+
+    public void render() {
+        renderer.render(meshFilter, gameObject.equals(Inspector.getSelectedObject()) && !Editor.isPlaying());
     }
 
 }

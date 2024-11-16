@@ -6,6 +6,7 @@ import org.landon.graphics.framebuffers.Framebuffer;
 import org.landon.graphics.renderers.FramebufferRenderer;
 import org.landon.gui.Gui;
 import org.landon.input.Input;
+import org.landon.project.ProjectFiles;
 import org.landon.serialization.Serializer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -17,6 +18,8 @@ import org.lwjgl.stb.STBImage;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Window {
 
@@ -29,8 +32,8 @@ public class Window {
     private long window;
     private GLFWWindowSizeCallback windowSize;
 
+    private final List<Framebuffer> framebuffers;
     private Framebuffer framebuffer;
-    private FramebufferRenderer framebufferRenderer;
 
     private ProfilingTimer frameTimer = new ProfilingTimer(false);
 
@@ -38,6 +41,7 @@ public class Window {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.framebuffers = new ArrayList<>();
 
         instance = this;
     }
@@ -58,12 +62,11 @@ public class Window {
         GL.createCapabilities();
 
         framebuffer = new Framebuffer(width, height);
-        framebufferRenderer = new FramebufferRenderer();
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
 
         windowSize = new GLFWWindowSizeCallback() {
@@ -75,7 +78,7 @@ public class Window {
                 GL11.glViewport(0, 0, width, height);
                 ImGui.getIO().setDisplaySize(width, height);
 
-                framebuffer.resize(width, height);
+                framebuffers.forEach(fb -> fb.resize(width, height));
             }
         };
 
@@ -110,6 +113,8 @@ public class Window {
     }
 
     public void destroy() {
+        ProjectFiles.destroy();
+
         windowSize.free();
         framebuffer.destroy();
 
@@ -122,7 +127,7 @@ public class Window {
         frameTimer.startSampling();
         framebuffer.bind();
         Time.startFrame();
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
 
         Gui.startFrame();
         ImGui.newFrame();
@@ -144,6 +149,10 @@ public class Window {
         GLFW.glfwSwapBuffers(window);
         Time.endFrame();
         frameTimer.endSampling();
+    }
+
+    public void addFramebuffer(Framebuffer framebuffer) {
+        framebuffers.add(framebuffer);
     }
 
     public void maximize() {

@@ -15,9 +15,9 @@ import org.landon.annoations.RangeInt;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.editor.popup.FileChooser;
-import org.landon.graphics.Color;
-import org.landon.graphics.Material;
-import org.landon.graphics.Texture;
+import org.landon.editor.windows.logger.Logger;
+import org.landon.graphics.material.Material;
+import org.landon.graphics.material.Texture;
 import org.landon.project.ProjectFiles;
 import org.landon.util.FileUtil;
 
@@ -55,7 +55,7 @@ public final class ComponentFields {
                     renderField(field, c);
                     ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Logger.error(e);
                 }
             }
 
@@ -74,7 +74,7 @@ public final class ComponentFields {
             else if (field.getType() == Vector3f.class) vector3Field(field, c);
             else if (field.getType() == Material.class) materialField(field, c);
             else if (field.getType().isEnum()) enumField(field, c);
-            else if (field.getType() == Color.class) colorField(field, c);
+            else if (field.getType() == Vector4f.class) colorField(field, c);
         }
 
         ExecuteGui executeGui = field.getAnnotation(ExecuteGui.class);
@@ -141,8 +141,8 @@ public final class ComponentFields {
         Material material = (Material) field.get(c);
 
         float[] color = toFloatArray(material.getColor());
-        if (ImGui.colorEdit3("Color", color)) {
-            material.setColor(new Vector3f(color[0], color[1], color[2]));
+        if (ImGui.colorEdit4(formatFieldName(field.getName()), color)) {
+            material.getColor().set(color[0], color[1], color[2], color[3]);
             c.variableUpdated(field);
         }
 
@@ -205,10 +205,10 @@ public final class ComponentFields {
     }
 
     private static void colorField(Field field, Component c) throws IllegalAccessException {
-        Color value = (Color) field.get(c);
-        float[] color = toFloatArray(value.getColor());
+        Vector4f value = (Vector4f) field.get(c);
+        float[] color = toFloatArray(value);
         if (ImGui.colorEdit4(formatFieldName(field.getName()), color)) {
-            value.setColor(color[0], color[1], color[2], color[3]);
+            value.set(color[0], color[1], color[2], color[3]);
             c.variableUpdated(field);
         }
     }

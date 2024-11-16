@@ -1,6 +1,6 @@
 package org.landon.editor;
 
-import org.landon.graphics.Texture;
+import org.landon.graphics.material.Texture;
 
 import java.util.HashMap;
 
@@ -20,6 +20,15 @@ public final class Icons {
 
         addIcon("folder", "resources/icons/explorer/folder.png");
         addIcon("file", "resources/icons/explorer/file.png");
+        addIcon("model", "resources/icons/explorer/model.png");
+
+        addIcon("play", "resources/icons/misc/play.png");
+        addIcon("nowplaying", "resources/icons/misc/nowplaying.png");
+        addIcon("stop", "resources/icons/misc/stop.png");
+
+        addIcon("info", "resources/icons/logger/log.png");
+        addIcon("warning", "resources/icons/logger/warning.png");
+        addIcon("error", "resources/icons/logger/error.png");
 
         addIcon("leap", "resources/icons/logo.png");
     }

@@ -138,4 +138,8 @@ public class Transform {
         return worldScale;
     }
 
+    public Transform clone() {
+        return new Transform(new Vector3f(localPosition), new Vector3f(localRotation), new Vector3f(localScale));
+    }
+
 }

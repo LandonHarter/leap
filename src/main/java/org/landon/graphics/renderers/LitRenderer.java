@@ -3,7 +3,8 @@ package org.landon.graphics.renderers;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.components.lighting.Light;
 import org.landon.components.rendering.Camera;
-import org.landon.graphics.Material;
+import org.landon.editor.windows.logger.Logger;
+import org.landon.graphics.material.Material;
 import org.landon.graphics.shaders.Shader;
 import org.landon.graphics.shaders.ShaderLibrary;
 import org.landon.scene.SceneManager;
@@ -33,21 +34,17 @@ public class LitRenderer extends Renderer {
     public void setUniforms(MeshFilter meshFilter) {
         Material material = meshFilter.getMaterial();
         Camera camera = SceneManager.getCurrentScene().getCamera();
-        if (camera == null) return;
 
         shader.setUniform("material.color", material.getColor());
-
         shader.setUniform("material.shineDamper", material.getShineDamper());
         shader.setUniform("material.reflectivity", material.getReflectivity());
-
-        shader.setUniform("material.useTexture", material.getTexture() != null);
         shader.setUniform("material.tex", 0);
 
-        shader.setUniform("cameraPosition", camera.getGameObject().getTransform().getWorldPosition());
+        if (camera != null) shader.setUniform("cameraPosition", camera.getGameObject().getTransform().getWorldPosition());
 
         for (int i = 0; i < SceneManager.getCurrentScene().getLights().size(); i++) {
             Light light = SceneManager.getCurrentScene().getLights().get(i);
-            light.updateUniforms(shader, i);
+            light.setUniforms(shader, i);
         }
     }
 

@@ -1,24 +1,25 @@
 package org.landon.serialization.deserializers;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.reader.ObjectReader;
+import org.landon.project.LeapFile;
 import org.landon.project.Project;
 
 import java.io.File;
 import java.lang.reflect.Type;
 
-public class FileDeserializer implements ObjectDeserializer {
+public class FileDeserializer implements ObjectReader<LeapFile> {
 
     @Override
-    public <T> T deserialze(DefaultJSONParser parser, Type type, Object fieldName) {
-        JSONObject jsonObject = parser.parseObject();
+    public LeapFile readObject(JSONReader jsonReader, Type fieldType, Object fieldName, long features) {
+        JSONObject jsonObject = jsonReader.readJSONObject();
 
         String path = jsonObject.getString("path");
         boolean isEngineFile = jsonObject.getBoolean("isEngineFile");
 
-        String newPath = isEngineFile ? path : Project.getRootDirectory().getAbsolutePath() + path;
-        return (T) new File(newPath);
+        String newPath = isEngineFile ? System.getProperty("user.dir") + "\\\\" + path : Project.getRootDirectory().getAbsolutePath() + path;
+        return new LeapFile(newPath);
     }
 
 }

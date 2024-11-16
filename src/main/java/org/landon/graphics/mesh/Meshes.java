@@ -1,4 +1,4 @@
-package org.landon.graphics;
+package org.landon.graphics.mesh;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -20,6 +20,17 @@ public final class Meshes {
 
     public static Mesh createSphere() {
         return parShapeToMesh(ParShapes.par_shapes_create_subdivided_sphere(4));
+    }
+
+    public static Mesh createPlane() {
+        return new Mesh(new Mesh.Vertex[] {
+                new Mesh.Vertex(new Vector3f(-0.5f, 0.5f, 0), new Vector2f(0, 0)),
+                new Mesh.Vertex(new Vector3f(-0.5f, -0.5f, 0), new Vector2f(0, 1)),
+                new Mesh.Vertex(new Vector3f(0.5f, -0.5f, 0), new Vector2f(1, 1)),
+                new Mesh.Vertex(new Vector3f(0.5f, 0.5f, 0), new Vector2f(1, 0)),
+        }, new int[] {
+                0, 1, 3, 3, 1, 2
+        }, true);
     }
 
     public static Mesh parShapeToMesh(ParShapesMesh parShapesMesh) {

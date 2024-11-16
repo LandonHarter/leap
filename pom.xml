@@ -15,6 +15,7 @@
 
         <lwjgl.version>3.3.4</lwjgl.version>
         <joml.version>1.10.7</joml.version>
+        <imgui.version>1.86.11</imgui.version>
         <lwjgl.natives>natives-windows</lwjgl.natives>
     </properties>
 
@@ -65,6 +66,10 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-tinyfd</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
             <classifier>${lwjgl.natives}</classifier>
         </dependency>
@@ -104,6 +109,11 @@
             <classifier>${lwjgl.natives}</classifier>
         </dependency>
         <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-tinyfd</artifactId>
+            <classifier>${lwjgl.natives}</classifier>
+        </dependency>
+        <dependency>
             <groupId>org.joml</groupId>
             <artifactId>joml</artifactId>
             <version>${joml.version}</version>
@@ -111,17 +121,17 @@
         <dependency>
             <groupId>io.github.spair</groupId>
             <artifactId>imgui-java-binding</artifactId>
-            <version>1.86.11</version>
+            <version>${imgui.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.spair</groupId>
             <artifactId>imgui-java-lwjgl3</artifactId>
-            <version>1.86.11</version>
+            <version>${imgui.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.spair</groupId>
             <artifactId>imgui-java-natives-windows</artifactId>
-            <version>1.86.11</version>
+            <version>${imgui.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
