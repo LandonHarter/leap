@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL30;
 
 public abstract class Renderer {
 
+    private static RenderMode renderMode = RenderMode.SHADED;
+
     protected Shader shader;
     protected int numLayouts = 3;
 
@@ -29,6 +31,11 @@ public abstract class Renderer {
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) return;
         Transform transform = meshFilter.getGameObject().getTransform();
         Mesh mesh = meshFilter.getMesh();
+
+        if (renderMode == RenderMode.WIREFRAME) {
+            WireframeRenderer.render(meshFilter);
+            return;
+        }
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL30.glBindVertexArray(mesh.getVao());
@@ -71,5 +78,18 @@ public abstract class Renderer {
 
     public void bindTextures(MeshFilter meshFilter) {}
     public void setUniforms(MeshFilter meshFilter) {}
+
+    public static RenderMode getRenderMode() {
+        return renderMode;
+    }
+
+    public static void setRenderMode(RenderMode renderMode) {
+        Renderer.renderMode = renderMode;
+    }
+
+    public enum RenderMode {
+        SHADED,
+        WIREFRAME,
+    }
 
 }

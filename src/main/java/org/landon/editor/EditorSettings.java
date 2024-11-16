@@ -12,6 +12,8 @@ public class EditorSettings {
     private final Vector3f cameraPosition = new Vector3f(0, 0, 0);
     private final Vector3f cameraRotation = new Vector3f(0, 0, 0);
 
+    private boolean renderGrid = true;
+
     public void save() {
         File file = new File(Project.getRootDirectory(), "editor_settings.json");
         String json = Serializer.toJson(this);
@@ -41,6 +43,14 @@ public class EditorSettings {
 
     public void setCameraRotation(Vector3f cameraRotation) {
         this.cameraRotation.set(cameraRotation);
+    }
+
+    public boolean shouldRenderGrid() {
+        return renderGrid;
+    }
+
+    public void setRenderGrid(boolean renderGrid) {
+        this.renderGrid = renderGrid;
     }
 
 }

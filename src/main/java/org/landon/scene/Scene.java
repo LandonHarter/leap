@@ -69,7 +69,7 @@ public class Scene {
 
         if (!Editor.isPlaying()) {
             Editor.getScene().update();
-            Grid.render();
+            if (Editor.getSettings().shouldRenderGrid()) Grid.render();
         }
 
         checkForCamera();

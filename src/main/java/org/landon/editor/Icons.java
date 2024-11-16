@@ -31,6 +31,7 @@ public final class Icons {
         addIcon("error", "resources/icons/logger/error.png");
 
         addIcon("leap", "resources/icons/logo.png");
+        addIcon("grid", "resources/icons/misc/grid.png");
     }
 
     public static int getIcon(String name) {

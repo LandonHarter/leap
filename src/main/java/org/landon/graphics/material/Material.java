@@ -29,13 +29,16 @@ public class Material {
         hasTransparency = texture.isTransparent() || color.w < 1;
     }
 
+    public void checkTransparency() {
+        hasTransparency = texture.isTransparent() || color.w < 1;
+    }
+
     public Texture getTexture() {
         return texture;
     }
 
     public void setTexture(Texture texture) {
         this.texture = texture;
-        hasTransparency = texture.isTransparent();
     }
 
     public boolean hasTransparency() {
@@ -48,12 +51,10 @@ public class Material {
 
     public void setColor(Vector4f color) {
         this.color = color;
-        hasTransparency = color.w < 1 || texture.isTransparent();
     }
 
     public void setColor(float r, float g, float b, float a) {
         this.color.set(r, g, b, a);
-        hasTransparency = a < 1 || texture.isTransparent();
     }
 
     public float getShineDamper() {

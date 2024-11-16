@@ -4,31 +4,59 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.extension.imguizmo.ImGuizmo;
 import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImInt;
 import org.joml.Vector2f;
 import org.landon.core.Window;
 import org.landon.editor.Editor;
+import org.landon.editor.Icons;
 import org.landon.editor.MousePicking;
 import org.landon.editor.gizmos.TransformationGizmo;
 import org.landon.editor.windows.inspector.Inspector;
 import org.landon.graphics.framebuffers.Framebuffer;
+import org.landon.graphics.renderers.Renderer;
 import org.landon.gui.Gui;
 import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
 
+import java.util.Arrays;
+
 public final class Viewport {
 
-    private static Vector2f imagePosition = new Vector2f();
-    private static Vector2f imageSize = new Vector2f();
-    private static Vector2f position = new Vector2f();
+    private static final Vector2f imagePosition = new Vector2f();
+    private static final Vector2f imageSize = new Vector2f();
+    private static final Vector2f position = new Vector2f();
+
+    private static final ImInt renderMode = new ImInt(0);
+    private static String[] renderModes;
 
     private static Framebuffer framebuffer;
 
     public static void init() {
         framebuffer = Window.getInstance().getFramebuffer();
+
+        Renderer.RenderMode[] modes = Renderer.RenderMode.values();
+        renderModes = new String[modes.length];
+        for (int i = 0; i < modes.length; i++) {
+            String modeName = modes[i].name().toLowerCase();
+            renderModes[i] = modeName.substring(0, 1).toUpperCase() + modeName.substring(1);
+        }
     }
 
     public static void render() {
-        ImGui.begin("\ue163  Viewport", ImGuiWindowFlags.NoCollapse);
+        ImGui.begin("\ue163  Viewport", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar);
+
+        if (ImGui.beginMenuBar()) {
+            ImGui.setNextItemWidth(ImGui.getWindowWidth() / 6.5f);
+            if (ImGui.combo("###render-mode", renderMode, renderModes)) {
+                Renderer.setRenderMode(Renderer.RenderMode.values()[renderMode.get()]);
+            }
+
+            if (ImGui.imageButton(Icons.getIcon("grid"), 20, 20)) {
+                Editor.getSettings().setRenderGrid(!Editor.getSettings().shouldRenderGrid());
+            }
+
+            ImGui.endMenuBar();
+        }
 
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) {
             ImVec2 windowSize = new ImVec2();
