@@ -8,6 +8,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.editor.windows.inspector.Inspector;
+import org.landon.editor.windows.logger.Logger;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class AddComponent extends Popup {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e);
         }
     }
 

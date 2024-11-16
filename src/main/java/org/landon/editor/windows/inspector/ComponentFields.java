@@ -15,6 +15,7 @@ import org.landon.annoations.RangeInt;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.editor.popup.FileChooser;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.material.Material;
 import org.landon.graphics.material.Texture;
 import org.landon.project.ProjectFiles;
@@ -54,7 +55,7 @@ public final class ComponentFields {
                     renderField(field, c);
                     ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Logger.error(e);
                 }
             }
 

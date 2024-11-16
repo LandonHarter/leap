@@ -115,7 +115,8 @@ public class ModelLoader {
 
             switch (key) {
                 case Assimp.AI_MATKEY_BASE_COLOR -> {
-                    mat.setColor(new Vector4f(data.getFloat(0), data.getFloat(4), data.getFloat(8), data.getFloat(12)));
+                    mat.setColor(new Vector4f(data.getFloat(), data.getFloat(), data.getFloat(), data.getFloat()));
+                    break;
                 }
             }
         }

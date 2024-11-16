@@ -3,6 +3,7 @@ package org.landon.components;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.editor.scene.EditorObject;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.scene.GameObject;
 import org.landon.serialization.deserializers.ComponentDeserializer;
 
@@ -47,7 +48,7 @@ public class Component {
         try {
             return this.getClass().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e);
         }
 
         return null;

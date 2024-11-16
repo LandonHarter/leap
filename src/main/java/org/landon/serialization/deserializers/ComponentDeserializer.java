@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
 import org.landon.components.Component;
+import org.landon.editor.windows.logger.Logger;
 
 import java.lang.reflect.Type;
 
@@ -19,7 +20,7 @@ public class ComponentDeserializer implements ObjectReader<Component> {
         try {
             typeClass = Class.forName(typeName);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            Logger.error(e);
         }
 
         JSONObject properties = jsonObject.getJSONObject("properties");

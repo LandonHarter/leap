@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.writer.ObjectWriter;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.math.Transform;
 import org.landon.scene.GameObject;
 
@@ -16,37 +17,7 @@ public class GameObjectSerializer implements ObjectWriter<GameObject> {
     @Override
     public void write(JSONWriter jsonWriter, Object object, Object fieldName, Type fieldType, long features) {
         GameObject gameObject = (GameObject) object;
-
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("uuid", gameObject.getUuid());
-//        jsonObject.put("name", gameObject.getName());
-//        jsonObject.put("enabled", gameObject.isEnabled());
-//        jsonObject.put("transform", gameObject.getTransform());
-//        jsonObject.put("parent", gameObject.getParent() != null ? gameObject.getParent().getUuid() : null);
-//
-//        JSONArray components = new JSONArray();
-//        gameObject.getComponents().forEach(component -> {
-//            JSONObject componentObject = new JSONObject();
-//            componentObject.put("type", component.getClass().getName());
-//
-//            JSONObject properties = new JSONObject();
-//            for (Field field : component.getClass().getDeclaredFields()) {
-//                if (Modifier.isTransient(field.getModifiers())) continue;
-//                field.setAccessible(true);
-//                try {
-//                    properties.put(field.getName(), field.get(component));
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            componentObject.put("properties", properties);
-//            components.add(componentObject);
-//        });
-//        jsonObject.put("components", components);
-
-//        jsonWriter.write(jsonObject);
-
+        
         jsonWriter.startObject();
         jsonWriter.writeName("uuid");
         jsonWriter.writeColon();
@@ -84,7 +55,7 @@ public class GameObjectSerializer implements ObjectWriter<GameObject> {
                     jsonWriter.writeColon();
                     jsonWriter.writeAs(field.get(component), field.getType());
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Logger.error(e);
                 }
             }
             jsonWriter.endObject();
