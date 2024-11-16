@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
 import org.landon.editor.Editor;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.math.Transform;
 import org.landon.serialization.deserializers.GameObjectDeserializer;
 import org.landon.serialization.serializers.GameObjectSerializer;
@@ -168,7 +169,6 @@ public class GameObject {
         GameObject p = child.getParent();
         while (p != null) {
             if (p.getUuid().equals(uuid)) {
-                System.err.println("GameObject is already a parent");
                 return;
             }
             p = p.getParent();

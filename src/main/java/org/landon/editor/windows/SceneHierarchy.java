@@ -8,12 +8,14 @@ import org.landon.editor.Icons;
 import org.landon.editor.popup.CreateObject;
 import org.landon.editor.popup.EditObject;
 import org.landon.editor.windows.inspector.Inspector;
+import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.mesh.ModelLoader;
 import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
 import org.landon.util.DialogUtil;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class SceneHierarchy {
 
@@ -43,14 +45,14 @@ public final class SceneHierarchy {
         if (header) {
             ImGui.indent();
 
+            AtomicInteger index = new AtomicInteger(0);
+            float initialY = ImGui.getCursorPosY();
             for (int i = 0; i < SceneManager.getCurrentScene().getObjects().size(); i++) {
                 GameObject obj = SceneManager.getCurrentScene().getObjects().get(i);
                 if (obj.getParent() != null) continue;
 
-                renderGameObject(obj);
-                ImGui.setCursorPosY(ImGui.getCursorPosY());
+                renderGameObject(obj, index, initialY);
                 divider(obj);
-                ImGui.setCursorPosY(ImGui.getCursorPosY());
             }
 
             ImGui.unindent();
@@ -89,7 +91,11 @@ public final class SceneHierarchy {
     }
 
     private static final int HeaderColor = ImColor.rgb("#0b5a71");
-    private static void renderGameObject(GameObject obj) {
+    private static void renderGameObject(GameObject obj, AtomicInteger index, float initialY) {
+        float y = initialY + index.get() * 43;
+        ImGui.setCursorPosY(y);
+        index.incrementAndGet();
+
         int flags = ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanFullWidth | ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.Framed;
         if (obj.getChildren().isEmpty()) {
             flags |= ImGuiTreeNodeFlags.Leaf;
@@ -133,6 +139,10 @@ public final class SceneHierarchy {
         if (ImGui.beginDragDropTarget()) {
             GameObject payload = ImGui.acceptDragDropPayload(GameObject.class);
             if (payload != null) {
+                if (payload.getParent() != null) {
+                    payload.getParent().removeChild(payload);
+                }
+
                 obj.addChild(payload);
             }
             ImGui.endDragDropTarget();
@@ -140,7 +150,8 @@ public final class SceneHierarchy {
 
         if (open) {
             for (int i = 0; i < obj.getChildren().size(); i++) {
-                renderGameObject(obj.getChildren().get(i));
+                renderGameObject(obj.getChildren().get(i), index, initialY);
+                divider(obj.getChildren().get(i));
             }
 
             ImGui.treePop();
