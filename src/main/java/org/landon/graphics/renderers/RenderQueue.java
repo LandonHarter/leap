@@ -1,0 +1,36 @@
+package org.landon.graphics.renderers;
+
+import org.joml.Vector3f;
+import org.landon.components.rendering.MeshRenderer;
+import org.landon.editor.windows.logger.Logger;
+import org.landon.scene.SceneManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RenderQueue {
+
+    private static final List<MeshRenderer> opaque = new ArrayList<>();
+    private static final List<MeshRenderer> transparent = new ArrayList<>();
+
+    public static void render() {
+        for (MeshRenderer renderer : opaque) {
+            renderer.render();
+        }
+        for (MeshRenderer renderer : transparent) {
+            renderer.render();
+        }
+
+        opaque.clear();
+        transparent.clear();
+    }
+
+    public static void addOpaqueRenderer(MeshRenderer renderer) {
+        opaque.add(renderer);
+    }
+
+    public static void addTransparentRenderer(MeshRenderer renderer) {
+        transparent.add(renderer);
+    }
+
+}

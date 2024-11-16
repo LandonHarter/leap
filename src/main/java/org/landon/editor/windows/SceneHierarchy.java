@@ -8,10 +8,10 @@ import org.landon.editor.Icons;
 import org.landon.editor.popup.CreateObject;
 import org.landon.editor.popup.EditObject;
 import org.landon.editor.windows.inspector.Inspector;
-import org.landon.graphics.ModelLoader;
-import org.landon.gui.Gui;
+import org.landon.graphics.mesh.ModelLoader;
 import org.landon.scene.GameObject;
 import org.landon.scene.SceneManager;
+import org.landon.util.DialogUtil;
 
 import java.io.File;
 
@@ -76,11 +76,10 @@ public final class SceneHierarchy {
 
             File file = ImGui.acceptDragDropPayload(File.class);
             if (file != null) {
-                GameObject obj = ModelLoader.loadModel(file.getAbsolutePath());
-                if (obj != null) {
-                    SceneManager.getCurrentScene().addObject(obj);
-                    Inspector.setSelectedObject(obj);
-                }
+                boolean loadTextures = DialogUtil.yesNo("Would you like to load textures?");
+                GameObject obj = ModelLoader.loadModel(file.getAbsolutePath(), loadTextures);
+                SceneManager.getCurrentScene().addObject(obj);
+                Inspector.setSelectedObject(obj);
             }
 
             ImGui.endDragDropTarget();
@@ -91,7 +90,7 @@ public final class SceneHierarchy {
 
     private static final int HeaderColor = ImColor.rgb("#0b5a71");
     private static void renderGameObject(GameObject obj) {
-        int flags = ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanFullWidth | ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen;
+        int flags = ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanFullWidth | ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.Framed;
         if (obj.getChildren().isEmpty()) {
             flags |= ImGuiTreeNodeFlags.Leaf;
         }

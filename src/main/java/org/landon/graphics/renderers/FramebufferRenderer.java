@@ -2,7 +2,7 @@ package org.landon.graphics.renderers;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.landon.graphics.Mesh;
+import org.landon.graphics.mesh.Mesh;
 import org.landon.graphics.shaders.Shader;
 import org.landon.graphics.framebuffers.Framebuffer;
 import org.lwjgl.opengl.GL11;

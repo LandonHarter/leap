@@ -1,31 +1,48 @@
-package org.landon.graphics;
+package org.landon.graphics.material;
 
+import com.alibaba.fastjson2.annotation.JSONType;
+import org.landon.editor.windows.logger.Logger;
+import org.landon.project.LeapFile;
 import org.landon.project.Project;
+import org.landon.serialization.deserializers.TextureDeserializer;
+import org.landon.serialization.serializers.TextureSerializer;
 import org.lwjgl.opengl.*;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
+@JSONType(serializer = TextureSerializer.class, deserializer = TextureDeserializer.class)
 public class Texture {
 
     private static final HashMap<String, Texture> loadedTextures = new HashMap<>();
 
     private int width = 0, height = 0;
-    private final File file;
+    private final LeapFile file;
     private int textureId;
+    private boolean transparent = false;
 
-    public Texture(String filepath) {
-        this.file = new File(filepath);
-        if (loadedTextures.containsKey(filepath)) {
-            textureId = loadedTextures.get(filepath).getTextureId();
+    public Texture(LeapFile file) {
+        this.file = file;
+        if (loadedTextures.containsKey(file.getPath())) {
+            textureId = loadedTextures.get(file.getPath()).getTextureId();
         } else {
             loadTexture();
-            loadedTextures.put(filepath, this);
+            loadedTextures.put(file.getPath(), this);
         }
+    }
+
+    public Texture(File file) {
+        this(new LeapFile(file));
+    }
+
+    public Texture(String filepath) {
+        this(new LeapFile(filepath));
     }
 
     private void loadTexture() {
@@ -61,6 +78,12 @@ public class Texture {
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         STBImage.stbi_image_free(image);
+
+        try {
+            transparent = ImageIO.read(new FileInputStream(file)).getColorModel().hasAlpha();
+        } catch (Exception e) {
+            Logger.error("Failed to check if texture is transparent: " + file.getName());
+        }
     }
 
     public int getTextureId() {
@@ -72,7 +95,11 @@ public class Texture {
     }
 
     public String getLocalPath() {
-        return file.getAbsolutePath().replaceAll(Project.getRootDirectory().getAbsolutePath(), "");
+        return file.getAbsolutePath().replaceAll(Project.getRootDirectory().getAbsolutePath(), "").replaceAll("\\\\", "/");
+    }
+
+    public boolean isTransparent() {
+        return transparent;
     }
 
     public int getWidth() {
@@ -83,7 +110,7 @@ public class Texture {
         return height;
     }
 
-    public File getFile() {
+    public LeapFile getFile() {
         return file;
     }
 

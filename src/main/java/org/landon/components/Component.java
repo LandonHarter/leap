@@ -1,12 +1,15 @@
 package org.landon.components;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.editor.scene.EditorObject;
 import org.landon.scene.GameObject;
+import org.landon.serialization.deserializers.ComponentDeserializer;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
 
+@JSONType(deserializer = ComponentDeserializer.class)
 public class Component {
 
     protected transient GameObject gameObject;

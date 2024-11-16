@@ -25,9 +25,9 @@ public final class Editor {
     private static EditorSettings settings;
 
     public static void init() {
-        settings = EditorSettings.load();
-        camera.setPosition(settings.getCameraPosition()); // must set targetDest as well
-        camera.getTransform().setLocalRotation(settings.getCameraRotation());
+//        settings = EditorSettings.load();
+//        camera.setPosition(settings.getCameraPosition()); // must set targetDest as well
+//        camera.getTransform().setLocalRotation(settings.getCameraRotation());
 
         Icons.init();
         Viewport.init();

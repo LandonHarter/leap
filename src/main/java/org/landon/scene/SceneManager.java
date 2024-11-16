@@ -1,6 +1,7 @@
 package org.landon.scene;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.landon.components.rendering.Camera;
 import org.landon.editor.Editor;
 import org.landon.editor.windows.inspector.Inspector;
@@ -29,8 +30,10 @@ public final class SceneManager {
     }
 
     public static void saveScene(Scene scene, File f) {
+        LoadingUtil.openLoadingScreen("Saving scene file...");
         String serializedScene = Serializer.toJson(scene);
         FileUtil.writeFile(f, serializedScene);
+        LoadingUtil.closeLoadingBar();
     }
 
     public static Scene readScene(File f) {
@@ -67,6 +70,18 @@ public final class SceneManager {
                 return new Matrix4f();
             }
             return camera.getProjection();
+        }
+    }
+
+    public static Vector3f getCameraPosition() {
+        Camera camera = currentScene.getCamera();
+        if (!Editor.isPlaying()) {
+            return Editor.getCamera().getTransform().getWorldPosition();
+        } else {
+            if (camera == null) {
+                return new Vector3f();
+            }
+            return camera.getGameObject().getTransform().getWorldPosition();
         }
     }
 

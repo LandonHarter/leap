@@ -1,23 +1,22 @@
 package org.landon.serialization.deserializers;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
-import org.landon.graphics.Mesh;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.reader.ObjectReader;
+import org.landon.graphics.mesh.Mesh;
 
 import java.lang.reflect.Type;
 
-public class MeshDeserializer implements ObjectDeserializer {
+public class MeshDeserializer implements ObjectReader<Mesh> {
 
     @Override
-    public <T> T deserialze(DefaultJSONParser parser, Type type, Object o) {
-        JSONObject jsonObject = parser.parseObject();
+    public Mesh readObject(JSONReader jsonReader, Type fieldType, Object fieldName, long features) {
+        JSONObject jsonObject = jsonReader.readJSONObject();
 
         Mesh.Vertex[] vertices = jsonObject.getObject("vertices", Mesh.Vertex[].class);
         int[] indices = jsonObject.getObject("indices", int[].class);
 
-        return (T) new Mesh(vertices, indices);
+        return new Mesh(vertices, indices);
     }
 
 }

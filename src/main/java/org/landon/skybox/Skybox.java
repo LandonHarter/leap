@@ -1,6 +1,7 @@
 package org.landon.skybox;
 
 import org.landon.graphics.shaders.Shader;
+import org.landon.project.LeapFile;
 import org.landon.project.Project;
 
 import java.io.File;
@@ -8,7 +9,7 @@ import java.io.File;
 public class Skybox {
 
     private SkyboxType type;
-    private File[] textures;
+    private LeapFile[] textures;
 
     private final SkyboxMesh mesh;
     private final Shader shader;
@@ -44,11 +45,19 @@ public class Skybox {
     }
 
     public void setTextures(File[] textures) {
+        this.textures = new LeapFile[textures.length];
+        for (int i = 0; i < textures.length; i++) {
+            this.textures[i] = new LeapFile(textures[i]);
+        }
+        createCubemap();
+    }
+
+    public void setTextures(LeapFile[] textures) {
         this.textures = textures;
         createCubemap();
     }
 
-    public File[] getTextures() {
+    public LeapFile[] getTextures() {
         return textures;
     }
 

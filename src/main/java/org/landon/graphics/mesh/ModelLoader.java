@@ -1,21 +1,27 @@
-package org.landon.graphics;
+package org.landon.graphics.mesh;
 
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
+import org.joml.*;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.components.rendering.MeshRenderer;
 import org.landon.editor.windows.logger.Logger;
+import org.landon.graphics.material.Material;
+import org.landon.graphics.material.Texture;
 import org.landon.scene.GameObject;
 import org.landon.util.LoadingUtil;
 import org.lwjgl.assimp.*;
 
 import java.io.File;
+import java.lang.Math;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class ModelLoader {
 
     public static GameObject loadModel(String path) {
+        return loadModel(path, false);
+    }
+
+    public static GameObject loadModel(String path, boolean loadTextures) {
         LoadingUtil.openLoadingScreen("Loading model...");
         int fast = Assimp.aiProcess_GenNormals | Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_Triangulate | Assimp.aiProcess_SortByPType;
         AIScene scene = Assimp.aiImportFile(path, fast);
@@ -26,7 +32,8 @@ public class ModelLoader {
             return new GameObject();
         }
 
-        GameObject root = loadGameObject(scene, scene.mRootNode());
+        File file = new File(path);
+        GameObject root = loadGameObject(file, scene, scene.mRootNode(), loadTextures);
         root.setName(new File(path).getName().split("[.]")[0]);
 
         Assimp.aiFreeScene(scene);
@@ -36,7 +43,7 @@ public class ModelLoader {
         return root;
     }
 
-    private static GameObject loadGameObject(AIScene scene, AINode node) {
+    private static GameObject loadGameObject(File file, AIScene scene, AINode node, boolean loadTextures) {
         GameObject gameObject = new GameObject(node.mName().dataString());
 
         Matrix4f transform = fromAssimpMatrix(node.mTransformation());
@@ -48,29 +55,26 @@ public class ModelLoader {
         gameObject.getTransform().setLocalRotation(rotation.getEulerAnglesXYZ(new Vector3f()).mul(180.0f / (float) Math.PI));
         gameObject.getTransform().setLocalScale(scale);
 
-        loadComponents(scene, node, gameObject);
+        loadComponents(file, scene, node, gameObject, loadTextures);
 
         for (int i = 0; i < node.mNumChildren(); i++) {
-            GameObject child = loadGameObject(scene, AINode.create(node.mChildren().get(i)));
+            GameObject child = loadGameObject(file, scene, AINode.create(node.mChildren().get(i)), loadTextures);
             gameObject.addChild(child);
         }
 
         return gameObject;
     }
 
-    private static void loadComponents(AIScene scene, AINode node, GameObject gameObject) {
+    private static void loadComponents(File file, AIScene scene, AINode node, GameObject gameObject, boolean loadTextures) {
         for (int i = 0; i < node.mNumMeshes(); i++) {
             AIMesh mesh = AIMesh.create(scene.mMeshes().get(node.mMeshes().get(i)));
-            Mesh m = loadMesh(scene, mesh);
-
-            GameObject child = new GameObject(mesh.mName().dataString());
-            child.addComponent(new MeshFilter(m));
-            child.addComponent(new MeshRenderer());
+            GameObject child = loadMesh(file, scene, mesh, loadTextures);
             gameObject.addChild(child);
         }
     }
 
-    private static Mesh loadMesh(AIScene scene, AIMesh mesh) {
+    private static GameObject loadMesh(File file, AIScene scene, AIMesh mesh, boolean loadTextures) {
+        GameObject obj = new GameObject(mesh.mName().dataString());
         Mesh.Vertex[] vertices = new Mesh.Vertex[mesh.mNumVertices()];
         for (int i = 0; i < mesh.mNumVertices(); i++) {
             AIVector3D vertex = mesh.mVertices().get(i);
@@ -92,7 +96,40 @@ public class ModelLoader {
             indices[i * 3 + 2] = face.mIndices().get(2);
         }
 
-        return new Mesh(vertices, indices, true);
+        Mesh m = new Mesh(vertices, indices, true);
+        Material mat = loadMaterial(file, AIMaterial.create(scene.mMaterials().get(mesh.mMaterialIndex())), loadTextures);
+
+        obj.addComponent(new MeshFilter(m, mat));
+        obj.addComponent(new MeshRenderer());
+
+        return obj;
+    }
+
+    private static Material loadMaterial(File file, AIMaterial material, boolean loadTextures) {
+        Material mat = new Material();
+
+        for (int i = 0; i < material.mNumProperties(); i++) {
+            AIMaterialProperty property = AIMaterialProperty.create(material.mProperties().get(i));
+            String key = property.mKey().dataString();
+            ByteBuffer data = property.mData();
+
+            switch (key) {
+                case Assimp.AI_MATKEY_BASE_COLOR -> {
+                    mat.setColor(new Vector4f(data.getFloat(0), data.getFloat(4), data.getFloat(8), data.getFloat(12)));
+                }
+            }
+        }
+
+        if (loadTextures) {
+            AIString path = AIString.create();
+            Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
+            File f = new File(file.getParent() + "/" + path.dataString());
+            if (f.exists() && !f.equals(file)) {
+                mat.setTexture(new Texture(f));
+            }
+        }
+
+        return mat;
     }
 
     private static Matrix4f fromAssimpMatrix(AIMatrix4x4 matrix) {

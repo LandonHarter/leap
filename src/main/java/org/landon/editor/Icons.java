@@ -1,6 +1,6 @@
 package org.landon.editor;
 
-import org.landon.graphics.Texture;
+import org.landon.graphics.material.Texture;
 
 import java.util.HashMap;
 

@@ -3,14 +3,9 @@ package org.landon.graphics.renderers;
 import org.joml.Matrix4f;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.editor.Editor;
-import org.landon.graphics.Mesh;
 import org.landon.graphics.shaders.Shader;
-import org.landon.math.Transform;
 import org.landon.scene.SceneManager;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL30;
 
 public class OutlineRenderer {
 

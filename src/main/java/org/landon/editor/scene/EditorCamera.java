@@ -44,7 +44,7 @@ public class EditorCamera {
         }
         oldMousePos.set(newMousePos);
 
-        Editor.getSettings().setCameraPosition(transform.getLocalPosition());
+//        Editor.getSettings().setCameraPosition(transform.getLocalPosition());
     }
 
     public Matrix4f getViewMatrix() {

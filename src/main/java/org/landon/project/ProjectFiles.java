@@ -2,7 +2,7 @@ package org.landon.project;
 
 import org.landon.core.Window;
 import org.landon.editor.windows.logger.Logger;
-import org.landon.graphics.Texture;
+import org.landon.graphics.material.Texture;
 import org.landon.project.assets.Assets;
 import org.landon.util.ThreadUtil;
 

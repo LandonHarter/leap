@@ -1,26 +1,25 @@
-package org.landon.graphics;
+package org.landon.graphics.material;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class Material {
 
     private Texture texture;
-    private Vector3f color;
+    private Vector4f color;
     private float shineDamper = 1;
     private float reflectivity = 0;
 
     public Material() {
         this.texture = new Texture("resources/textures/default.png");
-        this.color = new Vector3f(1, 1, 1);
+        this.color = new Vector4f(1, 1, 1, 1);
     }
 
     public Material(Texture texture) {
         this.texture = texture;
-        this.color = new Vector3f(1, 1, 1);
+        this.color = new Vector4f(1, 1, 1, 1);
     }
 
-    public Material(Texture texture, Vector3f color) {
+    public Material(Texture texture, Vector4f color) {
         this.texture = texture;
         this.color = color;
     }
@@ -33,11 +32,11 @@ public class Material {
         this.texture = texture;
     }
 
-    public Vector3f getColor() {
+    public Vector4f getColor() {
         return color;
     }
 
-    public void setColor(Vector3f color) {
+    public void setColor(Vector4f color) {
         this.color = color;
     }
 

@@ -1,15 +1,12 @@
 package org.landon.editor.gizmos;
 
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.landon.editor.Editor;
 import org.landon.editor.scene.EditorObject;
-import org.landon.graphics.Mesh;
-import org.landon.graphics.Meshes;
-import org.landon.graphics.Texture;
+import org.landon.graphics.mesh.Mesh;
+import org.landon.graphics.mesh.Meshes;
 import org.landon.graphics.shaders.Shader;
 import org.landon.scene.GameObject;
-import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;

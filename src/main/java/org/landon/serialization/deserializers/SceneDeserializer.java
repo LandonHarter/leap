@@ -1,10 +1,11 @@
 package org.landon.serialization.deserializers;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
-import org.landon.project.Project;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.reader.ObjectReader;
+import org.landon.project.LeapFile;
 import org.landon.scene.GameObject;
 import org.landon.scene.Scene;
 import org.landon.skybox.DefaultSkyboxes;
@@ -14,13 +15,13 @@ import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
-public class SceneDeserializer implements ObjectDeserializer {
+public class SceneDeserializer implements ObjectReader<Scene> {
 
     private static final HashMap<String, String> parentMap = new HashMap<>();
 
     @Override
-    public <T> T deserialze(DefaultJSONParser parser, Type type, Object o) {
-        JSONObject jsonObject = parser.parseObject();
+    public Scene readObject(JSONReader jsonReader, Type fieldType, Object fieldName, long features) {
+        JSONObject jsonObject = jsonReader.readJSONObject();
 
         String name = jsonObject.getString("name");
         JSONArray objects = jsonObject.getJSONArray("objects");
@@ -28,7 +29,9 @@ public class SceneDeserializer implements ObjectDeserializer {
 
         Scene scene = new Scene(name, false);
         for (int i = 0; i < objects.size(); i++) {
-            scene.addObject(objects.getObject(i, GameObject.class));
+            JSONObject object = objects.getJSONObject(i);
+            GameObject gameObject = JSON.parseObject(object.toString(), GameObject.class);
+            scene.addObject(gameObject);
         }
 
         parentMap.forEach((child, parent) -> {
@@ -41,12 +44,12 @@ public class SceneDeserializer implements ObjectDeserializer {
         parentMap.clear();
 
         SkyboxType skyboxType = SkyboxType.valueOf(skybox.getString("type"));
-        File[] textures = skybox.getObject("textures", File[].class);
+        LeapFile[] textures = JSON.parseObject(skybox.getJSONArray("textures").toString(), LeapFile[].class);
         if (textures.length == 0) textures = DefaultSkyboxes.CITY;
         scene.getSkybox().setType(skyboxType);
         scene.getSkybox().setTextures(textures);
 
-        return (T) scene;
+        return scene;
     }
 
     public static void setParent(String child, String parent) {

@@ -1,4 +1,4 @@
-package org.landon.graphics;
+package org.landon.graphics.mesh;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;

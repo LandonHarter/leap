@@ -2,11 +2,7 @@ package org.landon.editor.popup;
 
 import imgui.ImGui;
 import org.landon.components.rendering.Camera;
-import org.landon.components.graphics.MeshFilter;
-import org.landon.components.rendering.MeshRenderer;
 import org.landon.editor.windows.inspector.Inspector;
-import org.landon.graphics.Meshes;
-import org.landon.graphics.ModelLoader;
 import org.landon.scene.GameObject;
 import org.landon.scene.GameObjects;
 import org.landon.scene.SceneManager;

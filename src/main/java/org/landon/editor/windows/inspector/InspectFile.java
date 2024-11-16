@@ -1,7 +1,7 @@
 package org.landon.editor.windows.inspector;
 
 import imgui.ImGui;
-import org.landon.graphics.Texture;
+import org.landon.graphics.material.Texture;
 import org.landon.project.ProjectFiles;
 import org.landon.util.FileUtil;
 
@@ -34,6 +34,7 @@ public class InspectFile {
             ImGui.text("Name: " + file.getName());
             ImGui.text("Width: " + texture.getWidth());
             ImGui.text("Height: " + texture.getHeight());
+            ImGui.text("Transparent: " + texture.isTransparent());
             ImGui.unindent();
         }
     }

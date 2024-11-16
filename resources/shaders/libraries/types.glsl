@@ -1,5 +1,5 @@
 struct Material {
-    vec3 color;
+    vec4 color;
     float shineDamper;
     float reflectivity;
 

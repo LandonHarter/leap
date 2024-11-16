@@ -1,14 +1,18 @@
 package org.landon.scene;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
 import org.landon.editor.Editor;
 import org.landon.math.Transform;
+import org.landon.serialization.deserializers.GameObjectDeserializer;
+import org.landon.serialization.serializers.GameObjectSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@JSONType(serializer = GameObjectSerializer.class, deserializer = GameObjectDeserializer.class)
 public class GameObject {
 
     private transient Scene scene;
@@ -18,7 +22,7 @@ public class GameObject {
     private boolean enabled = true;
 
     private Transform transform;
-    private Transform lastTransform;
+    private transient Transform lastTransform;
 
     private final List<Component> components;
 
@@ -163,7 +167,6 @@ public class GameObject {
     public void addChild(GameObject child) {
         GameObject p = child.getParent();
         while (p != null) {
-            System.out.println(p.getName());
             if (p.getUuid().equals(uuid)) {
                 System.err.println("GameObject is already a parent");
                 return;

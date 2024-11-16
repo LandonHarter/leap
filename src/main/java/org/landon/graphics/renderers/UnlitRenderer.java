@@ -1,7 +1,7 @@
 package org.landon.graphics.renderers;
 
 import org.landon.components.graphics.MeshFilter;
-import org.landon.graphics.Material;
+import org.landon.graphics.material.Material;
 import org.landon.graphics.shaders.Shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;

@@ -4,11 +4,10 @@ import org.joml.Vector3f;
 import org.landon.annoations.HideField;
 import org.landon.annoations.RunInEditMode;
 import org.landon.components.Component;
-import org.landon.editor.windows.logger.Logger;
 import org.landon.frustum.AABB;
 import org.landon.frustum.Frustum;
-import org.landon.graphics.Material;
-import org.landon.graphics.Mesh;
+import org.landon.graphics.material.Material;
+import org.landon.graphics.mesh.Mesh;
 
 @RunInEditMode
 public class MeshFilter extends Component {

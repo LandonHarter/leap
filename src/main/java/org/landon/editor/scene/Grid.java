@@ -2,9 +2,9 @@ package org.landon.editor.scene;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.landon.editor.Editor;
-import org.landon.graphics.Color;
-import org.landon.graphics.Mesh;
+import org.landon.graphics.mesh.Mesh;
 import org.landon.graphics.shaders.Shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -15,9 +15,9 @@ public class Grid {
     private static Shader shader;
 
     public static float GridScale = 0.5f;
-    public static Color GridColor = new Color(0.8f, 0.8f, 0.8f, 1.0f);
-    public static Color XAxisColor = new Color(1, 0, 0, 1);
-    public static Color ZAxisColor = new Color(0, 0, 1, 1);
+    public static Vector4f GridColor = new Vector4f(0.8f, 0.8f, 0.8f, 1.0f);
+    public static Vector4f XAxisColor = new Vector4f(1, 0, 0, 1);
+    public static Vector4f ZAxisColor = new Vector4f(0, 0, 1, 1);
 
     private static Mesh mesh;
 
@@ -59,9 +59,9 @@ public class Grid {
         shader.setUniform("view", Editor.getCamera().getViewMatrix());
         shader.setUniform("projection", Editor.getCamera().getProjection());
         shader.setUniform("gridScale", GridScale);
-        shader.setUniform("gridColor", GridColor.getRgb());
-        shader.setUniform("xAxisColor", XAxisColor.getRgb());
-        shader.setUniform("zAxisColor", ZAxisColor.getRgb());
+        shader.setUniform("gridColor", GridColor.xyz(new Vector3f()));
+        shader.setUniform("xAxisColor", XAxisColor.xyz(new Vector3f()));
+        shader.setUniform("zAxisColor", ZAxisColor.xyz(new Vector3f()));
         shader.setUniform("cameraPosition", Editor.getCamera().getTransform().getLocalPosition());
 
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);

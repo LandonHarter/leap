@@ -47,7 +47,7 @@ public class Main {
             window.endFrame();
         }
 
-        Editor.getSettings().save();
+//        Editor.getSettings().save();
         window.destroy();
     }
 
