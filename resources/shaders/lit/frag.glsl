@@ -10,10 +10,7 @@ uniform Light[4] lights;
 out vec4 outColor;
 
 void main() {
-    outColor = vec4(material.color.xyz, 1.0f);
-    if (material.useTexture) {
-        outColor = texture(material.tex, vertex_textureCoord) * vec4(material.color.xyz, 1.0f);
-    }
+    outColor = texture(material.tex, vertex_textureCoord) * material.color;
 
     vec3 normal = normalize(vertex_normal);
     vec3 totalLight = vec3(0);
