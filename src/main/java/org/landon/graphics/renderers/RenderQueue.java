@@ -15,10 +15,10 @@ public class RenderQueue {
     private static final List<MeshRenderer> transparent = new ArrayList<>();
 
     public static void render() {
+        GL11.glEnable(GL11.GL_CULL_FACE);
         for (MeshRenderer renderer : opaque) {
             renderer.render();
         }
-
         GL11.glDisable(GL11.GL_CULL_FACE);
         for (MeshRenderer renderer : transparent) {
             renderer.render();

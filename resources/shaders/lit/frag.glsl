@@ -3,9 +3,11 @@
 in vec3 vertexPosition;
 in vec2 vertexTextureCoord;
 in vec3 vertexNormal;
+in mat3 TBN;
 
 uniform Material material;
 uniform Light[16] lights;
+uniform vec3 cameraPosition;
 
 out vec4 outColor;
 
@@ -14,7 +16,7 @@ void main() {
 
     vec3 normal = normalize(vertexNormal);
     if (material.hasNormalMap) {
-        normal = calculateNormal(material.normalMap, vertexTextureCoord, vertexNormal);
+        normal = calculateNormal(material.normalMap, vertexTextureCoord, vertexNormal, TBN);
     }
 
     vec3 totalLight = vec3(0);
@@ -22,7 +24,7 @@ void main() {
         Light light = lights[i];
         if (light.intensity == 0) continue;
 
-        vec3 l = calculateLight(light, material, normal, vertexPosition);
+        vec3 l = calculateLight(light, material, normal, vertexPosition, cameraPosition);
         totalLight += l;
     }
     totalLight = max(totalLight, vec3(0.1f));
