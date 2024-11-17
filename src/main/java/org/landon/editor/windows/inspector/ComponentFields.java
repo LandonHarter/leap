@@ -169,6 +169,7 @@ public final class ComponentFields {
 
         if (ImGui.button("Choose##texture")) {
             fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(false);
             fileChooser.setOnFileSelected(file -> {
                 material.setTexture(new Texture(file.getPath()));
                 c.variableUpdated(field);
@@ -196,8 +197,13 @@ public final class ComponentFields {
         Texture normalMap = material.getNormalMap();
         if (ImGui.button("Choose##normal")) {
             fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(true);
             fileChooser.setOnFileSelected(file -> {
-                material.setNormalMap(new Texture(file.getPath()));
+                if (file == null) {
+                    material.setNormalMap(null);
+                } else {
+                    material.setNormalMap(new Texture(file.getPath()));
+                }
                 c.variableUpdated(field);
             });
             fileChooser.setSelectedFile(material.getNormalMap() != null ? material.getNormalMap().getFile() : null);

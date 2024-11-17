@@ -15,6 +15,7 @@ public class FileChooser extends Popup {
 
     private String[] extensions;
     private Consumer<File> onFileSelected;
+    private boolean allowNone = false;
 
     private File selectedFile;
 
@@ -29,6 +30,22 @@ public class FileChooser extends Popup {
     public void render() {
         ImGui.text("Choose File (." + String.join(", .", extensions) + ")");
         ImGui.beginChildFrame(getId().hashCode(), 300, 400);
+
+        if (allowNone) {
+            boolean selected = selectedFile == null;
+            if (selected) {
+                ImGui.pushStyleColor(ImGuiCol.Header, ImColor.rgb("#0b5a71"));
+                ImGui.pushStyleColor(ImGuiCol.HeaderHovered, ImColor.rgb("#0b5a71"));
+            }
+            if (ImGui.treeNodeEx("None", ImGuiTreeNodeFlags.SpanAvailWidth | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Framed)) {
+                if (ImGui.isItemClicked()) {
+                    selectedFile = null;
+                }
+
+                ImGui.treePop();
+            }
+            if (selected) ImGui.popStyleColor(2);
+        }
 
         List<File> files = ProjectFiles.getFiles(extensions);
         for (File file : files) {
@@ -59,7 +76,9 @@ public class FileChooser extends Popup {
             close();
         }
         ImGui.sameLine();
-        if (ImGui.button("Select") && selectedFile != null) {
+
+        boolean canAcceptNull = allowNone || selectedFile != null;
+        if (ImGui.button("Select") && canAcceptNull) {
             onFileSelected.accept(selectedFile);
             selectedFile = null;
             close();
@@ -76,6 +95,10 @@ public class FileChooser extends Popup {
 
     public void setSelectedFile(File selectedFile) {
         this.selectedFile = selectedFile;
+    }
+
+    public void setAllowNone(boolean allowNone) {
+        this.allowNone = allowNone;
     }
 
 }
