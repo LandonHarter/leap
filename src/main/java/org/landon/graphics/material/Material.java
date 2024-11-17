@@ -10,6 +10,7 @@ public class Material {
     private Vector4f color;
     private float shineDamper = 1;
     private float reflectivity = 0;
+    private float normalMapStrength = 1;
 
     private transient boolean hasTransparency = false;
 
@@ -45,6 +46,14 @@ public class Material {
 
     public Texture getNormalMap() {
         return normalMap;
+    }
+
+    public float getNormalMapStrength() {
+        return normalMapStrength;
+    }
+
+    public void setNormalMapStrength(float normalMapStrength) {
+        this.normalMapStrength = normalMapStrength;
     }
 
     public void setNormalMap(Texture normalMap) {

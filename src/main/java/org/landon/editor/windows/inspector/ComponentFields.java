@@ -223,6 +223,15 @@ public final class ComponentFields {
 
             ImGui.treePop();
         }
+        if (normalMap != null) {
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+            float[] normalMapScale = new float[] { material.getNormalMapStrength() };
+            if (ImGui.sliderFloat("Normal Map Strength", normalMapScale, 0, 1)) {
+                material.setNormalMapStrength(normalMapScale[0]);
+                c.variableUpdated(field);
+            }
+        }
     }
 
     private static void enumField(Field field, Component c) throws IllegalAccessException {

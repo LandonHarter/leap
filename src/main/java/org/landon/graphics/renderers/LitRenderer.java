@@ -54,6 +54,7 @@ public class LitRenderer extends Renderer {
 
         shader.setUniform("material.hasNormalMap", material.getNormalMap() != null);
         shader.setUniform("material.normalMap", 1);
+        shader.setUniform("material.normalMapStrength", material.getNormalMapStrength());
 
         if (camera != null) shader.setUniform("cameraPosition", camera.getGameObject().getTransform().getWorldPosition());
 

@@ -90,7 +90,7 @@ public class Window {
         GLFW.glfwSetWindowSizeCallback(window, windowSize);
 
         GLFW.glfwShowWindow(window);
-        GLFW.glfwSwapInterval(0); // VSync
+        GLFW.glfwSwapInterval(1); // VSync
 
         IntBuffer iconWidth = BufferUtils.createIntBuffer(1);
         IntBuffer iconHeight = BufferUtils.createIntBuffer(1);

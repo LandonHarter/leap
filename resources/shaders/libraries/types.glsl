@@ -7,6 +7,7 @@ struct Material {
 
     bool hasNormalMap;
     sampler2D normalMap;
+    float normalMapStrength;
 };
 
 struct Light {

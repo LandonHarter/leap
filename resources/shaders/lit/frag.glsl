@@ -6,7 +6,7 @@ in vec3 vertexNormal;
 in mat3 TBN;
 
 uniform Material material;
-uniform Light[16] lights;
+uniform Light[1] lights;
 uniform vec3 cameraPosition;
 
 out vec4 outColor;
@@ -16,7 +16,7 @@ void main() {
 
     vec3 normal = normalize(vertexNormal);
     if (material.hasNormalMap) {
-        normal = calculateNormal(material.normalMap, vertexTextureCoord, vertexNormal, TBN);
+        normal = calculateNormal(material.normalMap, vertexTextureCoord, vertexNormal, TBN, material.normalMapStrength);
     }
 
     vec3 totalLight = vec3(0);
