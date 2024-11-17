@@ -13,6 +13,10 @@ void main() {
     outColor = texture(material.tex, vertex_textureCoord) * material.color;
 
     vec3 normal = normalize(vertex_normal);
+    if (material.hasNormalMap) {
+        normal = calculateNormal(material.normalMap, vertex_textureCoord, vertex_normal);
+    }
+
     vec3 totalLight = vec3(0);
     for (int i = 0; i < lights.length(); i++) {
         Light light = lights[i];

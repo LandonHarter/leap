@@ -20,6 +20,8 @@ import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.material.Material;
 import org.landon.graphics.material.Texture;
 import org.landon.project.ProjectFiles;
+import org.landon.serialization.types.LeapEnum;
+import org.landon.serialization.types.LeapFloat;
 import org.landon.util.FileUtil;
 
 import java.io.File;
@@ -49,7 +51,6 @@ public final class ComponentFields {
             for (Field field : fields) {
                 if (Modifier.isTransient(field.getModifiers())) continue;
                 if (Modifier.isStatic(field.getModifiers())) continue;
-                if (Modifier.isFinal(field.getModifiers())) continue;
 
                 field.setAccessible(true);
                 try {
@@ -69,12 +70,12 @@ public final class ComponentFields {
         if (!field.isAnnotationPresent(HideField.class)) {
             if (field.getType() == boolean.class) booleanField(field, c);
             else if (field.getType() == int.class) intField(field, c);
-            else if (field.getType() == float.class) floatField(field, c);
+            else if (field.getType() == LeapFloat.class) floatField(field, c);
             else if (field.getType() == String.class) stringField(field, c);
             else if (field.getType() == Vector2f.class) vector2Field(field, c);
             else if (field.getType() == Vector3f.class) vector3Field(field, c);
             else if (field.getType() == Material.class) materialField(field, c);
-            else if (field.getType().isEnum()) enumField(field, c);
+            else if (field.getType() == LeapEnum.class) enumField(field, c);
             else if (field.getType() == Vector4f.class) colorField(field, c);
         }
 
@@ -103,12 +104,13 @@ public final class ComponentFields {
     }
 
     private static void floatField(Field field, Component c) throws IllegalAccessException {
-        float[] value = new float[] { field.getFloat(c) };
+        LeapFloat value = (LeapFloat) field.get(c);
+        float[] floatValue = new float[] { value.getValue() };
         RangeFloat range = field.getAnnotation(RangeFloat.class);
 
-        boolean changed = range == null ? ImGui.dragFloat(formatFieldName(field.getName()), value) : ImGui.sliderFloat(formatFieldName(field.getName()), value, range.min(), range.max());
+        boolean changed = range == null ? ImGui.dragFloat(formatFieldName(field.getName()), floatValue) : ImGui.sliderFloat(formatFieldName(field.getName()), floatValue, range.min(), range.max());
         if (changed) {
-            field.setFloat(c, value[0]);
+            value.setValue(floatValue[0]);
             c.variableUpdated(field);
         }
     }
@@ -165,7 +167,7 @@ public final class ComponentFields {
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
 
-        if (ImGui.button("Choose")) {
+        if (ImGui.button("Choose##texture")) {
             fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
             fileChooser.setOnFileSelected(file -> {
                 material.setTexture(new Texture(file.getPath()));
@@ -188,19 +190,47 @@ public final class ComponentFields {
 
             ImGui.treePop();
         }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+        Texture normalMap = material.getNormalMap();
+        if (ImGui.button("Choose##normal")) {
+            fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setOnFileSelected(file -> {
+                material.setNormalMap(new Texture(file.getPath()));
+                c.variableUpdated(field);
+            });
+            fileChooser.setSelectedFile(material.getNormalMap() != null ? material.getNormalMap().getFile() : null);
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Normal Map (" + (normalMap != null ? normalMap.getName() : "None") + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.IMAGE_EXTENSIONS)) {
+                    material.setNormalMap(new Texture(file.getPath()));
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
+        }
     }
 
     private static void enumField(Field field, Component c) throws IllegalAccessException {
-        Enum<?> value = (Enum<?>) field.get(c);
-        String[] values = new String[field.getType().getEnumConstants().length];
+        LeapEnum<?> value = (LeapEnum<?>) field.get(c);
+        Class<?> type = value.getValue().getClass();
+        String[] values = new String[type.getEnumConstants().length];
         for (int i = 0; i < values.length; i++) {
-            values[i] = field.getType().getEnumConstants()[i].toString();
+            values[i] = type.getEnumConstants()[i].toString();
             values[i] = values[i].substring(0, 1).toUpperCase() + values[i].substring(1).toLowerCase();
         }
 
-        ImInt selected = new ImInt(value.ordinal());
+        ImInt selected = new ImInt(value.getValue().ordinal());
         if (ImGui.combo(formatFieldName(field.getName()), selected, values, values.length)) {
-            field.set(c, field.getType().getEnumConstants()[selected.get()]);
+            value.setValue(selected.get());
             c.variableUpdated(field);
         }
     }

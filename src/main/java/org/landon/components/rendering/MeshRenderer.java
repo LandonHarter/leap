@@ -5,24 +5,29 @@ import org.landon.components.Component;
 import org.landon.components.graphics.MeshFilter;
 import org.landon.editor.Editor;
 import org.landon.editor.windows.inspector.Inspector;
-import org.landon.editor.windows.logger.Logger;
-import org.landon.graphics.renderers.OutlineRenderer;
 import org.landon.graphics.renderers.RenderQueue;
 import org.landon.graphics.renderers.Renderer;
+import org.landon.graphics.renderers.RendererType;
 import org.landon.graphics.renderers.Renderers;
+import org.landon.serialization.types.LeapEnum;
 
 import java.lang.reflect.Field;
 
 @RunInEditMode
 public class MeshRenderer extends Component {
 
-    private Renderers.RendererType rendererType = Renderers.RendererType.LIT;
+    private final LeapEnum<RendererType> rendererType = new LeapEnum<>(RendererType.LIT);
 
-    private transient Renderer renderer = Renderers.getRenderer(rendererType);
+    private transient Renderer renderer;
     private transient MeshFilter meshFilter;
 
     public MeshRenderer() {
         super("Mesh Renderer", false, true);
+    }
+
+    @Override
+    public void load() {
+        renderer = Renderers.getRenderer(rendererType.getValue());
     }
 
     @Override
@@ -36,12 +41,12 @@ public class MeshRenderer extends Component {
     @Override
     public void variableUpdated(Field field) {
         if (field.getName().equals("rendererType")) {
-            renderer = Renderers.getRenderer(rendererType);
+            renderer = Renderers.getRenderer(rendererType.getValue());
         }
     }
 
-    public void setRendererType(Renderers.RendererType rendererType) {
-        this.rendererType = rendererType;
+    public void setRendererType(RendererType rendererType) {
+        this.rendererType.setValue(rendererType);
         renderer = Renderers.getRenderer(rendererType);
     }
 

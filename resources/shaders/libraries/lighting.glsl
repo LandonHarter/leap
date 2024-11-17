@@ -20,3 +20,10 @@ vec3 calculateLight(Light light, Material material, vec3 normal, vec3 position) 
 
     return (diffuse + specular) * light.color * light.intensity * attenuation;
 }
+
+vec3 calculateNormal(sampler2D normalMap, vec2 textureCoord, vec3 vnormal) {
+    vec3 normal = texture(normalMap, textureCoord).rgb;
+    normal = normalize(normal * 2.0 - 1.0);
+    normal = normalize(normal * mat3(vnormal, cross(vnormal, vec3(0, 1, 0)), cross(vnormal, vec3(1, 0, 0))));
+    return normal;
+}

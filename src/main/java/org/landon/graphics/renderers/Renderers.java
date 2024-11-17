@@ -13,9 +13,4 @@ public final class Renderers {
         return RENDERERS.get(type.ordinal());
     }
 
-    public enum RendererType {
-        UNLIT,
-        LIT
-    }
-
 }

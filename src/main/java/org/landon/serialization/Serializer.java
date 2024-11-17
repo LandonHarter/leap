@@ -4,20 +4,19 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONFactory;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.JSONWriter;
-import com.alibaba.fastjson2.modules.ObjectReaderModule;
-import com.alibaba.fastjson2.reader.ObjectReaderBaseModule;
 import com.alibaba.fastjson2.reader.ObjectReaderProvider;
 import com.alibaba.fastjson2.writer.ObjectWriterProvider;
 import org.landon.components.Component;
 import org.landon.graphics.material.Texture;
 import org.landon.graphics.mesh.Mesh;
-import org.landon.project.LeapFile;
+import org.landon.serialization.types.LeapEnum;
+import org.landon.serialization.types.LeapFile;
 import org.landon.scene.GameObject;
 import org.landon.scene.Scene;
 import org.landon.serialization.deserializers.*;
 import org.landon.serialization.serializers.*;
+import org.landon.serialization.types.LeapFloat;
 
-import java.io.File;
 import java.lang.reflect.Type;
 
 public final class Serializer {
@@ -31,6 +30,7 @@ public final class Serializer {
         writeProvider.register(Texture.class, new TextureSerializer());
         writeProvider.register(GameObject.class, new GameObjectSerializer());
         writeProvider.register(Scene.class, new SceneSerializer());
+        writeProvider.register(LeapEnum.class, new EnumSerializer());
         writeContext = JSONFactory.createWriteContext(writeProvider, JSONWriter.Feature.LargeObject, JSONWriter.Feature.FieldBased, JSONWriter.Feature.PrettyFormat);
         writeContext.setPropertyPreFilter(new TransientFilter());
 
@@ -41,7 +41,9 @@ public final class Serializer {
         readProvider.register(Scene.class, new SceneDeserializer());
         readProvider.register(Component.class, new ComponentDeserializer());
         readProvider.register(Mesh.class, new MeshDeserializer());
-        readContext = JSONFactory.createReadContext(readProvider);;
+        readProvider.register(LeapFloat.class, new FloatDeserializer());
+        readProvider.register(LeapEnum.class, new EnumDeserializer());
+        readContext = JSONFactory.createReadContext(readProvider, JSONReader.Feature.FieldBased);
     }
 
     public static String toJson(Object object) {

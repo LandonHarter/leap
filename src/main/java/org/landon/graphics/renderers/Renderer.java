@@ -60,8 +60,7 @@ public abstract class Renderer {
 
         shader.unbind();
 
-        GL13.glActiveTexture(0);
-        GL13.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        unbindTextures();
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -77,6 +76,7 @@ public abstract class Renderer {
     }
 
     public void bindTextures(MeshFilter meshFilter) {}
+    public void unbindTextures() {}
     public void setUniforms(MeshFilter meshFilter) {}
 
     public static RenderMode getRenderMode() {

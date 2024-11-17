@@ -2,7 +2,7 @@ package org.landon.graphics.material;
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.editor.windows.logger.Logger;
-import org.landon.project.LeapFile;
+import org.landon.serialization.types.LeapFile;
 import org.landon.project.Project;
 import org.landon.serialization.deserializers.TextureDeserializer;
 import org.landon.serialization.serializers.TextureSerializer;

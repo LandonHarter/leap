@@ -15,10 +15,14 @@ public class UnlitRenderer extends Renderer {
     @Override
     public void bindTextures(MeshFilter meshFilter) {
         Material material = meshFilter.getMaterial();
-        if (material.getTexture() != null) {
-            GL13.glActiveTexture(GL13.GL_TEXTURE0);
-            GL13.glBindTexture(GL11.GL_TEXTURE_2D, material.getTexture().getTextureId());
-        }
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL13.glBindTexture(GL11.GL_TEXTURE_2D, material.getTexture().getTextureId());
+    }
+
+    @Override
+    public void unbindTextures() {
+        GL13.glActiveTexture(0);
+        GL13.glBindTexture(GL11.GL_TEXTURE_2D, 0);
     }
 
     @Override

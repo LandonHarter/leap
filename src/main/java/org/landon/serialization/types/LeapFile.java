@@ -1,4 +1,4 @@
-package org.landon.project;
+package org.landon.serialization.types;
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.serialization.deserializers.FileDeserializer;

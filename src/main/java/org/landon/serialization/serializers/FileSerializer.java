@@ -2,10 +2,9 @@ package org.landon.serialization.serializers;
 
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.writer.ObjectWriter;
-import org.landon.project.LeapFile;
+import org.landon.serialization.types.LeapFile;
 import org.landon.project.Project;
 
-import java.io.File;
 import java.lang.reflect.Type;
 
 public class FileSerializer implements ObjectWriter<LeapFile> {

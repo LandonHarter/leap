@@ -9,12 +9,13 @@ import org.landon.editor.gizmos.ComponentGizmo;
 import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.shaders.Shader;
 import org.landon.scene.SceneManager;
+import org.landon.serialization.types.LeapFloat;
 
 @RunInEditMode
 public class Light extends Component {
 
-    private float intensity = 1.0f;
-    private float attenuation = 0.0f;
+    private LeapFloat intensity = new LeapFloat(1);
+    private LeapFloat attenuation = new LeapFloat(0.015f);
     private Vector4f color = new Vector4f(1, 1, 1, 1);
 
     public Light() {
@@ -24,9 +25,9 @@ public class Light extends Component {
     public void updateUniforms(Shader shader, int index) {
         String name = "lights[" + index + "]";
         shader.setUniform(name + ".position", getGameObject().getTransform().getWorldPosition());
-        shader.setUniform(name + ".intensity", intensity);
+        shader.setUniform(name + ".intensity", intensity.getValue());
         shader.setUniform(name + ".color", color.xyz(new Vector3f()));
-        shader.setUniform(name + ".attenuation", attenuation);
+        shader.setUniform(name + ".attenuation", attenuation.getValue());
     }
 
     public void resetUniforms(Shader shader, int index) {

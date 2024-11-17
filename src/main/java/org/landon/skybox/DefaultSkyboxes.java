@@ -1,8 +1,6 @@
 package org.landon.skybox;
 
-import org.landon.project.LeapFile;
-
-import java.io.File;
+import org.landon.serialization.types.LeapFile;
 
 public final class DefaultSkyboxes {
 

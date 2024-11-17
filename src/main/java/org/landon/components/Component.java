@@ -43,6 +43,7 @@ public class Component {
     public void variableUpdated(Field field) {}
     public void createGizmo() {}
     public void onTransformChange() {}
+    public void load() {}
 
     public Component clone() {
         try {

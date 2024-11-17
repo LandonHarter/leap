@@ -5,6 +5,7 @@ import org.landon.components.lighting.Light;
 import org.landon.components.rendering.Camera;
 import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.material.Material;
+import org.landon.graphics.material.Texture;
 import org.landon.graphics.shaders.Shader;
 import org.landon.graphics.shaders.ShaderLibrary;
 import org.landon.scene.SceneManager;
@@ -24,10 +25,19 @@ public class LitRenderer extends Renderer {
     @Override
     public void bindTextures(MeshFilter meshFilter) {
         Material material = meshFilter.getMaterial();
-        if (material.getTexture() != null) {
-            GL13.glActiveTexture(GL13.GL_TEXTURE0);
-            GL13.glBindTexture(GL11.GL_TEXTURE_2D, material.getTexture().getTextureId());
-        }
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL13.glBindTexture(GL11.GL_TEXTURE_2D, material.getTexture().getTextureId());
+
+        Texture normalMap = material.getNormalMap();
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        GL13.glBindTexture(GL11.GL_TEXTURE_2D, normalMap != null ? normalMap.getTextureId() : 0);
+    }
+
+    @Override
+    public void unbindTextures() {
+        GL13.glActiveTexture(0);
+        GL13.glBindTexture(GL11.GL_TEXTURE_2D, 0);
     }
 
     @Override
@@ -38,7 +48,11 @@ public class LitRenderer extends Renderer {
         shader.setUniform("material.color", material.getColor());
         shader.setUniform("material.shineDamper", material.getShineDamper());
         shader.setUniform("material.reflectivity", material.getReflectivity());
+
         shader.setUniform("material.tex", 0);
+
+        shader.setUniform("material.hasNormalMap", material.getNormalMap() != null);
+        shader.setUniform("material.normalMap", 1);
 
         if (camera != null) shader.setUniform("cameraPosition", camera.getGameObject().getTransform().getWorldPosition());
 

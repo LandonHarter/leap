@@ -3,8 +3,10 @@ struct Material {
     float shineDamper;
     float reflectivity;
 
-    bool useTexture;
     sampler2D tex;
+
+    bool hasNormalMap;
+    sampler2D normalMap;
 };
 
 struct Light {

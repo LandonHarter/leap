@@ -5,6 +5,8 @@ import org.joml.Vector4f;
 public class Material {
 
     private Texture texture;
+    private Texture normalMap;
+
     private Vector4f color;
     private float shineDamper = 1;
     private float reflectivity = 0;
@@ -39,6 +41,14 @@ public class Material {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+    }
+
+    public Texture getNormalMap() {
+        return normalMap;
+    }
+
+    public void setNormalMap(Texture normalMap) {
+        this.normalMap = normalMap;
     }
 
     public boolean hasTransparency() {

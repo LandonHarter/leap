@@ -1,13 +1,10 @@
 package org.landon.serialization.deserializers;
 
-import com.alibaba.fastjson.parser.DefaultJSONParser;
-import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
 import org.landon.graphics.material.Texture;
-import org.landon.project.LeapFile;
+import org.landon.serialization.types.LeapFile;
 
-import java.io.File;
 import java.lang.reflect.Type;
 
 public class TextureDeserializer implements ObjectReader<Texture> {
