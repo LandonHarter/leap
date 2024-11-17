@@ -15,10 +15,11 @@ import org.lwjgl.opengl.GL13;
 public class LitRenderer extends Renderer {
 
     public LitRenderer() {
-        Shader s = new Shader("resources/shaders/lit/vert.glsl", "resources/shaders/lit/frag.glsl", false);
+        Shader s = new Shader("resources/shaders/lit/vert.glsl", "resources/shaders/lit/geom.glsl", "resources/shaders/lit/frag.glsl", false);
         s.addLibrary(new ShaderLibrary("resources/shaders/libraries/lighting.glsl", ShaderLibrary.ShaderType.FRAGMENT));
         s.createShader();
 
+        numLayouts = 5;
         shader = s;
     }
 

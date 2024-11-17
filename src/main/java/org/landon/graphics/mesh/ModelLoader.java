@@ -123,10 +123,16 @@ public class ModelLoader {
 
         if (loadTextures) {
             AIString path = AIString.create();
-            Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
-            File f = new File(file.getParent() + "/" + path.dataString());
-            if (f.exists() && !f.equals(file)) {
-                mat.setTexture(new Texture(f));
+            int result;
+
+            result = Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
+            if (result == Assimp.aiReturn_SUCCESS) {
+                mat.setTexture(new Texture(new File(file.getParent() + "/" + path.dataString())));
+            }
+
+            result = Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_NORMALS, 0, path, (IntBuffer) null, null, null, null, null, null);
+            if (result == Assimp.aiReturn_SUCCESS) {
+                mat.setNormalMap(new Texture(new File(file.getParent() + "/" + path.dataString())));
             }
         }
 

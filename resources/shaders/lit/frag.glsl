@@ -1,8 +1,8 @@
 #version 330 core
 
-in vec3 vertex_position;
-in vec2 vertex_textureCoord;
-in vec3 vertex_normal;
+in vec3 vertexPosition;
+in vec2 vertexTextureCoord;
+in vec3 vertexNormal;
 
 uniform Material material;
 uniform Light[16] lights;
@@ -10,11 +10,11 @@ uniform Light[16] lights;
 out vec4 outColor;
 
 void main() {
-    outColor = texture(material.tex, vertex_textureCoord) * material.color;
+    outColor = texture(material.tex, vertexTextureCoord) * material.color;
 
-    vec3 normal = normalize(vertex_normal);
+    vec3 normal = normalize(vertexNormal);
     if (material.hasNormalMap) {
-        normal = calculateNormal(material.normalMap, vertex_textureCoord, vertex_normal);
+        normal = calculateNormal(material.normalMap, vertexTextureCoord, vertexNormal);
     }
 
     vec3 totalLight = vec3(0);
@@ -22,7 +22,7 @@ void main() {
         Light light = lights[i];
         if (light.intensity == 0) continue;
 
-        vec3 l = calculateLight(light, material, normal, vertex_position);
+        vec3 l = calculateLight(light, material, normal, vertexPosition);
         totalLight += l;
     }
     totalLight = max(totalLight, vec3(0.1f));

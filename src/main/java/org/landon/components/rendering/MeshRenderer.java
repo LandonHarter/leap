@@ -23,6 +23,7 @@ public class MeshRenderer extends Component {
 
     public MeshRenderer() {
         super("Mesh Renderer", false, true);
+        renderer = Renderers.getRenderer(rendererType.getValue());
     }
 
     @Override

@@ -7,6 +7,8 @@ import org.joml.Vector4f;
 import org.landon.util.FileUtil;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL33;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -14,26 +16,32 @@ import java.util.List;
 
 public class Shader {
 
-    private String vertexContent, fragmentContent;
-    private File vertexFile, fragmentFile;
+    private final String vertexContent, geometryContent, fragmentContent;
+    private final File vertexFile, geometryFile, fragmentFile;
 
     private List<ShaderLibrary> libraries;
 
-    private int vertexId, fragmentId, programId;
+    private int vertexId, geometryId, fragmentId, programId;
     private boolean validated;
 
     private LinkedHashMap<String, Integer> uniforms = new LinkedHashMap<>();
 
     private static int currentProgram = 0;
 
-    public Shader(String vertexPath, String fragmentPath, boolean create) {
+    public Shader(String vertexPath, String geometryPath, String fragmentPath, boolean create) {
         vertexFile = new File(vertexPath);
+        geometryFile = geometryPath == null ? null : new File(geometryPath);
         fragmentFile = new File(fragmentPath);
         vertexContent = FileUtil.readFile(vertexFile);
+        geometryContent = geometryPath == null ? null : FileUtil.readFile(geometryFile);
         fragmentContent = FileUtil.readFile(fragmentFile);
         libraries = ShaderLibrary.getDefaultLibraries();
 
         if (create) createShader();
+    }
+
+    public Shader(String vertexPath, String fragmentPath, boolean create) {
+        this(vertexPath, null, fragmentPath, create);
     }
 
     public Shader(String vertexPath, String fragmentPath) {
@@ -105,8 +113,15 @@ public class Shader {
     public void destroy() {
         GL20.glDetachShader(programId, vertexId);
         GL20.glDetachShader(programId, fragmentId);
+
+        if (geometryFile != null) {
+            GL20.glDetachShader(programId, geometryId);
+            GL20.glDeleteShader(geometryId);
+        }
+
         GL20.glDeleteShader(vertexId);
         GL20.glDeleteShader(fragmentId);
+
         GL20.glDeleteProgram(programId);
     }
 
@@ -146,6 +161,32 @@ public class Shader {
         if (GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
             System.err.println("Failed to link program: " + GL20.glGetProgramInfoLog(programId));
             return;
+        }
+
+        boolean hasGeometry = geometryFile != null;
+        if (hasGeometry) {
+            String geometrySource = geometryContent;
+            for (int i = libraries.size() - 1; i >= 0; i--) {
+                ShaderLibrary library = libraries.get(i);
+                if (library.getType() == ShaderLibrary.ShaderType.GEOMETRY || library.getType() == ShaderLibrary.ShaderType.ALL) {
+                    geometrySource = library.inject(geometrySource);
+                }
+            }
+
+            geometryId = GL20.glCreateShader(GL33.GL_GEOMETRY_SHADER);
+            GL20.glShaderSource(geometryId, geometrySource);
+            GL20.glCompileShader(geometryId);
+            if (GL20.glGetShaderi(geometryId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+                System.err.println("Failed to compile geometry shader: " + GL20.glGetShaderInfoLog(geometryId));
+                return;
+            }
+
+            GL20.glAttachShader(programId, geometryId);
+            GL20.glLinkProgram(programId);
+            if (GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
+                System.err.println("Failed to link program: " + GL20.glGetProgramInfoLog(programId));
+                return;
+            }
         }
 
         GL20.glDeleteShader(vertexId);
