@@ -76,11 +76,12 @@ public class LitRenderer extends Renderer {
         shader.setUniform("material.displacementMapStrength", material.getDisplacementMapStrength());
 
         Vector3f cameraPos = new Vector3f(0);
-        if (Editor.isPlaying()) {
-            cameraPos = Editor.getCamera().getTransform().getWorldPosition();
+        if (!Editor.isPlaying()) {
+            cameraPos = Editor.getCamera().getTransform().getLocalPosition();
         } else if (camera != null) {
             cameraPos = camera.getGameObject().getTransform().getWorldPosition();
         }
+        Logger.info(cameraPos);
         shader.setUniform("cameraPosition", cameraPos);
 
         for (int i = 0; i < SceneManager.getCurrentScene().getLights().size(); i++) {
