@@ -76,8 +76,8 @@ public class Scene {
     }
 
     public void destroy() {
-        for (GameObject object : objects) {
-            object.destroy();
+        for (int i = objects.size() - 1; i >= 0; i--) {
+            objects.get(i).destroy();
         }
     }
 

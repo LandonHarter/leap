@@ -10,11 +10,9 @@ public class Material {
     private Texture displacementMap;
 
     private Vector4f color;
-    private float shineDamper = 1;
-    private float reflectivity = 0;
     private float metallic = 1.5f;
-    private float glossiness = 120.0f;
-    private float fresnel = 5.0f;
+    private float glossiness = 100;
+    private float fresnel = 5;
     private float normalMapStrength = 1;
     private float displacementMapStrength = 0;
     private float specularMapStrength = 1;
@@ -137,22 +135,6 @@ public class Material {
 
     public void setColor(float r, float g, float b, float a) {
         this.color.set(r, g, b, a);
-    }
-
-    public float getShineDamper() {
-        return shineDamper;
-    }
-
-    public void setShineDamper(float shineDamper) {
-        this.shineDamper = shineDamper;
-    }
-
-    public float getReflectivity() {
-        return reflectivity;
-    }
-
-    public void setReflectivity(float reflectivity) {
-        this.reflectivity = reflectivity;
     }
 
 }

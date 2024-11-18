@@ -55,10 +55,8 @@ public class LitRenderer extends Renderer {
         Camera camera = SceneManager.getCurrentScene().getCamera();
 
         shader.setUniform("material.color", material.getColor());
-        shader.setUniform("material.shineDamper", material.getShineDamper());
-        shader.setUniform("material.reflectivity", material.getReflectivity());
         shader.setUniform("material.metallic", material.getMetallic());
-        shader.setUniform("material.alpha", material.getGlossiness() / 200.0f);
+        shader.setUniform("material.alpha", material.getGlossiness() / 500.0f);
         shader.setUniform("material.baseReflectivity", material.getFresnel());
 
         shader.setUniform("material.tex", 0);
@@ -81,7 +79,6 @@ public class LitRenderer extends Renderer {
         } else if (camera != null) {
             cameraPos = camera.getGameObject().getTransform().getWorldPosition();
         }
-        Logger.info(cameraPos);
         shader.setUniform("cameraPosition", cameraPos);
 
         for (int i = 0; i < SceneManager.getCurrentScene().getLights().size(); i++) {

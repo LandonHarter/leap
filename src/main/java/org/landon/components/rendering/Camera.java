@@ -22,6 +22,11 @@ public class Camera extends Component {
     }
 
     @Override
+    public void onRemove() {
+        gizmo.destroy();
+    }
+
+    @Override
     public void createGizmo() {
         if (gizmoCreated) return;
         gizmoCreated = true;

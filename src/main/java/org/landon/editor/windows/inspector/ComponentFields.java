@@ -151,22 +151,6 @@ public final class ComponentFields {
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
 
-        float[] shine = new float[] { material.getShineDamper() };
-        if (ImGui.dragFloat("Shine Damper", shine)) {
-            material.setShineDamper(shine[0]);
-            c.variableUpdated(field);
-        }
-
-        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
-
-        float[] reflectivity = new float[] { material.getReflectivity() };
-        if (ImGui.dragFloat("Reflectivity", reflectivity)) {
-            material.setReflectivity(reflectivity[0]);
-            c.variableUpdated(field);
-        }
-
-        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
-
         float[] metallic = new float[] { material.getMetallic() };
         if (ImGui.dragFloat("Metallic", metallic)) {
             material.setMetallic(metallic[0]);
