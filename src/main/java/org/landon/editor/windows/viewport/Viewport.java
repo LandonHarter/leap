@@ -82,7 +82,7 @@ public final class Viewport {
 
         TransformationGizmo.update();
 
-        if (ImGui.isMouseClicked(0) && ImGui.isWindowHovered() && !ImGuizmo.isOver()) {
+        if (ImGui.isMouseClicked(0) && ImGui.isWindowHovered() && !ImGuizmo.isOver() && !Editor.isPlaying()) {
             GameObject selected = MousePicking.click();
             Inspector.setSelectedObject(selected);
         }

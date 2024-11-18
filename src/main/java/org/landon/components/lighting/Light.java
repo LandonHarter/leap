@@ -17,9 +17,9 @@ import org.landon.serialization.types.LeapFloat;
 @RunInEditMode
 public class Light extends Component {
 
-    private LeapFloat intensity = new LeapFloat(1);
-    private LeapFloat attenuation = new LeapFloat(0.015f);
-    private Vector4f color = new Vector4f(1, 1, 1, 1);
+    private final LeapFloat intensity = new LeapFloat(1);
+    private final LeapFloat attenuation = new LeapFloat(0.015f);
+    private final Vector4f color = new Vector4f(1, 1, 1, 1);
 
     public Light() {
         super("Light", false, true);

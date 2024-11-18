@@ -42,31 +42,16 @@ vec3 F(vec3 F0, vec3 V, vec3 H) {
 vec2 displaceCoords() {
     if (!material.hasDisplacementMap) return vertexTextureCoord;
 
-    vec3 viewDirection = normalize(tangentCameraPosition - tangentPosition);
-    float heightScale = material.displacementMapStrength / 20.0f;
-    const float minLayers = 8.0f;
-    const float maxLayers = 64.0f;
-    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0, 0, 1), viewDirection)));
-    float layerDepth = 1.0f / numLayers;
-    float currentLayerDepth = 0.0f;
-    vec2 S = viewDirection.xy / viewDirection.z * heightScale;
-    vec2 deltaUVS = S / numLayers;
-    vec2 UVS = vertexTextureCoord;
-    float currentDepthMapValue = 1.0f - texture(material.displacementMap, UVS).r;
-    while (currentLayerDepth < currentDepthMapValue) {
-        UVS -= deltaUVS;
-        currentDepthMapValue = 1.0f - texture(material.displacementMap, UVS).r;
-        currentLayerDepth += layerDepth;
+    vec3 viewDir = normalize(cameraPosition - vertexPosition) * TBN;
+    float height =  texture(material.displacementMap, vertexTextureCoord).r;
+    vec2 p = viewDir.xy / viewDir.z * (height * material.displacementMapStrength);
+    vec2 newCoords = vertexTextureCoord - p;
+
+    if (newCoords.x < 0 || newCoords.x > 1 || newCoords.y < 0 || newCoords.y > 1) {
+        discard;
     }
-    vec2 prevTexCoords = UVS + deltaUVS;
-    float afterDepth = currentDepthMapValue - currentLayerDepth;
-    float beforeDepth = 1.0f - texture(material.displacementMap, prevTexCoords).r - currentLayerDepth + layerDepth;
-    float weight = afterDepth / (afterDepth - beforeDepth);
-    UVS = prevTexCoords * weight + UVS * (1.0f - weight);
 
-    if (UVS.x > 1.0f || UVS.y > 1.0f || UVS.x < 0.0f || UVS.y < 0.0f) discard;
-
-    return UVS;
+    return newCoords;
 }
 
 vec3 calculateNormal(vec2 texCoords) {
@@ -81,12 +66,18 @@ vec4 PBR(Light light, vec3 normal, vec3 col) {
     vec3 L = normalize(light.position - vertexPosition);
     vec3 H = normalize(V + L);
 
+    vec3 specularFactor = vec3(material.baseReflectivity);
+    if (material.hasSpecularMap) {
+        specularFactor *= texture(material.specularMap, vertexTextureCoord).rgb;
+        specularFactor = mix(vec3(material.baseReflectivity), specularFactor, material.specularMapStrength);
+    }
+
     vec3 Ks = F(vec3(material.baseReflectivity), V, H);
     vec3 Kd = (vec3(1.0f) - Ks) * (1.0 - material.metallic);
 
     vec3 lambert = col.rgb / vec3(PI);
 
-    vec3 cookTorranceNumerator = D(material.alpha, normal, H) * G(material.alpha, normal, V, L) * F(vec3(material.baseReflectivity), V, H);
+    vec3 cookTorranceNumerator = D(material.alpha, normal, H) * G(material.alpha, normal, V, L) * F(specularFactor, V, H);
     float cookTorranceDenominator = 4.0 * max(dot(V, normal), 0.0) * max(dot(L, normal), 0.0);
     cookTorranceDenominator = max(cookTorranceDenominator, 0.000001);
     vec3 cookTorrance = cookTorranceNumerator / cookTorranceDenominator;

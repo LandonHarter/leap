@@ -11,7 +11,7 @@ public class Material {
 
     private Vector4f color;
     private float metallic = 1.5f;
-    private float glossiness = 100;
+    private float glossiness = 6;
     private float fresnel = 5;
     private float normalMapStrength = 1;
     private float displacementMapStrength = 0;

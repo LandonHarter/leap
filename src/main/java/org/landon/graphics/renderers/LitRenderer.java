@@ -56,7 +56,7 @@ public class LitRenderer extends Renderer {
 
         shader.setUniform("material.color", material.getColor());
         shader.setUniform("material.metallic", material.getMetallic());
-        shader.setUniform("material.alpha", material.getGlossiness() / 500.0f);
+        shader.setUniform("material.alpha", material.getGlossiness());
         shader.setUniform("material.baseReflectivity", material.getFresnel());
 
         shader.setUniform("material.tex", 0);
@@ -71,7 +71,7 @@ public class LitRenderer extends Renderer {
 
         shader.setUniform("material.hasDisplacementMap", material.getDisplacementMap() != null);
         shader.setUniform("material.displacementMap", 3);
-        shader.setUniform("material.displacementMapStrength", material.getDisplacementMapStrength());
+        shader.setUniform("material.displacementMapStrength", material.getDisplacementMapStrength() / 5.0f);
 
         Vector3f cameraPos = new Vector3f(0);
         if (!Editor.isPlaying()) {
