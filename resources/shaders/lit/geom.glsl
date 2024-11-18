@@ -16,8 +16,10 @@ uniform mat4 projection;
 uniform vec3 cameraPosition;
 
 out vec3 vertexPosition;
+out vec3 tangentPosition;
 out vec2 vertexTextureCoord;
 out vec3 vertexNormal;
+out vec3 tangentCameraPosition;
 out mat3 TBN;
 
 void main() {
@@ -32,20 +34,25 @@ void main() {
     vec3 bitangent = cross(normal, tangent);
     TBN = mat3(tangent, bitangent, normal);
 
+    tangentCameraPosition = TBN * cameraPosition;
+
     gl_Position = projection * view * gl_in[0].gl_Position;
     vertexPosition = gl_in[0].gl_Position.xyz;
+    tangentPosition = TBN * vertexPosition;
     vertexTextureCoord = data[0].vertex_textureCoord;
     vertexNormal = (model * vec4(data[0].vertex_normal, 0.0f)).xyz;
     EmitVertex();
 
     gl_Position = projection * view * gl_in[1].gl_Position;
     vertexPosition = gl_in[1].gl_Position.xyz;
+    tangentPosition = TBN * vertexPosition;
     vertexTextureCoord = data[1].vertex_textureCoord;
     vertexNormal = (model * vec4(data[1].vertex_normal, 0.0f)).xyz;
     EmitVertex();
 
     gl_Position = projection * view * gl_in[2].gl_Position;
     vertexPosition = gl_in[2].gl_Position.xyz;
+    tangentPosition = TBN * vertexPosition;
     vertexTextureCoord = data[2].vertex_textureCoord;
     vertexNormal = (model * vec4(data[2].vertex_normal, 0.0f)).xyz;
     EmitVertex();

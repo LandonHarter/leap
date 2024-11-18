@@ -6,11 +6,18 @@ public class Material {
 
     private Texture texture;
     private Texture normalMap;
+    private Texture specularMap;
+    private Texture displacementMap;
 
     private Vector4f color;
     private float shineDamper = 1;
     private float reflectivity = 0;
+    private float metallic = 1.5f;
+    private float glossiness = 120.0f;
+    private float fresnel = 5.0f;
     private float normalMapStrength = 1;
+    private float displacementMapStrength = 0;
+    private float specularMapStrength = 1;
 
     private transient boolean hasTransparency = false;
 
@@ -58,6 +65,62 @@ public class Material {
 
     public void setNormalMap(Texture normalMap) {
         this.normalMap = normalMap;
+    }
+
+    public Texture getSpecularMap() {
+        return specularMap;
+    }
+
+    public float getSpecularMapStrength() {
+        return specularMapStrength;
+    }
+
+    public void setSpecularMapStrength(float specularMapStrength) {
+        this.specularMapStrength = specularMapStrength;
+    }
+
+    public void setSpecularMap(Texture specularMap) {
+        this.specularMap = specularMap;
+    }
+
+    public Texture getDisplacementMap() {
+        return displacementMap;
+    }
+
+    public float getDisplacementMapStrength() {
+        return displacementMapStrength;
+    }
+
+    public void setDisplacementMapStrength(float displacementMapStrength) {
+        this.displacementMapStrength = displacementMapStrength;
+    }
+
+    public void setDisplacementMap(Texture displacementMap) {
+        this.displacementMap = displacementMap;
+    }
+
+    public float getMetallic() {
+        return metallic;
+    }
+
+    public void setMetallic(float metallic) {
+        this.metallic = metallic;
+    }
+
+    public float getGlossiness() {
+        return glossiness;
+    }
+
+    public void setGlossiness(float glossiness) {
+        this.glossiness = glossiness;
+    }
+
+    public float getFresnel() {
+        return fresnel;
+    }
+
+    public void setFresnel(float fresnel) {
+        this.fresnel = fresnel;
     }
 
     public boolean hasTransparency() {

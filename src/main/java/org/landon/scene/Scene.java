@@ -94,7 +94,6 @@ public class Scene {
 
     public void removeObject(GameObject object) {
         object.onRemoveFromScene();
-        object.destroy();
         objects.remove(object);
     }
 

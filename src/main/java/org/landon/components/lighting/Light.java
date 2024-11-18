@@ -7,6 +7,9 @@ import org.landon.components.Component;
 import org.landon.editor.Icons;
 import org.landon.editor.gizmos.ComponentGizmo;
 import org.landon.editor.windows.logger.Logger;
+import org.landon.graphics.renderers.Renderer;
+import org.landon.graphics.renderers.RendererType;
+import org.landon.graphics.renderers.Renderers;
 import org.landon.graphics.shaders.Shader;
 import org.landon.scene.SceneManager;
 import org.landon.serialization.types.LeapFloat;
@@ -55,11 +58,20 @@ public class Light extends Component {
     @Override
     public void onRemove() {
         if (SceneManager.getCurrentScene() == null) return;
-        SceneManager.getCurrentScene().removeLight(this);
+        Shader shader = Renderers.getRenderer(RendererType.LIT).getShader();
+        shader.bind();
+        for (int i = 0; i < SceneManager.getCurrentScene().getLights().size(); i++) {
+            resetUniforms(shader, i);
+        }
+        shader.unbind();
+        gizmo.destroy();
     }
 
     @Override
     public void createGizmo() {
+        if (gizmoCreated) return;
+        gizmoCreated = true;
+
         gizmo = new ComponentGizmo(gameObject, Icons.getIcon("light"));
     }
 }

@@ -79,6 +79,10 @@ public abstract class Renderer {
     public void unbindTextures() {}
     public void setUniforms(MeshFilter meshFilter) {}
 
+    public Shader getShader() {
+        return shader;
+    }
+
     public static RenderMode getRenderMode() {
         return renderMode;
     }

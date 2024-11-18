@@ -22,6 +22,7 @@ public class Component {
     private transient final boolean canDisable;
 
     protected transient EditorObject gizmo;
+    protected transient boolean gizmoCreated = false;
 
     public Component(String name, boolean allowMultiple, boolean canDisable) {
         this.uuid = UUID.randomUUID().toString();
@@ -41,7 +42,9 @@ public class Component {
     public void onComponentRemoved(Component component) {}
     public void executeGui(String name) {}
     public void variableUpdated(Field field) {}
-    public void createGizmo() {}
+    public void createGizmo() {
+        gizmoCreated = true;
+    }
     public void onTransformChange() {}
     public void load() {}
 

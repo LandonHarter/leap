@@ -167,6 +167,30 @@ public final class ComponentFields {
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
 
+        float[] metallic = new float[] { material.getMetallic() };
+        if (ImGui.dragFloat("Metallic", metallic)) {
+            material.setMetallic(metallic[0]);
+            c.variableUpdated(field);
+        }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+        float[] glossiness = new float[] { material.getGlossiness() };
+        if (ImGui.dragFloat("Glossiness", glossiness)) {
+            material.setGlossiness(glossiness[0]);
+            c.variableUpdated(field);
+        }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+        float[] fresnel = new float[] { material.getFresnel() };
+        if (ImGui.dragFloat("Fresnel", fresnel)) {
+            material.setFresnel(fresnel[0]);
+            c.variableUpdated(field);
+        }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
         if (ImGui.button("Choose##texture")) {
             fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
             fileChooser.setAllowNone(false);
@@ -229,6 +253,84 @@ public final class ComponentFields {
             float[] normalMapScale = new float[] { material.getNormalMapStrength() };
             if (ImGui.sliderFloat("Normal Map Strength", normalMapScale, 0, 1)) {
                 material.setNormalMapStrength(normalMapScale[0]);
+                c.variableUpdated(field);
+            }
+        }
+
+        Texture specularMap = material.getSpecularMap();
+        if (ImGui.button("Choose##specular")) {
+            fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(true);
+            fileChooser.setOnFileSelected(file -> {
+                if (file == null) {
+                    material.setSpecularMap(null);
+                } else {
+                    material.setSpecularMap(new Texture(file.getPath()));
+                }
+                c.variableUpdated(field);
+            });
+            fileChooser.setSelectedFile(specularMap != null ? specularMap.getFile() : null);
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Specular Map (" + (specularMap != null ? specularMap.getName() : "None") + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.IMAGE_EXTENSIONS)) {
+                    material.setSpecularMap(new Texture(file.getPath()));
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
+        }
+        if (specularMap != null) {
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+            float[] specularMapScale = new float[] { material.getSpecularMapStrength() };
+            if (ImGui.sliderFloat("Specular Map Strength", specularMapScale, 0, 1)) {
+                material.setSpecularMapStrength(specularMapScale[0]);
+                c.variableUpdated(field);
+            }
+        }
+
+        Texture displacementMap = material.getDisplacementMap();
+        if (ImGui.button("Choose##displacement")) {
+            fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(true);
+            fileChooser.setOnFileSelected(file -> {
+                if (file == null) {
+                    material.setDisplacementMap(null);
+                } else {
+                    material.setDisplacementMap(new Texture(file.getPath()));
+                }
+                c.variableUpdated(field);
+            });
+            fileChooser.setSelectedFile(material.getDisplacementMap() != null ? material.getDisplacementMap().getFile() : null);
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Displacement Map (" + (displacementMap != null ? displacementMap.getName() : "None") + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.IMAGE_EXTENSIONS)) {
+                    material.setDisplacementMap(new Texture(file.getPath()));
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
+        }
+        if (displacementMap != null) {
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+            float[] displacementMapScale = new float[] { material.getDisplacementMapStrength() };
+            if (ImGui.sliderFloat("Displacement Map Strength", displacementMapScale, 0, 1)) {
+                material.setDisplacementMapStrength(displacementMapScale[0]);
                 c.variableUpdated(field);
             }
         }

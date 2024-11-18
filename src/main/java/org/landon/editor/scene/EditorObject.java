@@ -1,5 +1,6 @@
 package org.landon.editor.scene;
 
+import org.landon.editor.Editor;
 import org.landon.math.Transform;
 
 public class EditorObject {
@@ -8,6 +9,7 @@ public class EditorObject {
     protected Transform transform = new Transform();
 
     public void update() {}
+    public void destroy() {}
 
     public Transform getTransform() {
         return transform;

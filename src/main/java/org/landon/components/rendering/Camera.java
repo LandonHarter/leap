@@ -23,6 +23,8 @@ public class Camera extends Component {
 
     @Override
     public void createGizmo() {
+        if (gizmoCreated) return;
+        gizmoCreated = true;
         gizmo = new ComponentGizmo(gameObject, Icons.getIcon("camera"));
     }
 

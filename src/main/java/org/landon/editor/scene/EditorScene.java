@@ -1,6 +1,7 @@
 package org.landon.editor.scene;
 
 import org.landon.editor.Editor;
+import org.landon.editor.windows.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
