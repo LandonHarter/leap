@@ -47,7 +47,7 @@ public class FileChooser extends Popup {
             if (selected) ImGui.popStyleColor(2);
         }
 
-        List<File> files = ProjectFiles.getFiles(extensions);
+        List<File> files = ProjectFiles.getFiles(extensions, true);
         for (File file : files) {
             float cursorY = ImGui.getCursorPosY();
             ImGui.setCursorPosY(cursorY + 3);
