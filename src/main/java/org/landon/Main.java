@@ -36,6 +36,8 @@ public class Main {
         MousePicking.click();
         OutlineRenderer.init();
 
+        window.closeStartupWindow();
+        window.decorate();
         while (window.isOpen()) {
             window.startFrame();
 
