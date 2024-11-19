@@ -8,6 +8,7 @@ import org.landon.editor.windows.inspector.Inspector;
 import org.landon.editor.windows.logger.Logger;
 import org.landon.project.Project;
 import org.landon.serialization.Serializer;
+import org.landon.thirdparty.Discord;
 import org.landon.util.FileUtil;
 import org.landon.util.LoadingUtil;
 
@@ -28,6 +29,7 @@ public final class SceneManager {
         if (scene.getFile() != null) {
             Project.setLastScene(scene.getFile().getAbsolutePath());
         }
+        Discord.updateRpc();
     }
 
     public static void saveScene(Scene scene, File f) {

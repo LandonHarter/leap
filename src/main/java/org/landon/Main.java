@@ -8,6 +8,7 @@ import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
+import org.landon.thirdparty.Discord;
 import org.landon.util.ExplorerUtil;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public class Main {
 
         ProjectFiles.loadTextures();
 
+        Discord.enableRpc();
         Scene scene = SceneManager.readScene(Project.getLastScene());
         SceneManager.loadScene(scene);
 
@@ -49,6 +51,7 @@ public class Main {
             window.endFrame();
         }
 
+        Discord.disableRpc();
         Editor.getSettings().save();
         window.destroy();
     }
