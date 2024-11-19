@@ -10,7 +10,7 @@ public class EditObject extends Popup {
     @Override
     public void render() {
         if (ImGui.menuItem("Delete")) {
-            SceneManager.getCurrentScene().removeObject(Inspector.getSelectedObject());
+            Inspector.getSelectedObject().destroy();
             Inspector.setSelectedObject(null);
         }
     }

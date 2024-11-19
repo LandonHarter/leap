@@ -33,6 +33,7 @@ public class ShaderLibrary {
 
     public enum ShaderType {
         VERTEX,
+        GEOMETRY,
         FRAGMENT,
         ALL
     }

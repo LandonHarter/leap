@@ -1,14 +1,11 @@
 package org.landon.serialization.serializers;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.writer.ObjectWriter;
-import org.landon.project.LeapFile;
+import org.landon.serialization.types.LeapFile;
 import org.landon.scene.GameObject;
 import org.landon.scene.Scene;
-import org.landon.serialization.Serializer;
 
-import java.io.File;
 import java.lang.reflect.Type;
 
 public final class SceneSerializer implements ObjectWriter<Scene> {

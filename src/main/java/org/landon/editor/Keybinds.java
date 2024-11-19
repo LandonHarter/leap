@@ -61,7 +61,7 @@ public class Keybinds {
         }, () -> {
             GameObject selectedObject = Inspector.getSelectedObject();
             if (selectedObject != null) {
-                SceneManager.getCurrentScene().removeObject(selectedObject);
+                selectedObject.destroy();
                 Inspector.setSelectedObject(null);
             }
 

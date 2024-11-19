@@ -79,4 +79,10 @@ public class ComponentGizmo extends EditorObject {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
+    @Override
+    public void destroy() {
+        Editor.getScene().removeObject(this);
+        shader.destroy();
+        mesh.destroy();
+    }
 }

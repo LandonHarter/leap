@@ -5,6 +5,7 @@ import org.landon.core.profiling.ProfilingTimer;
 import org.landon.graphics.framebuffers.Framebuffer;
 import org.landon.graphics.renderers.FramebufferRenderer;
 import org.landon.gui.Gui;
+import org.landon.gui.swing.JPictureBox;
 import org.landon.input.Input;
 import org.landon.project.ProjectFiles;
 import org.landon.serialization.Serializer;
@@ -16,6 +17,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.STBImage;
 
+import javax.swing.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -47,11 +49,13 @@ public class Window {
     }
 
     public void create() {
+        openStartupWindow();
         if (!GLFW.glfwInit()) {
             System.err.println("Failed to initialize GLFW");
             return;
         }
 
+        GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, GLFW.GLFW_FALSE);
         window = GLFW.glfwCreateWindow(width, height, title, 0, 0);
         if (window == 0) {
             System.err.println("Failed to create window");
@@ -89,8 +93,6 @@ public class Window {
         GLFW.glfwSetWindowSizeCallback(window, windowSize);
         GLFW.glfwSetWindowSizeCallback(window, windowSize);
 
-        GLFW.glfwShowWindow(window);
-        GLFW.glfwSwapInterval(1); // VSync
 
         IntBuffer iconWidth = BufferUtils.createIntBuffer(1);
         IntBuffer iconHeight = BufferUtils.createIntBuffer(1);
@@ -103,8 +105,14 @@ public class Window {
 
         GLFW.glfwSetWindowIcon(window, iconBuffer);
 
+        GLFW.glfwShowWindow(window);
+        GLFW.glfwSwapInterval(1); // VSync
         GL11.glViewport(0, 0, width, height);
         init();
+    }
+
+    public void decorate() {
+        GLFW.glfwSetWindowAttrib(window, GLFW.GLFW_DECORATED, GLFW.GLFW_TRUE);
     }
 
     private static void init() {
@@ -157,6 +165,28 @@ public class Window {
 
     public void maximize() {
         GLFW.glfwMaximizeWindow(window);
+    }
+
+    private JFrame frame;
+    public void openStartupWindow() {
+        frame = new JFrame("Leap Game Engine");
+        frame.setSize(450, 450);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setUndecorated(true);
+        frame.setIconImage(new ImageIcon("resources/icons/logo.png").getImage());
+
+        JPictureBox image = new JPictureBox();
+        image.setIcon(new ImageIcon("resources/icons/startup.png"));
+        frame.add(image);
+
+        frame.setVisible(true);
+    }
+
+    public void closeStartupWindow() {
+        frame.setVisible(false);
+        frame.dispose();
+        frame = null;
     }
 
     public void close() {

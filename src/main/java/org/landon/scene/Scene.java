@@ -69,15 +69,15 @@ public class Scene {
 
         if (!Editor.isPlaying()) {
             Editor.getScene().update();
-            Grid.render();
+            if (Editor.getSettings().shouldRenderGrid()) Grid.render();
         }
 
         checkForCamera();
     }
 
     public void destroy() {
-        for (GameObject object : objects) {
-            object.destroy();
+        for (int i = objects.size() - 1; i >= 0; i--) {
+            objects.get(i).destroy();
         }
     }
 
@@ -94,7 +94,6 @@ public class Scene {
 
     public void removeObject(GameObject object) {
         object.onRemoveFromScene();
-        object.destroy();
         objects.remove(object);
     }
 

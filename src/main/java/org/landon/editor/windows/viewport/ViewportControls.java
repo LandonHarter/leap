@@ -46,6 +46,7 @@ public class ViewportControls {
         LoadingUtil.openLoadingScreen("Loading original scene...");
         Scene scene = Serializer.fromJson(originalScene, SceneManager.getCurrentScene().getClass());
         scene.checkForCamera();
+        scene.setFile(SceneManager.getCurrentScene().getFile());
         SceneManager.loadScene(scene);
         LoadingUtil.closeLoadingBar();
 

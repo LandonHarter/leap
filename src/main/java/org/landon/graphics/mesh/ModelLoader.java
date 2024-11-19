@@ -116,17 +116,35 @@ public class ModelLoader {
             switch (key) {
                 case Assimp.AI_MATKEY_BASE_COLOR -> {
                     mat.setColor(new Vector4f(data.getFloat(), data.getFloat(), data.getFloat(), data.getFloat()));
-                    break;
+                }
+                case Assimp.AI_MATKEY_BUMPSCALING -> {
+                    mat.setNormalMapStrength(data.getFloat());
                 }
             }
         }
 
         if (loadTextures) {
             AIString path = AIString.create();
-            Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
-            File f = new File(file.getParent() + "/" + path.dataString());
-            if (f.exists() && !f.equals(file)) {
-                mat.setTexture(new Texture(f));
+            int result;
+
+            result = Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
+            if (result == Assimp.aiReturn_SUCCESS) {
+                mat.setTexture(new Texture(new File(file.getParent() + "/" + path.dataString())));
+            }
+
+            result = Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_NORMALS, 0, path, (IntBuffer) null, null, null, null, null, null);
+            if (result == Assimp.aiReturn_SUCCESS) {
+                mat.setNormalMap(new Texture(new File(file.getParent() + "/" + path.dataString())));
+            }
+
+            result = Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_SPECULAR, 0, path, (IntBuffer) null, null, null, null, null, null);
+            if (result == Assimp.aiReturn_SUCCESS) {
+                mat.setSpecularMap(new Texture(new File(file.getParent() + "/" + path.dataString())));
+            }
+
+            result = Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DISPLACEMENT, 0, path, (IntBuffer) null, null, null, null, null, null);
+            if (result == Assimp.aiReturn_SUCCESS) {
+                mat.setDisplacementMap(new Texture(new File(file.getParent() + "/" + path.dataString())));
             }
         }
 

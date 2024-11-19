@@ -2,6 +2,7 @@ package org.landon.editor.windows.inspector;
 
 import imgui.ImGui;
 import imgui.ImVec2;
+import imgui.flag.ImGuiColorEditFlags;
 import imgui.flag.ImGuiTreeNodeFlags;
 import imgui.type.ImInt;
 import imgui.type.ImString;
@@ -19,6 +20,8 @@ import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.material.Material;
 import org.landon.graphics.material.Texture;
 import org.landon.project.ProjectFiles;
+import org.landon.serialization.types.LeapEnum;
+import org.landon.serialization.types.LeapFloat;
 import org.landon.util.FileUtil;
 
 import java.io.File;
@@ -48,7 +51,6 @@ public final class ComponentFields {
             for (Field field : fields) {
                 if (Modifier.isTransient(field.getModifiers())) continue;
                 if (Modifier.isStatic(field.getModifiers())) continue;
-                if (Modifier.isFinal(field.getModifiers())) continue;
 
                 field.setAccessible(true);
                 try {
@@ -68,12 +70,12 @@ public final class ComponentFields {
         if (!field.isAnnotationPresent(HideField.class)) {
             if (field.getType() == boolean.class) booleanField(field, c);
             else if (field.getType() == int.class) intField(field, c);
-            else if (field.getType() == float.class) floatField(field, c);
+            else if (field.getType() == LeapFloat.class) floatField(field, c);
             else if (field.getType() == String.class) stringField(field, c);
             else if (field.getType() == Vector2f.class) vector2Field(field, c);
             else if (field.getType() == Vector3f.class) vector3Field(field, c);
             else if (field.getType() == Material.class) materialField(field, c);
-            else if (field.getType().isEnum()) enumField(field, c);
+            else if (field.getType() == LeapEnum.class) enumField(field, c);
             else if (field.getType() == Vector4f.class) colorField(field, c);
         }
 
@@ -102,12 +104,13 @@ public final class ComponentFields {
     }
 
     private static void floatField(Field field, Component c) throws IllegalAccessException {
-        float[] value = new float[] { field.getFloat(c) };
+        LeapFloat value = (LeapFloat) field.get(c);
+        float[] floatValue = new float[] { value.getValue() };
         RangeFloat range = field.getAnnotation(RangeFloat.class);
 
-        boolean changed = range == null ? ImGui.dragFloat(formatFieldName(field.getName()), value) : ImGui.sliderFloat(formatFieldName(field.getName()), value, range.min(), range.max());
+        boolean changed = range == null ? ImGui.dragFloat(formatFieldName(field.getName()), floatValue) : ImGui.sliderFloat(formatFieldName(field.getName()), floatValue, range.min(), range.max());
         if (changed) {
-            field.setFloat(c, value[0]);
+            value.setValue(floatValue[0]);
             c.variableUpdated(field);
         }
     }
@@ -141,31 +144,40 @@ public final class ComponentFields {
         Material material = (Material) field.get(c);
 
         float[] color = toFloatArray(material.getColor());
-        if (ImGui.colorEdit4(formatFieldName(field.getName()), color)) {
-            material.getColor().set(color[0], color[1], color[2], color[3]);
+        if (ImGui.colorEdit4(formatFieldName(field.getName()), color, ImGuiColorEditFlags.AlphaBar)) {
+            material.setColor(color[0], color[1], color[2], color[3]);
             c.variableUpdated(field);
         }
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
 
-        float[] shine = new float[] { material.getShineDamper() };
-        if (ImGui.dragFloat("Shine Damper", shine)) {
-            material.setShineDamper(shine[0]);
+        float[] metallic = new float[] { material.getMetallic() };
+        if (ImGui.dragFloat("Metallic", metallic)) {
+            material.setMetallic(metallic[0]);
             c.variableUpdated(field);
         }
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
 
-        float[] reflectivity = new float[] { material.getReflectivity() };
-        if (ImGui.dragFloat("Reflectivity", reflectivity)) {
-            material.setReflectivity(reflectivity[0]);
+        float[] glossiness = new float[] { material.getGlossiness() };
+        if (ImGui.dragFloat("Glossiness", glossiness)) {
+            material.setGlossiness(glossiness[0]);
             c.variableUpdated(field);
         }
 
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
 
-        if (ImGui.button("Choose")) {
+        float[] fresnel = new float[] { material.getFresnel() };
+        if (ImGui.dragFloat("Fresnel", fresnel)) {
+            material.setFresnel(fresnel[0]);
+            c.variableUpdated(field);
+        }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+        if (ImGui.button("Choose##texture")) {
             fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(false);
             fileChooser.setOnFileSelected(file -> {
                 material.setTexture(new Texture(file.getPath()));
                 c.variableUpdated(field);
@@ -187,19 +199,139 @@ public final class ComponentFields {
 
             ImGui.treePop();
         }
+
+        ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+        Texture normalMap = material.getNormalMap();
+        if (ImGui.button("Choose##normal")) {
+            fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(true);
+            fileChooser.setOnFileSelected(file -> {
+                if (file == null) {
+                    material.setNormalMap(null);
+                } else {
+                    material.setNormalMap(new Texture(file.getPath()));
+                }
+                c.variableUpdated(field);
+            });
+            fileChooser.setSelectedFile(material.getNormalMap() != null ? material.getNormalMap().getFile() : null);
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Normal Map (" + (normalMap != null ? normalMap.getName() : "None") + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.IMAGE_EXTENSIONS)) {
+                    material.setNormalMap(new Texture(file.getPath()));
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
+        }
+        if (normalMap != null) {
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+            float[] normalMapScale = new float[] { material.getNormalMapStrength() };
+            if (ImGui.sliderFloat("Normal Map Strength", normalMapScale, 0, 1)) {
+                material.setNormalMapStrength(normalMapScale[0]);
+                c.variableUpdated(field);
+            }
+        }
+
+        Texture specularMap = material.getSpecularMap();
+        if (ImGui.button("Choose##specular")) {
+            fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(true);
+            fileChooser.setOnFileSelected(file -> {
+                if (file == null) {
+                    material.setSpecularMap(null);
+                } else {
+                    material.setSpecularMap(new Texture(file.getPath()));
+                }
+                c.variableUpdated(field);
+            });
+            fileChooser.setSelectedFile(specularMap != null ? specularMap.getFile() : null);
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Specular Map (" + (specularMap != null ? specularMap.getName() : "None") + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.IMAGE_EXTENSIONS)) {
+                    material.setSpecularMap(new Texture(file.getPath()));
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
+        }
+        if (specularMap != null) {
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+            float[] specularMapScale = new float[] { material.getSpecularMapStrength() };
+            if (ImGui.sliderFloat("Specular Map Strength", specularMapScale, 0, 1)) {
+                material.setSpecularMapStrength(specularMapScale[0]);
+                c.variableUpdated(field);
+            }
+        }
+
+        Texture displacementMap = material.getDisplacementMap();
+        if (ImGui.button("Choose##displacement")) {
+            fileChooser.setExtensions(ProjectFiles.IMAGE_EXTENSIONS);
+            fileChooser.setAllowNone(true);
+            fileChooser.setOnFileSelected(file -> {
+                if (file == null) {
+                    material.setDisplacementMap(null);
+                } else {
+                    material.setDisplacementMap(new Texture(file.getPath()));
+                }
+                c.variableUpdated(field);
+            });
+            fileChooser.setSelectedFile(material.getDisplacementMap() != null ? material.getDisplacementMap().getFile() : null);
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Displacement Map (" + (displacementMap != null ? displacementMap.getName() : "None") + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.IMAGE_EXTENSIONS)) {
+                    material.setDisplacementMap(new Texture(file.getPath()));
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
+        }
+        if (displacementMap != null) {
+            ImGui.setCursorPosY(ImGui.getCursorPosY() + 2);
+
+            float[] displacementMapScale = new float[] { material.getDisplacementMapStrength() };
+            if (ImGui.sliderFloat("Displacement Map Strength", displacementMapScale, 0, 1)) {
+                material.setDisplacementMapStrength(displacementMapScale[0]);
+                c.variableUpdated(field);
+            }
+        }
     }
 
     private static void enumField(Field field, Component c) throws IllegalAccessException {
-        Enum<?> value = (Enum<?>) field.get(c);
-        String[] values = new String[field.getType().getEnumConstants().length];
+        LeapEnum<?> value = (LeapEnum<?>) field.get(c);
+        Class<?> type = value.getValue().getClass();
+        String[] values = new String[type.getEnumConstants().length];
         for (int i = 0; i < values.length; i++) {
-            values[i] = field.getType().getEnumConstants()[i].toString();
+            values[i] = type.getEnumConstants()[i].toString();
             values[i] = values[i].substring(0, 1).toUpperCase() + values[i].substring(1).toLowerCase();
         }
 
-        ImInt selected = new ImInt(value.ordinal());
+        ImInt selected = new ImInt(value.getValue().ordinal());
         if (ImGui.combo(formatFieldName(field.getName()), selected, values, values.length)) {
-            field.set(c, field.getType().getEnumConstants()[selected.get()]);
+            value.setValue(selected.get());
             c.variableUpdated(field);
         }
     }

@@ -5,11 +5,12 @@ import org.landon.components.Component;
 import org.landon.core.Window;
 import org.landon.editor.Icons;
 import org.landon.editor.gizmos.ComponentGizmo;
+import org.landon.serialization.types.LeapFloat;
 
 public class Camera extends Component {
 
-    private float fov = 70;
-    private float nearPlane = 0.01f, farPlane = 1000.0f;
+    private final LeapFloat fov = new LeapFloat(70);
+    private final LeapFloat nearPlane = new LeapFloat(0.01f), farPlane = new LeapFloat(1000.0f);
 
     public Camera() {
         super("Camera", false, false);
@@ -21,7 +22,14 @@ public class Camera extends Component {
     }
 
     @Override
+    public void onRemove() {
+        gizmo.destroy();
+    }
+
+    @Override
     public void createGizmo() {
+        if (gizmoCreated) return;
+        gizmoCreated = true;
         gizmo = new ComponentGizmo(gameObject, Icons.getIcon("camera"));
     }
 
@@ -32,31 +40,31 @@ public class Camera extends Component {
     public Matrix4f getProjection() {
         Window window = Window.getInstance();
         float aspect = (float) window.getWidth() / (float) window.getHeight();
-        return new Matrix4f().identity().perspective((float) Math.toRadians(fov), aspect, nearPlane, farPlane);
+        return new Matrix4f().identity().perspective((float) Math.toRadians(fov.getValue()), aspect, nearPlane.getValue(), farPlane.getValue());
     }
 
     public void setFov(float fov) {
-        this.fov = fov;
+        this.fov.setValue(fov);
     }
 
     public float getFov() {
-        return fov;
+        return fov.getValue();
     }
 
     public void setNearPlane(float nearPlane) {
-        this.nearPlane = nearPlane;
+        this.nearPlane.setValue(nearPlane);
     }
 
     public float getNearPlane() {
-        return nearPlane;
+        return nearPlane.getValue();
     }
 
     public void setFarPlane(float farPlane) {
-        this.farPlane = farPlane;
+        this.farPlane.setValue(farPlane);
     }
 
     public float getFarPlane() {
-        return farPlane;
+        return farPlane.getValue();
     }
 
 }

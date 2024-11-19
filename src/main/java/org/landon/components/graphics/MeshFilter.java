@@ -44,6 +44,7 @@ public class MeshFilter extends Component {
     @Override
     public void update() {
         inFrustum = Frustum.inFrustum(aabb);
+        material.checkTransparency();
     }
 
     @Override

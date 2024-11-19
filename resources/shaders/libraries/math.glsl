@@ -1,3 +1,1 @@
-float random(float seed) {
-    return fract(sin(seed) * 43758.5453123);
-}
+const float PI = 3.1415926535897932384626433832795;

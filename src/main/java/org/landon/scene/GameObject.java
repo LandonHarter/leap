@@ -84,9 +84,11 @@ public class GameObject {
 
         components.clear();
         for (GameObject child : children) {
-            SceneManager.getCurrentScene().removeObject(child);
+            child.destroy();
         }
         children.clear();
+
+        SceneManager.getCurrentScene().removeObject(this);
     }
 
     public void onAddToScene() {

@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL30;
 
 public abstract class Renderer {
 
+    private static RenderMode renderMode = RenderMode.SHADED;
+
     protected Shader shader;
     protected int numLayouts = 3;
 
@@ -29,16 +31,14 @@ public abstract class Renderer {
         if (Editor.isPlaying() && SceneManager.getCurrentScene().getCamera() == null) return;
         Transform transform = meshFilter.getGameObject().getTransform();
         Mesh mesh = meshFilter.getMesh();
-        boolean transparent = meshFilter.getMaterial().getTexture().isTransparent();
+
+        if (renderMode == RenderMode.WIREFRAME) {
+            WireframeRenderer.render(meshFilter);
+            return;
+        }
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL30.glBindVertexArray(mesh.getVao());
-
-        if (transparent) {
-            GL11.glDisable(GL11.GL_CULL_FACE);
-        } else {
-            GL11.glEnable(GL11.GL_CULL_FACE);
-        }
 
         for (int i = 0; i < numLayouts; i++) {
             GL30.glEnableVertexAttribArray(i);
@@ -60,8 +60,7 @@ public abstract class Renderer {
 
         shader.unbind();
 
-        GL13.glActiveTexture(0);
-        GL13.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        unbindTextures();
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -70,10 +69,6 @@ public abstract class Renderer {
         }
 
         GL30.glBindVertexArray(0);
-
-        if (transparent) {
-            GL11.glEnable(GL11.GL_CULL_FACE);
-        }
     }
 
     public void render(MeshFilter meshFilter) {
@@ -81,6 +76,24 @@ public abstract class Renderer {
     }
 
     public void bindTextures(MeshFilter meshFilter) {}
+    public void unbindTextures() {}
     public void setUniforms(MeshFilter meshFilter) {}
+
+    public Shader getShader() {
+        return shader;
+    }
+
+    public static RenderMode getRenderMode() {
+        return renderMode;
+    }
+
+    public static void setRenderMode(RenderMode renderMode) {
+        Renderer.renderMode = renderMode;
+    }
+
+    public enum RenderMode {
+        SHADED,
+        WIREFRAME,
+    }
 
 }

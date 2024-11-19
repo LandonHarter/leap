@@ -2,7 +2,7 @@ package org.landon.graphics.material;
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import org.landon.editor.windows.logger.Logger;
-import org.landon.project.LeapFile;
+import org.landon.serialization.types.LeapFile;
 import org.landon.project.Project;
 import org.landon.serialization.deserializers.TextureDeserializer;
 import org.landon.serialization.serializers.TextureSerializer;
@@ -31,6 +31,7 @@ public class Texture {
         this.file = file;
         if (loadedTextures.containsKey(file.getPath())) {
             textureId = loadedTextures.get(file.getPath()).getTextureId();
+            transparent = loadedTextures.get(file.getPath()).isTransparent();
         } else {
             loadTexture();
             loadedTextures.put(file.getPath(), this);

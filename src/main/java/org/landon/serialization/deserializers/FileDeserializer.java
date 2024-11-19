@@ -3,10 +3,9 @@ package org.landon.serialization.deserializers;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
-import org.landon.project.LeapFile;
+import org.landon.serialization.types.LeapFile;
 import org.landon.project.Project;
 
-import java.io.File;
 import java.lang.reflect.Type;
 
 public class FileDeserializer implements ObjectReader<LeapFile> {
