@@ -3,6 +3,7 @@ package org.landon.editor;
 import imgui.ImGui;
 import org.landon.editor.scene.EditorScene;
 import org.landon.editor.scene.Grid;
+import org.landon.editor.windows.EditorWindow;
 import org.landon.editor.windows.Profiler;
 import org.landon.editor.windows.logger.Logger;
 import org.landon.editor.windows.explorer.ProjectExplorer;
@@ -36,6 +37,7 @@ public final class Editor {
         Grid.init();
         MousePicking.init();
         WireframeRenderer.init();
+        EditorWindow.createInstances();
         Keybinds.init();
 
         ProjectFiles.init();
@@ -51,6 +53,7 @@ public final class Editor {
         ProjectExplorer.render();
         Profiler.render();
         Popup.renderPopups();
+        EditorWindow.renderAll();
         Keybinds.update();
         Logger.render();
 

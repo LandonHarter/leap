@@ -11,6 +11,8 @@ public class EditorSettings {
 
     private final Vector3f cameraPosition = new Vector3f(0, 0, 0);
     private final Vector3f cameraRotation = new Vector3f(0, 0, 0);
+    private float cameraMoveSpeed = 80;
+    private float cameraSensitivity = 8;
 
     private boolean renderGrid = true;
 
@@ -51,6 +53,22 @@ public class EditorSettings {
 
     public void setRenderGrid(boolean renderGrid) {
         this.renderGrid = renderGrid;
+    }
+
+    public float getCameraMoveSpeed() {
+        return cameraMoveSpeed;
+    }
+
+    public void setCameraMoveSpeed(float cameraMoveSpeed) {
+        this.cameraMoveSpeed = cameraMoveSpeed;
+    }
+
+    public float getCameraSensitivity() {
+        return cameraSensitivity;
+    }
+
+    public void setCameraSensitivity(float cameraSensitivity) {
+        this.cameraSensitivity = cameraSensitivity;
     }
 
 }

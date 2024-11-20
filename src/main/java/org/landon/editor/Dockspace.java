@@ -6,6 +6,7 @@ import imgui.internal.flag.ImGuiDockNodeFlags;
 import imgui.type.ImBoolean;
 import org.landon.components.rendering.Camera;
 import org.landon.core.Window;
+import org.landon.editor.windows.EditorWindow;
 import org.landon.scene.GameObject;
 import org.landon.scene.Scene;
 import org.landon.scene.SceneManager;
@@ -58,6 +59,13 @@ public final class Dockspace {
                         currentScene.save();
                     }
                 }
+            }
+
+            ImGui.endMenu();
+        }
+        if (ImGui.beginMenu("Edit")) {
+            if (ImGui.menuItem("Preferences")) {
+                EditorWindow.openWindow("Preferences");
             }
 
             ImGui.endMenu();

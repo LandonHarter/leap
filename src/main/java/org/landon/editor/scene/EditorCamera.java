@@ -19,9 +19,6 @@ public class EditorCamera {
     private final Vector2f oldMousePos = new Vector2f();
     private final Vector2f newMousePos = new Vector2f();
 
-    private final float moveSpeed = 40;
-    private final float sensitivity = 8;
-
     public void movement(boolean viewportHovered) {
         transform.setLocalPosition(transform.getLocalPosition().lerp(targetDest, 0.1f));
         if (Editor.isPlaying() || !viewportHovered)
@@ -30,9 +27,9 @@ public class EditorCamera {
         newMousePos.set(Input.getMouseX(), Input.getMouseY());
         if (Input.getScrollY() != 0) {
             if (Input.getScrollY() > 0)
-                targetDest = transform.getForward().mul((float) Time.getDelta() * moveSpeed).add(targetDest);
+                targetDest = transform.getForward().mul((float) Time.getDelta() * Editor.getSettings().getCameraMoveSpeed()).add(targetDest);
             else
-                targetDest = transform.getForward().mul((float) Time.getDelta() * -moveSpeed).add(targetDest);
+                targetDest = transform.getForward().mul((float) Time.getDelta() * -Editor.getSettings().getCameraMoveSpeed()).add(targetDest);
             Input.resetScroll();
         }
 
@@ -40,6 +37,7 @@ public class EditorCamera {
             float dx = newMousePos.x - oldMousePos.x;
             float dy = newMousePos.y - oldMousePos.y;
 
+            float sensitivity = Editor.getSettings().getCameraSensitivity();
             transform.setLocalRotation(transform.getLocalRotation().sub(new Vector3f(dy * sensitivity, dx * sensitivity, 0).mul((float) Time.getDelta())));
         }
         oldMousePos.set(newMousePos);
