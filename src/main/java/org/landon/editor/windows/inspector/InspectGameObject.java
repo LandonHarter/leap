@@ -13,7 +13,7 @@ import org.landon.scene.GameObject;
 public class InspectGameObject {
 
     private static ImString name = new ImString();
-    private static Popup addComponentPopup = new AddComponent();
+    private static final Popup addComponentPopup = new AddComponent();
 
     public static void render(GameObject obj) {
         ImGui.setCursorPosY(ImGui.getCursorPosY() + 10);

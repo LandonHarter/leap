@@ -8,7 +8,7 @@ in vec3 tangentCameraPosition;
 in mat3 TBN;
 
 uniform Material material;
-uniform Light[1] lights;
+uniform Light[8] lights;
 uniform vec3 cameraPosition;
 
 out vec4 outColor;

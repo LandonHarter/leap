@@ -8,6 +8,7 @@ import org.landon.scene.GameObject;
 import org.landon.serialization.deserializers.ComponentDeserializer;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.UUID;
 
 @JSONType(deserializer = ComponentDeserializer.class)
@@ -56,6 +57,22 @@ public class Component {
         }
 
         return null;
+    }
+
+    public void copy(Component c) {
+        if (c.getClass().isAssignableFrom(this.getClass())) {
+            for (Field field : c.getClass().getDeclaredFields()) {
+                int mod = field.getModifiers();
+                if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) continue;
+
+                try {
+                    field.setAccessible(true);
+                    field.set(this, field.get(c));
+                } catch (Exception e) {
+                    Logger.error(e);
+                }
+            }
+        }
     }
 
     public void setGameObject(GameObject gameObject) {

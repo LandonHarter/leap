@@ -15,7 +15,9 @@ import org.landon.annoations.RangeFloat;
 import org.landon.annoations.RangeInt;
 import org.landon.components.Component;
 import org.landon.editor.Icons;
+import org.landon.editor.popup.ClipboardPopup;
 import org.landon.editor.popup.FileChooser;
+import org.landon.editor.popup.Popup;
 import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.material.Material;
 import org.landon.graphics.material.Texture;
@@ -30,7 +32,8 @@ import java.lang.reflect.Modifier;
 
 public final class ComponentFields {
 
-    private static FileChooser fileChooser = new FileChooser(new String[] {}, file -> {});
+    private static final FileChooser fileChooser = new FileChooser(new String[] {}, file -> {});
+    private static final ClipboardPopup clipboardPopup = new ClipboardPopup();
 
     public static void render(Component c) {
         ImVec2 cursorPos = ImGui.getCursorPos();
@@ -44,7 +47,19 @@ public final class ComponentFields {
         ImGui.image(Icons.getIcon(c.getClass().getSimpleName()), 20, 20);
         ImGui.sameLine();
         ImGui.setCursorPosY(cursorPos.y);
-        if (ImGui.treeNodeEx(c.getUUID(), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth, c.getName())) {
+        boolean open = ImGui.treeNodeEx(c.getUUID(), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.SpanAvailWidth, c.getName());
+        if (ImGui.isItemClicked(1)) {
+            clipboardPopup.setPayload(c);
+            clipboardPopup.setOnPaste(payload -> {
+                Component component = clipboardPopup.getClipboard(Component.class);
+                if (component != null) {
+                    c.copy(component);
+                }
+            });
+            clipboardPopup.open();
+        }
+
+        if (open) {
             ImGui.indent(6);
             ImGui.setCursorPosY(ImGui.getCursorPosY() + 4);
             Field[] fields = c.getClass().getDeclaredFields();
