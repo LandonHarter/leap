@@ -1,6 +1,7 @@
 package org.landon.skybox;
 
 import org.landon.graphics.shaders.Shader;
+import org.landon.serialization.types.LeapEnum;
 import org.landon.serialization.types.LeapFile;
 import org.landon.project.Project;
 
@@ -8,40 +9,42 @@ import java.io.File;
 
 public class Skybox {
 
-    private SkyboxType type;
+    private final LeapEnum<SkyboxType> type = new LeapEnum<>(SkyboxType.Cubemap);
     private LeapFile[] textures;
 
     private final SkyboxMesh mesh;
-    private final Shader shader;
+    private final Shader cubemapShader;
+    private final Shader hdriShader;
 
-    private int cubemapId = -1;
+    private int texture = -1;
 
     public Skybox(SkyboxType type) {
-        this.type = type;
+        this.type.setValue(type);
 
         mesh = new SkyboxMesh();
-        shader = new Shader("resources/shaders/skybox/vert.glsl", "resources/shaders/skybox/frag.glsl");
+        cubemapShader = new Shader("resources/shaders/skybox/cubemap/vert.glsl", "resources/shaders/skybox/cubemap/frag.glsl");
+        hdriShader = new Shader("resources/shaders/skybox/hdri/vert.glsl", "resources/shaders/skybox/hdri/frag.glsl");
     }
 
     public void createCubemap() {
-        cubemapId = SkyboxTexture.createSkyboxTexture(textures, type);
+        texture = SkyboxTexture.createSkyboxTexture(textures, type.getValue());
     }
 
     public void render() {
-        if (cubemapId == -1) return;
-        mesh.render(this, shader);
+        if (texture == -1) return;
+        mesh.render(this, type.getValue() == SkyboxType.Cubemap ? cubemapShader : hdriShader);
     }
 
     public void setType(SkyboxType type) {
-        this.type = type;
+        this.type.setValue(type);
     }
 
     public SkyboxType getType() {
-        return type;
+        return type.getValue();
     }
 
-    public int getCubemap() {
-        return cubemapId;
+    public int getTexture() {
+        return texture;
     }
 
     public void setTextures(File[] textures) {

@@ -4,6 +4,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL33;
 import org.lwjgl.stb.STBImage;
 
 import java.io.File;
@@ -41,7 +42,26 @@ public class SkyboxTexture {
     }
 
     private static int createHdri(File texture) {
-        return 0;
+        int id = GL11.glGenTextures();
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL30.GL_TEXTURE_2D, id);
+
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
+        STBImage.stbi_set_flip_vertically_on_load(true);
+        ByteBuffer image = STBImage.stbi_load(texture.getAbsolutePath(), width, height, channels, 4);
+        STBImage.stbi_set_flip_vertically_on_load(false);
+
+        GL11.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL33.GL_RGBA, width.get(), height.get(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image);
+        STBImage.stbi_image_free(image);
+
+        GL11.glTexParameteri(GL30.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL30.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL30.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL33.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL30.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL33.GL_CLAMP_TO_EDGE);
+
+        return id;
     }
 
 }
