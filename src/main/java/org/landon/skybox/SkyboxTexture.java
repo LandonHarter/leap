@@ -9,6 +9,7 @@ import org.lwjgl.stb.STBImage;
 
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 public class SkyboxTexture {
@@ -50,10 +51,9 @@ public class SkyboxTexture {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
         STBImage.stbi_set_flip_vertically_on_load(true);
-        ByteBuffer image = STBImage.stbi_load(texture.getAbsolutePath(), width, height, channels, 4);
+        FloatBuffer image = STBImage.stbi_loadf(texture.getAbsolutePath(), width, height, channels, 3);
         STBImage.stbi_set_flip_vertically_on_load(false);
-
-        GL11.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL33.GL_RGBA, width.get(), height.get(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image);
+        GL11.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL33.GL_RGB16F, width.get(), height.get(), 0, GL11.GL_RGB, GL11.GL_FLOAT, image);
         STBImage.stbi_image_free(image);
 
         GL11.glTexParameteri(GL30.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);

@@ -1,7 +1,9 @@
 package org.landon.graphics.framebuffers;
 
 import org.landon.core.Window;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30C;
+import org.lwjgl.opengl.GL33;
 
 public class Framebuffer {
 
