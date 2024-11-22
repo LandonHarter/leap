@@ -30,7 +30,8 @@ public final class Icons {
         addIcon("warning", "resources/icons/logger/warning.png");
         addIcon("error", "resources/icons/logger/error.png");
 
-        addIcon("leap", "resources/icons/logo.png");
+        addIcon("leap", "resources/icons/logos/logo-light.png");
+        addIcon("leap-dark", "resources/icons/logos/logo-dark.png");
         addIcon("grid", "resources/icons/misc/grid.png");
     }
 

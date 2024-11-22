@@ -16,7 +16,7 @@ public final class LoadingUtil {
         LoadingUtil.message = message;
 
         frame = new JFrame(message + " (Active for 0s)");
-        frame.setIconImage(new ImageIcon("resources/icons/logo.png").getImage());
+        frame.setIconImage(new ImageIcon("resources/icons/logos/logo-fill-light.png").getImage());
         frame.setSize(400, 100);
         frame.setLocationRelativeTo(null);
         frame.setAlwaysOnTop(true);

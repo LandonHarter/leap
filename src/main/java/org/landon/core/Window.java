@@ -99,7 +99,7 @@ public class Window {
         IntBuffer iconWidth = BufferUtils.createIntBuffer(1);
         IntBuffer iconHeight = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
-        ByteBuffer image = STBImage.stbi_load("resources/icons/logo.png", iconWidth, iconHeight, channels, 0);
+        ByteBuffer image = STBImage.stbi_load("resources/icons/logos/logo-fill-light.png", iconWidth, iconHeight, channels, 0);
         GLFWImage icon = GLFWImage.malloc();
         GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
         icon.set(iconWidth.get(), iconHeight.get(), image);
@@ -176,10 +176,10 @@ public class Window {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setUndecorated(true);
-        frame.setIconImage(new ImageIcon("resources/icons/logo.png").getImage());
+        frame.setIconImage(new ImageIcon("resources/icons/logos/logo-fill-light.png").getImage());
 
         JPictureBox image = new JPictureBox();
-        image.setIcon(new ImageIcon("resources/icons/startup.png"));
+        image.setIcon(new ImageIcon("resources/icons/logos/startup.png"));
         frame.add(image);
 
         frame.setVisible(true);

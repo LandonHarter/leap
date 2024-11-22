@@ -12,6 +12,7 @@ public class Discord {
     public static void enableRpc() {
         DiscordRPC.INSTANCE.Discord_Initialize("1308259960370499644", new DiscordEventHandlers(), true, "");
         drp = new DiscordRichPresence();
+        drp.largeImageKey = "startup";
         drp.startTimestamp = System.currentTimeMillis() + 5 * 60;
         drp.state = "leapengine.org";
 
