@@ -3,11 +3,10 @@
 in vec3 vertex_position;
 in vec2 vertex_textureCoord;
 
-uniform sampler2D tex;
-uniform vec4 color;
+uniform Material material;
 
 out vec4 outColor;
 
 void main() {
-    outColor = texture(tex, vertex_textureCoord) * color;
+    outColor = texture(material.tex, vertex_textureCoord) * material.color;
 }

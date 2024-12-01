@@ -6,6 +6,7 @@ import org.landon.serialization.types.LeapFile;
 import org.landon.project.Project;
 import org.landon.serialization.deserializers.TextureDeserializer;
 import org.landon.serialization.serializers.TextureSerializer;
+import org.landon.util.ThreadUtil;
 import org.lwjgl.opengl.*;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
@@ -80,11 +81,13 @@ public class Texture {
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         STBImage.stbi_image_free(image);
 
-        try {
-            transparent = ImageIO.read(new FileInputStream(file)).getColorModel().hasAlpha();
-        } catch (Exception e) {
-            Logger.error("Failed to check if texture is transparent: " + file.getName());
-        }
+        ThreadUtil.run(() -> {
+            try {
+                transparent = ImageIO.read(new FileInputStream(file)).getColorModel().hasAlpha();
+            } catch (Exception e) {
+                Logger.error("Failed to check if texture is transparent: " + file.getName());
+            }
+        });
     }
 
     public int getTextureId() {
