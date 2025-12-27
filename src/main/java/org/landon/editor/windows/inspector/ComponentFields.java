@@ -18,9 +18,11 @@ import org.landon.editor.Icons;
 import org.landon.editor.popup.ClipboardPopup;
 import org.landon.editor.popup.FileChooser;
 import org.landon.editor.popup.Popup;
+import org.landon.editor.windows.inspector.fields.LeapFile;
 import org.landon.editor.windows.logger.Logger;
 import org.landon.graphics.material.Material;
 import org.landon.graphics.material.Texture;
+import org.landon.project.Project;
 import org.landon.project.ProjectFiles;
 import org.landon.serialization.types.LeapEnum;
 import org.landon.serialization.types.LeapFloat;
@@ -92,6 +94,7 @@ public final class ComponentFields {
             else if (field.getType() == Material.class) materialField(field, c);
             else if (field.getType() == LeapEnum.class) enumField(field, c);
             else if (field.getType() == Vector4f.class) colorField(field, c);
+            else if (field.getType() == LeapFile.class) fileField(field, c);
         }
 
         ExecuteGui executeGui = field.getAnnotation(ExecuteGui.class);
@@ -357,6 +360,46 @@ public final class ComponentFields {
         if (ImGui.colorEdit4(formatFieldName(field.getName()), color)) {
             value.set(color[0], color[1], color[2], color[3]);
             c.variableUpdated(field);
+        }
+    }
+
+    private static void fileField(Field field, Component c) throws IllegalAccessException {
+        LeapFile value = (LeapFile) field.get(c);
+        if (ImGui.button("Choose##script")) {
+            fileChooser.setExtensions(ProjectFiles.SCRIPT_EXTENSIONS);
+            fileChooser.setAllowNone(false);
+            fileChooser.setOnFileSelected(file -> {
+                try {
+                    if (value != null) {
+                        value.setFile(file);
+                    } else {
+                        field.set(c, new LeapFile(file));
+                    }
+                    c.variableUpdated(field);
+                } catch (IllegalAccessException e) {
+                    Logger.error(e);
+                }
+            });
+            fileChooser.setSelectedFile(value != null ? value.getFile() : null);
+            fileChooser.open();
+        }
+        ImGui.sameLine();
+        if (ImGui.treeNodeEx("Script (" + (value != null ? value.getFile().getName() : "None") + ")", ImGuiTreeNodeFlags.FramePadding | ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.SpanAvailWidth)) {
+            if (ImGui.beginDragDropTarget()) {
+                File file = ImGui.acceptDragDropPayload(File.class);
+                if (file != null && FileUtil.isExtension(file, ProjectFiles.SCRIPT_EXTENSIONS)) {
+                    if (value != null) {
+                        value.setFile(file);
+                    } else {
+                        field.set(c, new LeapFile(file));
+                    }
+                    c.variableUpdated(field);
+                }
+
+                ImGui.endDragDropTarget();
+            }
+
+            ImGui.treePop();
         }
     }
 

@@ -20,6 +20,7 @@ public class ProjectFiles {
     private static Thread watchThread;
 
     public static final String[] IMAGE_EXTENSIONS = {"png", "jpg", "jpeg"};
+    public static final String[] SCRIPT_EXTENSIONS = {"lua"};
 
     public static void init() {
         new ProjectFilesListener();
