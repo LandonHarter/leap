@@ -17,7 +17,7 @@ public class FileDeserializer implements ObjectReader<LeapFile> {
         String path = jsonObject.getString("path");
         boolean isEngineFile = jsonObject.getBoolean("isEngineFile");
 
-        String newPath = isEngineFile ? System.getProperty("user.dir") + "\\\\" + path : Project.getRootDirectory().getAbsolutePath() + path;
+        String newPath = isEngineFile ? System.getProperty("user.dir") + "/" + path : Project.getRootDirectory().getAbsolutePath() + path;
         return new LeapFile(newPath);
     }
 

@@ -38,6 +38,9 @@ build/
 ### Mac OS ###
 .DS_Store
 
+projects/
+run.sh
+
 /out/
 /META_INF/
 /target/

@@ -30,6 +30,9 @@ public class SkyboxTexture {
             IntBuffer height = BufferUtils.createIntBuffer(1);
             IntBuffer channels = BufferUtils.createIntBuffer(1);
             ByteBuffer image = STBImage.stbi_load(textures[i].getAbsolutePath(), width, height, channels, 4);
+            if (image == null) {
+                continue;
+            }
             GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL11.GL_RGBA, width.get(), height.get(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image);
             STBImage.stbi_image_free(image);
         }

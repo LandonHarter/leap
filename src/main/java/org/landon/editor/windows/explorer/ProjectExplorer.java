@@ -43,8 +43,8 @@ public final class ProjectExplorer {
         ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, 15, 8);
         ImGui.pushStyleColor(ImGuiCol.FrameBg, ImGui.getColorU32(0.15f, 0.15f, 0.15f, 1));
         if (ImGui.beginChildFrame("project-explorer".hashCode(), ImGui.getContentRegionMaxX(), ImGui.calcTextSize("assets").y + 16, ImGuiWindowFlags.NoScrollbar)) {
-            String path = currentDirectory.getPath().replace(Project.getRootDirectory().getPath() + "\\", "");
-            String[] directories = path.split("\\\\");
+            String path = currentDirectory.getPath().replace(Project.getRootDirectory().getPath() + "/", "");
+            String[] directories = path.split("/");
 
             for (String breadcrumb : directories) {
                 ImGui.beginGroup();

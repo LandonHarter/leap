@@ -54,5 +54,4 @@ public class SceneDeserializer implements ObjectReader<Scene> {
     public static void setParent(String child, String parent) {
         parentMap.put(child, parent);
     }
-
 }
